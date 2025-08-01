@@ -1,36 +1,37 @@
 <div class="cio-insights-tiles">
-  <div
-    class="insight-tile"
-    *ngFor="let insight of insights; let i = index"
-    [style.backgroundImage]="'url(' + insight.image + ')'"
-  >
+  <div class="insight-tile" *ngFor="let insight of insights; let i = index"
+    [style.backgroundImage]="'url(' + insight.image + ')'">
     <div class="tile-overlay">
       <div class="tile-title" (click)="i === 0 && showRelatedProducts()">{{ insight.title }}</div>
       <div class="tile-metrics">
         <span class="metric visits" title="Customer Interests" (click)="showCustomers(i)">
           <svg width="18" height="18" viewBox="0 0 24 24">
-            <path d="M12 4.5C7.305 4.5 3.135 7.36 1.5 12c1.635 4.64 5.805 7.5 10.5 7.5s8.865-2.86 10.5-7.5C20.865 7.36 16.695 4.5 12 4.5zm0 12a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z" fill="#fff"/>
+            <path
+              d="M12 4.5C7.305 4.5 3.135 7.36 1.5 12c1.635 4.64 5.805 7.5 10.5 7.5s8.865-2.86 10.5-7.5C20.865 7.36 16.695 4.5 12 4.5zm0 12a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"
+              fill="#fff" />
           </svg>
           {{ insight.visits }}
         </span>
         <span class="metric proposed" title="Proposed" (click)="showCustomers(i)">
           <svg width="18" height="18" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" fill="#ffd700"/>
+            <circle cx="12" cy="12" r="10" fill="#ffd700" />
             <text x="12" y="16" text-anchor="middle" font-size="12" fill="#193b6a">P</text>
           </svg>
           {{ insight.proposed }}
         </span>
         <span class="metric accepted" title="Accepted" (click)="showCustomers(i)">
           <svg width="18" height="18" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" fill="#3cb371"/>
-            <path d="M8 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/>
+            <circle cx="12" cy="12" r="10" fill="#3cb371" />
+            <path d="M8 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none" />
           </svg>
           {{ insight.accepted }}
         </span>
         <span class="metric eye" title="Show Interested Customers" (click)="showCustomers(i)">
           <svg width="18" height="18" viewBox="0 0 24 24">
-            <path d="M12 4.5C7.305 4.5 3.135 7.36 1.5 12c1.635 4.64 5.805 7.5 10.5 7.5s8.865-2.86 10.5-7.5C20.865 7.36 16.695 4.5 12 4.5zm0 12a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z" fill="#ffd700"/>
-            <circle cx="12" cy="12" r="3" fill="#193b6a"/>
+            <path
+              d="M12 4.5C7.305 4.5 3.135 7.36 1.5 12c1.635 4.64 5.805 7.5 10.5 7.5s8.865-2.86 10.5-7.5C20.865 7.36 16.695 4.5 12 4.5zm0 12a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"
+              fill="#ffd700" />
+            <circle cx="12" cy="12" r="3" fill="#193b6a" />
           </svg>
         </span>
       </div>
@@ -39,22 +40,52 @@
 </div>
 
 <div *ngIf="selectedInsightIndex !== null" class="cio-insights-table-wrapper">
-  <ag-grid-angular
-    class="ag-theme-alpine"
-    style="width: 100%; height: 350px;"
-    [rowData]="customerTableData"
-    [columnDefs]="customerColumnDefs"
-    rowSelection="multiple"
-    [theme]="theme"
-    [animateRows]="true"
-    [gridOptions]="customerGridOptions"
-    (gridReady)="onCustomerGridReady($event)">
+  <ag-grid-angular class="ag-theme-alpine" style="width: 100%; height: 350px;" [rowData]="customerTableData"
+    [columnDefs]="customerColumnDefs" rowSelection="multiple" [theme]="theme" [animateRows]="true"
+    [gridOptions]="customerGridOptions" (gridReady)="onCustomerGridReady($event)">
   </ag-grid-angular>
   <button class="recommend-btn" (click)="sendRecommendationMail()">
     Send Product Recommendation
   </button>
 </div>
-
+<!-- Outlook-style Mail Popup -->
+<div *ngIf="showMailPopup" class="mail-popup-backdrop"></div>
+<div *ngIf="showMailPopup" class="mail-popup outlook-style">
+  <div class="mail-popup-header">
+    <span>
+      <svg width="22" height="22" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;">
+        <rect x="3" y="5" width="18" height="14" rx="2" stroke="#193b6a" stroke-width="2" />
+        <path d="M3 7l9 6 9-6" stroke="#193b6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      New Recommendation Email
+    </span>
+    <button class="close-btn" (click)="showMailPopup = false" aria-label="Close">&times;</button>
+  </div>
+  <div class="mail-popup-content">
+    <div class="mail-fields">
+      <div class="mail-field-row">
+        <label>To:</label>
+        <input [(ngModel)]="mailTo" type="email" />
+      </div>
+      <div class="mail-field-row">
+        <label>Cc:</label>
+        <input [(ngModel)]="mailCc" type="email" />
+      </div>
+      <div class="mail-field-row">
+        <label>Bcc:</label>
+        <input [(ngModel)]="mailBcc" type="email" />
+      </div>
+      <div class="mail-field-row">
+        <label>Subject:</label>
+        <input [(ngModel)]="mailSubject" type="text" />
+      </div>
+    </div>
+    <textarea [(ngModel)]="mailBody" rows="10" class="mail-body"></textarea>
+    <div style="margin-top:12px;text-align:right;">
+      <button class="send-btn" (click)="showMailPopup = false">Send</button>
+    </div>
+  </div>
+</div>
 <!-- Products Popup -->
 <div *ngIf="showProductsPopup" class="products-popup-backdrop" (click)="closeProductsPopup()"></div>
 <div *ngIf="showProductsPopup" class="products-popup">
@@ -62,11 +93,7 @@
     <span>Related Investment Products</span>
     <button class="close-btn" (click)="closeProductsPopup()" aria-label="Close">&times;</button>
   </div>
-  <ag-grid-angular
-    class="ag-theme-alpine"
-    style="width: 100%; height: 280px;"
-    [rowData]="productsTableData"
-    [columnDefs]="productsColumnDefs"
-    [domLayout]="'autoHeight'">
+  <ag-grid-angular class="ag-theme-alpine" style="width: 100%; height: 280px;" [rowData]="productsTableData"
+    [columnDefs]="productsColumnDefs" [domLayout]="'autoHeight'">
   </ag-grid-angular>
 </div>

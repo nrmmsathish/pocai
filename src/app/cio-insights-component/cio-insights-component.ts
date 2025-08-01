@@ -2,17 +2,23 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgGridModule } from 'ag-grid-angular';
 import { GridOptions, themeQuartz } from 'ag-grid-community';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cio-insights-component',
-  imports: [CommonModule, AgGridModule],
+  imports: [CommonModule, AgGridModule, FormsModule],
   standalone: true,
   templateUrl: './cio-insights-component.html',
   styleUrl: './cio-insights-component.scss'
 })
 export class CioInsightsComponent {
   theme = themeQuartz;
-
+  showMailPopup = false;
+  mailTo = '';
+  mailCc = '';
+  mailBcc = '';
+  mailSubject = '';
+  mailBody = '';
   insights = [
     {
       title: 'ESG Investing: The Future of Wealth',
@@ -112,7 +118,7 @@ export class CioInsightsComponent {
 
   showCustomers(index: number) {
     this.selectedInsightIndex = index;
-    
+
     this.customerTableData = [
       {
         name: 'Alice Johnson',
@@ -466,9 +472,32 @@ export class CioInsightsComponent {
   sendRecommendationMail() {
     const selectedNodes = this.gridApi.getSelectedNodes();
     const selectedCustomers = selectedNodes.map((node: any) => node.data);
-    alert(
-      `Recommendation mail will be sent to:\n` +
-      selectedCustomers.map((c: any) => `${c.name} (${c.email})`).join('\n')
-    );
+
+    if (!selectedCustomers.length) {
+      alert('Please select at least one customer to send a recommendation.');
+      return;
+    }
+
+    // Prepare To, Cc, Bcc
+    this.mailTo = selectedCustomers.map((c: any) => c.email).join('; ');
+    this.mailCc = '';
+    this.mailBcc = 'audit@bank.com';
+
+    // Prepare Subject and Body
+    const product = this.productsTableData[0] || { name: 'Recommended Product', returns: 'N/A', type: '', risk: '', suitability: '' };
+    this.mailSubject = `Product Recommendation: ${product.name}`;
+    this.mailBody =
+      `Dear Client,\n\n` +
+      `We are pleased to recommend the following investment product based on your profile and interests:\n\n` +
+      `Product: ${product.name}\n` +
+      `Type: ${product.type}\n` +
+      `Suitability: ${product.suitability}\n` +
+      `Risk Level: ${product.risk}\n` +
+      `5-Year Returns: ${product.returns}\n\n` +
+      `Please find the attached prospectus for more details. We believe this product aligns well with your investment goals.\n\n` +
+      `Let us know if you would like to discuss this further or have any questions.\n\n` +
+      `Best regards,\nYour Wealth Advisory Team`;
+
+    this.showMailPopup = true;
   }
 }

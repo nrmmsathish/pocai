@@ -207,3 +207,125 @@
   cursor: pointer;
   font-weight: 700;
 }
+.mail-popup-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #193b6a44;
+  z-index: 2000;
+}
+
+.mail-popup.outlook-style {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px #2d8cff44;
+  z-index: 2001;
+  min-width: 620px;
+  max-width: 96vw;
+  width: 500px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInUp 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.mail-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #e3f0ff 60%, #f8fbff 100%);
+  border-radius: 18px 18px 0 0;
+  padding: 18px 24px 14px 24px;
+  font-weight: 700;
+  font-size: 1.15em;
+  color: #193b6a;
+  border-bottom: 1px solid #e6f0fa;
+}
+
+.mail-popup-content {
+  padding: 22px 24px 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mail-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mail-field-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mail-field-row label {
+  min-width: 60px;
+  font-weight: 600;
+  color: #193b6a;
+}
+
+.mail-field-row input {
+  flex: 1;
+  border: 1.5px solid #e6f0fa;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 1em;
+  background: #f7fafc;
+  color: #193b6a;
+  transition: border 0.2s;
+  outline: none;
+}
+.mail-field-row input:focus {
+  border-color: #2d8cff;
+  background: #fff;
+}
+
+.mail-body {
+  width: 95%;
+  min-height: 120px;
+  border: 1.5px solid #e6f0fa;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1em;
+  background: #f7fafc;
+  color: #193b6a;
+  resize: vertical;
+  margin-top: 8px;
+}
+
+.send-btn {
+  background: linear-gradient(90deg, #2d8cff 60%, #6ec6ff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-weight: 600;
+  font-size: 1.06em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #2d8cff22;
+  transition: background 0.2s, color 0.2s;
+  margin-left: 8px;
+}
+.send-btn:hover {
+  background: linear-gradient(90deg, #193b6a 60%, #2d8cff 100%);
+  color: #ffd700;
+}
+
+@media (max-width: 600px) {
+  .mail-popup.outlook-style {
+    min-width: 0;
+    width: 98vw;
+    padding: 0;
+  }
+  .mail-popup-header,
+  .mail-popup-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
