@@ -97,9 +97,9 @@
         </div>
         <div *ngIf="activeTab === 'talking'" class="talking-points-section">
 
-          <ul>
-            <li *ngFor="let point of talkingPointsList" [innerHTML]="point"></li>
-          </ul>
+         <ul>
+  <li *ngFor="let point of talkingPointsList; let i = index" [innerHTML]="point" [style.--i]="i"></li>
+</ul>
         </div>
       </div>
     </div>

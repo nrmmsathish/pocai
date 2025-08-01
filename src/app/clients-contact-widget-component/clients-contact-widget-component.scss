@@ -1018,7 +1018,7 @@ ag-grid-angular {
 
 .call-animation {
   flex: 2;
-  min-width: 0;
+  min-width: 600px;
   text-align: center;
 }
 
@@ -1206,4 +1206,55 @@ ag-grid-angular {
 
 .mobile .gridster-item {
     height: 100% !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-popup,
+.call-popup,
+.premeeting-points-container,
+.call-assistant-extension {
+  animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.ai-tabs button,
+.ask-btn {
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.ai-tabs button:active,
+.ask-btn:active {
+  transform: scale(0.97);
+}
+.talking-points-section ul li {
+  opacity: 0;
+  transform: translateX(-24px);
+  animation: slideInLeft 0.5s forwards;
+  animation-delay: calc(0.05s * var(--i));
+}
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.ai-popup,
+.call-popup,
+.premeeting-points-container,
+.call-assistant-extension {
+  transition: box-shadow 0.2s;
+}
+.ai-popup:hover,
+.call-popup:hover,
+.premeeting-points-container:hover,
+.call-assistant-extension:hover {
+  box-shadow: 0 8px 36px #2d8cff33, 0 2px 8px #193b6a11;
 }
