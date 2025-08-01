@@ -4,7 +4,6 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ColDef, GridOptions, themeQuartz } from 'ag-grid-community';
 import { FormsModule } from '@angular/forms';
 
-
 interface Client {
   name: string;
   tier: string;
@@ -20,8 +19,13 @@ interface Client {
   complianceFlag?: boolean;
   taxResidency?: string;
   customTags?: string[];
-  priority?: string; // Add priority field
+  priority?: string;
+  email?: string;
+  lastContactSummary?: string;
+  recentArticles?: { title: string; url: string; readDate?: string }[];
+  isActiveInvestor?: boolean;
 }
+
 @Component({
   selector: 'app-clients-contact-widget-component',
   imports: [CommonModule, AgGridModule, FormsModule],
@@ -30,24 +34,29 @@ interface Client {
   styleUrl: './clients-contact-widget-component.scss'
 })
 export class ClientsContactWidgetComponent {
-  constructor(private ngZone: NgZone, private cdr: ChangeDetectorRef) {
-    this.gridOptions = {
-      defaultColDef: {
-        resizable: true,
-        minWidth: 80,
-        flex: 1 // auto-size columns based on available space
-      },
-      onGridReady: (params: any) => {
-        params.api.sizeColumnsToFit();
-      }
-    };
-  }
+  theme = themeQuartz;
   isMobile = window.innerWidth <= 600;
-
-  showReasonTooltip = false;
-  recentArticles?: { title: string; url: string; readDate?: string }[];
-  isActiveInvestor?: boolean;
   gridOptions: GridOptions;
+  columnDefs: ColDef<Client>[];
+  rowData: Client[];
+
+  // Popups and UI state
+  showPopup = false;
+  showMailPopup = false;
+  showWhatsappPopup = false;
+  showZoomPopup = false;
+  showCallPopup = false;
+  listening = false;
+
+  // Client and AI
+  selectedClient: Client | null = null;
+  talkingPointsList: string[] = [];
+  activeTab: 'summary' | 'talking' = 'summary';
+  aiTypingPoints: { text: string, typing: boolean }[] = [];
+  aiTypingIndex = 0;
+  private aiTypingTimeouts: number[] = [];
+
+  // Mail
   mailTemplates = [
     { id: 'welcome', name: 'Welcome Email', body: 'Dear {{name}},\n\nWelcome to our Private Wealth service...' },
     { id: 'review', name: 'Portfolio Review', body: 'Dear {{name}},\n\nWe would like to schedule a review of your portfolio...' },
@@ -55,249 +64,243 @@ export class ClientsContactWidgetComponent {
   ];
   selectedTemplate = 'welcome';
   mailTemplate = '';
-  clientSummaryText: string = '';
-  talkingPointsList: string[] = [];
-  activeTab: 'summary' | 'talking' = 'summary';
-  showMailPopup = false;
-  showWhatsappPopup = false;
-  aiTypingIndex = 0;
-  aiTypingPoints: { text: string, typing: boolean }[] = [];
-  private aiTypingTimeouts: number[] = [];
-
-
   mailRecipient = '';
   mailFrom = 'sathish.virattiswaran@bank.com';
   mailCc = 'sathish.virattiswaran@bank.com';
   mailTo = '';
   mailBcc = 'mail.audit@bank.com';
   mailSubject = '';
-  showZoomPopup = false;
+  userSignature = 'Best regards,\nJohn Doe\nPrivate Wealth Advisor';
+
+  // WhatsApp
+  whatsappRecipient = '';
+  whatsappMessages: { from: string, text: string }[] = [];
+  whatsappInput = '';
+
+  // Zoom
   zoomTopic = '';
   zoomDateTime = '';
   zoomInvitees = '';
   zoomMessage = '';
-  whatsappRecipient = '';
-  whatsappMessages: { from: string, text: string }[] = [];
-  whatsappInput = '';
-  userSignature = 'Best regards,\nJohn Doe\nPrivate Wealth Advisor';
-  showCallPopup = false;
+
+  // Call/Assistant
   callRecipient = '';
   callStatus = 'Calling...';
-  listening = false;
-
-
-  theme = themeQuartz; // Use the material theme
-  tiers = ['Platinum', 'Gold', 'Silver', 'Bronze'];
-  columnDefs: ColDef<Client>[] = [
-    {
-      headerName: 'Name',
-      field: 'name',
-      filter: 'agTextColumnFilter',
-      cellRenderer: (params: any) => {
-        return `<a class="client-link" style="color:#193b6a;text-decoration:underline;cursor:pointer;" data-row-index="${params.rowIndex}">${params.value}</a>`;
-      },
-      minWidth: 120
-    },
-    {
-      headerName: 'Tier',
-      field: 'tier',
-      filter: 'agTextColumnFilter',
-      cellRenderer: (params: any) => {
-        const tier = params.value;
-        let color = '#444'; // Default muted dark gray
-        if (tier === 'Platinum') {
-          color = '#2d8cff'; // Muted blue
-        } else if (tier === 'Gold') {
-          color = '#bfa600'; // Muted gold
-        } else if (tier === 'Silver') {
-          color = '#7d7d7d'; // Muted silver
-        } else if (tier === 'Bronze') {
-          color = '#a67c52'; // Muted bronze
-        }
-        return `<span style="font-weight:500;color:${color};border-radius:8px;padding:4px 14px;display:inline-block;">${tier}</span>`;
-      },
-      minWidth: 110
-    },
-    {
-      headerName: 'Investment AUM',
-      field: 'aum',
-      filter: 'agNumberColumnFilter',
-      cellRenderer: (params: any) => {
-        const value = params.value ? `$${params.value.toLocaleString()}` : '';
-        const trend = params.data?.aumTrend; // 'up' or 'down'
-        let icon = '';
-        if (trend === 'up') {
-          // Up arrow icon
-          icon = `<svg width="16" height="16" style="vertical-align:middle">
-        <polygon points="8,3 13,11 3,11" fill="#3cb371"/>
-      </svg>`;
-        } else if (trend === 'down') {
-          // Down arrow icon
-          icon = `<svg width="16" height="16" style="vertical-align:middle">
-        <polygon points="8,13 13,5 3,5" fill="#d9534f"/>
-      </svg>`;
-        }
-        return `${value} ${icon}`;
-      }
-    },
-    {
-      headerName: 'L12M NNIA',
-      field: 'nnia',
-      filter: 'agNumberColumnFilter',
-      cellRenderer: (params: any) => {
-        const value = params.value ? `$${params.value.toLocaleString()}` : '';
-        const trend = params.data?.nniaTrend; // 'up' or 'down'
-        let icon = '';
-        if (trend === 'up') {
-          // Up arrow icon
-          icon = `<svg width="16" height="16" style="vertical-align:middle">
-        <polygon points="8,3 13,11 3,11" fill="#3cb371"/>
-      </svg>`;
-        } else if (trend === 'down') {
-          // Down arrow icon
-          icon = `<svg width="16" height="16" style="vertical-align:middle">
-        <polygon points="8,13 13,5 3,5" fill="#d9534f"/>
-      </svg>`;
-        }
-        return `${value} ${icon}`;
-      }
-    },
-    { headerName: 'Reason', field: 'reason', filter: 'agTextColumnFilter' },
-    {
-      //    headerName: `<span style="display:flex;align-items:center;gap:6px;">
-      //   <img src="aiIcon.png" alt="AI Icon" style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
-      //   Priority
-      // </span>`,
-      headerName: 'Priority',
-      field: 'priority',
-      filter: 'agTextColumnFilter',
-      sortable: true,
-      // headerComponentParams: { suppressHtmlEscaping: false }, // <-- Add this line
-      minWidth: 80,
-      sort: 'asc', // Ensure descending sort (High > Medium > Low)
-      comparator: (valueA: string, valueB: string) => {
-        const order: Record<'High' | 'Medium' | 'Low', number> = { High: 3, Medium: 2, Low: 1 };
-        return (order[valueB as 'High' | 'Medium' | 'Low'] || 0) - (order[valueA as 'High' | 'Medium' | 'Low'] || 0);
-      },
-      cellRenderer: (params: any) => {
-        const value = params.value || 'Medium';
-        let color = '#ff5a5f';      // High: Vibrant coral red
-        let bg = '#ffeaea';
-        if (value === 'High') {
-          color = '#ff5a5f';
-          bg = '#ffeaea';
-        } else if (value === 'Medium') {
-          color = '#ffb347';        // Medium: Warm amber
-          bg = '#fff7e6';
-        } else if (value === 'Low') {
-          color = '#2ecc71';        // Low: Fresh green
-          bg = '#eafaf1';
-        }
-        return `<span style="font-weight:600;color:${color};border-radius:8px;padding:2px 12px;">${value}</span>`;
-      }
-    },
-    {
-      headerName: 'Risk Profile',
-      field: 'riskProfile',
-      filter: 'agTextColumnFilter',
-      minWidth: 120,
-      cellRenderer: (params: any) => {
-        const risk = params.value || 'Balanced';
-        let color = '#6c757d'; // Neutral gray for Balanced
-        if (risk === 'Aggressive') color = '#b8860b'; // Muted dark yellow
-        else if (risk === 'Conservative') color = '#228b22'; // Muted green
-        return `<span style="font-weight:600;color:${color};">${risk}</span>`;
-      }
-    },
-    {
-      headerName: 'Last Txn Amount',
-      field: 'lastTransactionAmount',
-      filter: 'agNumberColumnFilter',
-      minWidth: 140,
-      valueFormatter: params => params.value ? `$${params.value.toLocaleString()}` : ''
-    },
-    {
-      headerName: 'Diversification',
-      field: 'portfolioDiversification',
-      filter: 'agNumberColumnFilter',
-      minWidth: 120,
-      valueFormatter: params => params.value ? `${params.value} assets` : ''
-    },
-
-    {
-      headerName: 'Tax Residency',
-      field: 'taxResidency',
-      filter: 'agTextColumnFilter',
-      minWidth: 120
-    },
-    {
-      headerName: 'Tags',
-      field: 'customTags',
-      filter: 'agTextColumnFilter',
-      minWidth: 160,
-      cellRenderer: (params: any) => {
-        return Array.isArray(params.value)
-          ? params.value.map((tag: any) => `<span style="background:#e3f0ff;color:#193b6a;border-radius:6px;padding:2px 8px;margin-right:4px;font-size:0.95em;">${tag}</span>`).join('')
-          : '';
-      }
-    },
-    {
-      headerName: 'Last Contact',
-      field: 'lastContact',
-      filter: 'agDateColumnFilter',
-      valueFormatter: params => {
-        if (!params.value) return '';
-        const date = new Date(params.value);
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = date.toLocaleString('en-US', { month: 'short' });
-        const year = date.getFullYear();
-        return `${day} ${month} ${year}`; // dd mmm yyyy
-      },
-      cellRenderer: (params: { value: string | number | Date; }) => {
-        if (!params.value) return '';
-        const date = new Date(params.value);
-        const formatted = `${date.getDate().toString().padStart(2, '0')} ${date.toLocaleString('en-US', { month: 'short' })} ${date.getFullYear()}`;
-        const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        return `<span title="Time: ${time}">${formatted}</span>`;
-      }
-    },
-    {
-      headerName: 'Reach Client',
-      cellRenderer: () => `
-    <div class="reach-client-actions">
-      <span title="Call" class="reach-btn call-btn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 9.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" stroke="#3cb371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </span>
-      </span>
-      <span title="WhatsApp" class="reach-btn whatsapp-btn">
-        <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
-          <circle cx="16" cy="16" r="16" fill="#25D366"/>
-          <path d="M22.5 19.5c-.5-.25-1.5-.75-1.75-.75-.25 0-.5.25-.75.5-.25.25-.75.75-1 1-.25.25-.5.25-.75.25-.25 0-.5-.25-.75-.5-1.25-1-2.25-2-3.25-3.25-.25-.25-.5-.5-.5-.75 0-.25.25-.5.25-.75.25-.25.5-.5.5-.75 0-.25-.25-.5-.5-.75-.25-.25-.5-.5-.75-.5-.25 0-.5.25-.75.5-.25.25-.75.75-1 1-.25.25-.25.5-.25.75 0 .25.25.5.5.75 1.25 1.25 2.25 2.25 3.25 3.25.25.25.5.5.75.5.25 0 .5-.25.75-.5.25-.25.75-.75 1-1 .25-.25.25-.5.25-.75 0-.25-.25-.5-.5-.75z" fill="#fff"/>
-        </span>
-      </span>
-      <span title="Email" class="reach-btn email-btn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="5" width="18" height="14" rx="2" stroke="#193b6a" stroke-width="2"/>
-          <path d="M3 7l9 6 9-6" stroke="#193b6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
-      <span title="Zoom (AI Listen)" class="reach-btn zoom-btn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="7" width="13" height="10" rx="2" stroke="#2D8CFF" stroke-width="2"/>
-          <path d="M21 7v10l-5-5V12l5-5z" fill="#2D8CFF"/>
-          <circle cx="9.5" cy="12" r="1.5" fill="#2D8CFF"/>
-        </svg>
-      </span>
-    </div>
-  `,
-      sortable: false,
-      filter: false,
-      minWidth: 180
-    }
+  assistantQuestion: string = '';
+  assistantAnswer: string = '';
+  transcriptLines: string[] = [];
+  fullTranscript: string[] = [
+    "Advisor: Welcome to the call, Alice.",
+    "Client: Thank you. I wanted to discuss my portfolio performance.",
+    "Advisor: Sure, let's review your recent investments.",
+    "Client: I am interested in ESG funds.",
+    "Advisor: Great choice. I will share some options.",
+    "AI: ESG funds have outperformed the market this quarter.",
+    "Client: Can you send me the details?",
+    "Advisor: Absolutely, I will email you after the call."
   ];
-  rowData = [
-    {
+  transcriptInterval: any;
+
+  tiers = ['Platinum', 'Gold', 'Silver', 'Bronze'];
+
+  constructor(private ngZone: NgZone, private cdr: ChangeDetectorRef) {
+    this.gridOptions = {
+      defaultColDef: {
+        resizable: true,
+        minWidth: 80,
+        flex: 1
+      },
+      onGridReady: (params: any) => {
+        params.api.sizeColumnsToFit();
+      }
+    };
+    this.columnDefs = this.getColumnDefs();
+    this.rowData = this.getRowData();
+  }
+
+  getColumnDefs(): ColDef<Client>[] {
+    return [
+      {
+        headerName: 'Name',
+        field: 'name',
+        filter: 'agTextColumnFilter',
+        cellRenderer: (params: any) =>
+          `<a class="client-link" style="color:#193b6a;text-decoration:underline;cursor:pointer;" data-row-index="${params.rowIndex}">${params.value}</a>`,
+        minWidth: 120
+      },
+      {
+        headerName: 'Tier',
+        field: 'tier',
+        filter: 'agTextColumnFilter',
+        cellRenderer: (params: any) => {
+          const tier = params.value;
+          let color = '#444';
+          if (tier === 'Platinum') color = '#2d8cff';
+          else if (tier === 'Gold') color = '#bfa600';
+          else if (tier === 'Silver') color = '#7d7d7d';
+          else if (tier === 'Bronze') color = '#a67c52';
+          return `<span style="font-weight:500;color:${color};border-radius:8px;padding:4px 14px;display:inline-block;">${tier}</span>`;
+        },
+        minWidth: 110
+      },
+      {
+        headerName: 'Investment AUM',
+        field: 'aum',
+        filter: 'agNumberColumnFilter',
+        cellRenderer: (params: any) => {
+          const value = params.value ? `$${params.value.toLocaleString()}` : '';
+          const trend = params.data?.aumTrend;
+          let icon = '';
+          if (trend === 'up') {
+            icon = `<svg width="16" height="16" style="vertical-align:middle"><polygon points="8,3 13,11 3,11" fill="#3cb371"/></svg>`;
+          } else if (trend === 'down') {
+            icon = `<svg width="16" height="16" style="vertical-align:middle"><polygon points="8,13 13,5 3,5" fill="#d9534f"/></svg>`;
+          }
+          return `${value} ${icon}`;
+        }
+      },
+      {
+        headerName: 'L12M NNIA',
+        field: 'nnia',
+        filter: 'agNumberColumnFilter',
+        cellRenderer: (params: any) => {
+          const value = params.value ? `$${params.value.toLocaleString()}` : '';
+          const trend = params.data?.nniaTrend;
+          let icon = '';
+          if (trend === 'up') {
+            icon = `<svg width="16" height="16" style="vertical-align:middle"><polygon points="8,3 13,11 3,11" fill="#3cb371"/></svg>`;
+          } else if (trend === 'down') {
+            icon = `<svg width="16" height="16" style="vertical-align:middle"><polygon points="8,13 13,5 3,5" fill="#d9534f"/></svg>`;
+          }
+          return `${value} ${icon}`;
+        }
+      },
+      { headerName: 'Reason', field: 'reason', filter: 'agTextColumnFilter' },
+      {
+        headerName: 'Priority',
+        field: 'priority',
+        filter: 'agTextColumnFilter',
+        sortable: true,
+        minWidth: 80,
+        sort: 'asc',
+        comparator: (valueA: string, valueB: string) => {
+          const order: Record<'High' | 'Medium' | 'Low', number> = { High: 3, Medium: 2, Low: 1 };
+          return (order[valueB as 'High' | 'Medium' | 'Low'] || 0) - (order[valueA as 'High' | 'Medium' | 'Low'] || 0);
+        },
+        cellRenderer: (params: any) => {
+          const value = params.value || 'Medium';
+          let color = '#ff5a5f', bg = '#ffeaea';
+          if (value === 'Medium') { color = '#ffb347'; bg = '#fff7e6'; }
+          else if (value === 'Low') { color = '#2ecc71'; bg = '#eafaf1'; }
+          return `<span style="font-weight:600;color:${color};border-radius:8px;padding:2px 12px;">${value}</span>`;
+        }
+      },
+      {
+        headerName: 'Risk Profile',
+        field: 'riskProfile',
+        filter: 'agTextColumnFilter',
+        minWidth: 120,
+        cellRenderer: (params: any) => {
+          const risk = params.value || 'Balanced';
+          let color = '#6c757d';
+          if (risk === 'Aggressive') color = '#b8860b';
+          else if (risk === 'Conservative') color = '#228b22';
+          return `<span style="font-weight:600;color:${color};">${risk}</span>`;
+        }
+      },
+      {
+        headerName: 'Last Txn Amount',
+        field: 'lastTransactionAmount',
+        filter: 'agNumberColumnFilter',
+        minWidth: 140,
+        valueFormatter: params => params.value ? `$${params.value.toLocaleString()}` : ''
+      },
+      {
+        headerName: 'Diversification',
+        field: 'portfolioDiversification',
+        filter: 'agNumberColumnFilter',
+        minWidth: 120,
+        valueFormatter: params => params.value ? `${params.value} assets` : ''
+      },
+      {
+        headerName: 'Tax Residency',
+        field: 'taxResidency',
+        filter: 'agTextColumnFilter',
+        minWidth: 120
+      },
+      {
+        headerName: 'Tags',
+        field: 'customTags',
+        filter: 'agTextColumnFilter',
+        minWidth: 160,
+        cellRenderer: (params: any) =>
+          Array.isArray(params.value)
+            ? params.value.map((tag: any) =>
+                `<span style="background:#e3f0ff;color:#193b6a;border-radius:6px;padding:2px 8px;margin-right:4px;font-size:0.95em;">${tag}</span>`
+              ).join('')
+            : ''
+      },
+      {
+        headerName: 'Last Contact',
+        field: 'lastContact',
+        filter: 'agDateColumnFilter',
+        valueFormatter: params => {
+          if (!params.value) return '';
+          const date = new Date(params.value);
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = date.toLocaleString('en-US', { month: 'short' });
+          const year = date.getFullYear();
+          return `${day} ${month} ${year}`;
+        },
+        cellRenderer: (params: { value: string | number | Date }) => {
+          if (!params.value) return '';
+          const date = new Date(params.value);
+          const formatted = `${date.getDate().toString().padStart(2, '0')} ${date.toLocaleString('en-US', { month: 'short' })} ${date.getFullYear()}`;
+          const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          return `<span title="Time: ${time}">${formatted}</span>`;
+        }
+      },
+      {
+        headerName: 'Reach Client',
+        cellRenderer: () => `
+          <div class="reach-client-actions">
+            <span title="Call" class="reach-btn call-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 9.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" stroke="#3cb371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span title="WhatsApp" class="reach-btn whatsapp-btn">
+              <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="16" fill="#25D366"/>
+                <path d="M22.5 19.5c-.5-.25-1.5-.75-1.75-.75-.25 0-.5.25-.75.5-.25.25-.75.75-1 1-.25.25-.5.25-.75.25-.25 0-.5-.25-.75-.5-1.25-1-2.25-2-3.25-3.25-.25-.25-.5-.5-.5-.75 0-.25.25-.5.25-.75.25-.25.5-.5.5-.75 0-.25-.25-.5-.5-.75-.25-.25-.5-.5-.75-.5-.25 0-.5.25-.75.5-.25.25-.75.75-1 1-.25.25-.25.5-.25.75 0 .25.25.5.5.75 1.25 1.25 2.25 2.25 3.25 3.25.25.25.5.5.75.5.25 0 .5-.25.75-.5.25-.25.75-.75 1-1 .25-.25.25-.5.25-.75 0-.25-.25-.5-.5-.75z" fill="#fff"/>
+              </svg>
+            </span>
+            <span title="Email" class="reach-btn email-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="5" width="18" height="14" rx="2" stroke="#193b6a" stroke-width="2"/>
+                <path d="M3 7l9 6 9-6" stroke="#193b6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span title="Zoom (AI Listen)" class="reach-btn zoom-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="7" width="13" height="10" rx="2" stroke="#2D8CFF" stroke-width="2"/>
+                <path d="M21 7v10l-5-5V12l5-5z" fill="#2D8CFF"/>
+                <circle cx="9.5" cy="12" r="1.5" fill="#2D8CFF"/>
+              </svg>
+            </span>
+          </div>
+        `,
+        sortable: false,
+        filter: false,
+        minWidth: 180
+      }
+    ];
+  }
+
+  getRowData(): Client[] {
+    
+    return [
+     {
       name: 'Alice Johnson',
       tier: 'Platinum',
       aum: 12000000,
@@ -693,85 +696,158 @@ export class ClientsContactWidgetComponent {
       ],
       isActiveInvestor: true
     }
-  ];
-  selectedClient: any = null;
-  showPopup = false;
-  aiTalkingPoints: string[] = [];
-  gridApi: any;
+    ];
+  }
 
-  assistantQuestion: string = '';
-  assistantAnswer: string = '';
-  transcriptLines: string[] = [];
-  fullTranscript: string[] = [
-    "Advisor: Welcome to the call, Alice.",
-    "Client: Thank you. I wanted to discuss my portfolio performance.",
-    "Advisor: Sure, let's review your recent investments.",
-    "Client: I am interested in ESG funds.",
-    "Advisor: Great choice. I will share some options.",
-    "AI: ESG funds have outperformed the market this quarter.",
-    "Client: Can you send me the details?",
-    "Advisor: Absolutely, I will email you after the call."
-  ];
+  // --- Popup and Assistant Logic ---
 
-  transcriptInterval: any;
-
-  startTranscriptSimulation() {
-    this.transcriptLines = [];
-    let idx = 0;
-    if (this.transcriptInterval) {
-      clearInterval(this.transcriptInterval);
+  onCellClicked(event: any) {
+    if (event.colDef.field === 'name') {
+      this.selectedClient = event.data;
+      this.generateTalkingPoints(event.data);
+      this.showPopup = true;
     }
-    this.transcriptInterval = setInterval(() => {
-      if (idx < this.fullTranscript.length) {
-        this.transcriptLines.push(this.fullTranscript[idx]);
-        idx++;
-        setTimeout(() => {
-          const transcriptBox = document.querySelector('.transcript-box');
-          if (transcriptBox) {
-            transcriptBox.scrollTop = transcriptBox.scrollHeight;
-          }
-        }, 10); // Scroll after DOM update
-      } else {
-        clearInterval(this.transcriptInterval);
+    if (event.colDef.headerName === 'Reach Client') {
+      const client = event.data;
+      if (event.event?.target?.closest('.email-btn')) {
+        this.mailRecipient = client.name;
+        this.mailTo = client.email || '';
+        this.mailSubject = `Portfolio Update for ${client.name}`;
+        this.mailTemplate = `Dear ${client.name},\n\nThank you for your continued trust in our services. Please let us know if you have any questions about your portfolio or recent market developments.\n\n${this.userSignature}`;
+        this.showMailPopup = true;
       }
-    }, 1200); // 1.2 seconds per line
-  }
-  // Simulate AI suggestion (replace with real API call if needed)
-  generateClientSummary(client: Client): string {
-    let trendText = '';
-    if (client.aumTrend === 'up') {
-      trendText = 'Investment has increased recently.';
-    } else if (client.aumTrend === 'down') {
-      trendText = 'Investment has decreased recently.';
+      if (event.event?.target?.closest('.whatsapp-btn')) {
+        this.whatsappRecipient = client.name;
+        this.whatsappMessages = [
+          { from: 'client', text: `Hi, this is ${client.name}.` },
+          { from: 'me', text: 'Hello! How can I assist you today?' }
+        ];
+        this.whatsappInput = '';
+        this.showWhatsappPopup = true;
+      }
+      if (event.event?.target?.closest('.call-btn')) {
+        this.callRecipient = client.name;
+        this.callStatus = 'Calling...';
+        this.listening = false;
+        this.showCallPopup = true;
+        setTimeout(() => {
+          this.ngZone.run(() => {
+            this.callStatus = `Connected to ${client.name}`;
+            this.listening = true;
+            this.startTranscriptSimulation();
+            const tones: Array<'angry' | 'happy' | 'neutral'> = ['angry', 'happy', 'neutral'];
+            const idx = Math.floor(Math.random() * tones.length);
+            this.startAssistantListening(client, tones[idx]);
+            this.cdr.markForCheck();
+          });
+        }, 1500);
+      }
+      if (event.event?.target?.closest('.zoom-btn')) {
+        this.zoomTopic = `Meeting with ${client.name}`;
+        this.zoomDateTime = '';
+        this.zoomInvitees = client.email || '';
+        this.zoomMessage = `Hi ${client.name},\n\nI'd like to invite you to a Zoom meeting to discuss your portfolio and any questions you may have.\n\nBest regards,\nJohn Doe`;
+        this.showZoomPopup = true;
+      }
     }
-    // Format last contact date as DD MMM YYYY
-    let lastContactFormatted = '';
-    if (client.lastContact) {
-      const date = new Date(client.lastContact);
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = date.toLocaleString('en-US', { month: 'short' });
-      const year = date.getFullYear();
-      lastContactFormatted = `${day} ${month} ${year}`;
-    }
-    return `Client: ${client.name} (${client.tier} tier)
-Portfolio Value: $${client.aum.toLocaleString()}
-NNIA: $${client.nnia.toLocaleString()}
-${trendText}
-Last Contact: ${lastContactFormatted}
-Reason for connect: ${client.reason}`;
   }
 
-  // Update generateTalkingPoints to include summary
+  closePopup() {
+    this.showPopup = false;
+    this.selectedClient = null;
+    this.aiTypingPoints = [];
+  }
+
+  closeMailPopup() {
+    this.showMailPopup = false;
+    this.mailTemplate = '';
+    this.mailRecipient = '';
+  }
+
+  closeWhatsappPopup() {
+    this.showWhatsappPopup = false;
+    this.whatsappRecipient = '';
+    this.whatsappMessages = [];
+    this.whatsappInput = '';
+  }
+
+  closeZoomPopup() {
+    this.showZoomPopup = false;
+    this.zoomTopic = '';
+    this.zoomDateTime = '';
+    this.zoomInvitees = '';
+    this.zoomMessage = '';
+  }
+
+  hangupCall() {
+    this.callStatus = 'Call ended';
+    this.listening = false;
+    this.clearAITypingTimeouts();
+    this.aiTypingPoints = [];
+    setTimeout(() => {
+      this.showCallPopup = false;
+      this.cdr.detectChanges();
+    }, 900);
+  }
+
+  sendMail() {
+    const subject = this.mailSubject || '';
+    const to = this.mailRecipient || '';
+    const cc = this.mailCc || '';
+    const bcc = this.mailBcc || '';
+    const body = (this.mailTemplate || '') + '\n\n' + (this.userSignature || '');
+    let eml =
+      `To: ${to}\r\n` +
+      (cc ? `Cc: ${cc}\r\n` : '') +
+      (bcc ? `Bcc: ${bcc}\r\n` : '') +
+      `Subject: ${subject}\r\n` +
+      `Content-Type: text/plain; charset=UTF-8\r\n` +
+      `\r\n` +
+      `${body}`;
+
+    const blob = new Blob([eml], { type: 'message/rfc822' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${subject.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'email'}.eml`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    this.closeMailPopup();
+  }
+
+  sendWhatsappMessage() {
+    if (this.whatsappInput.trim()) {
+      this.whatsappMessages.push({ from: 'me', text: this.whatsappInput });
+      setTimeout(() => {
+        this.whatsappMessages.push({
+          from: 'bot',
+          text: '🤖 Bot: Thank you for your message! I will notify your advisor or help you with quick info.'
+        });
+        this.cdr.markForCheck();
+      }, 900);
+      this.whatsappInput = '';
+    }
+  }
+
+  sendZoomInvite() {
+    alert('Zoom invite sent to: ' + this.zoomInvitees + '\n\nTopic: ' + this.zoomTopic + '\nDate & Time: ' + this.zoomDateTime + '\n\nMessage:\n' + this.zoomMessage);
+    this.closeZoomPopup();
+  }
+
+  // --- AI/Assistant Logic ---
+
+  askAssistant() {
+    this.assistantAnswer = "Based on the transcript, the client's main concern is portfolio performance. Recommend sharing a summary and next steps.";
+  }
+
   generateTalkingPoints(client: Client, tone: 'neutral' | 'angry' | 'happy' = 'neutral') {
-    // Personalized summary for connect
-    this.talkingPointsList = [];
-
-    // Engagement or service request info
     const engagementInfo = client.reason
       ? `<b>Engagement/Service Request</b>: ${client.reason}.`
       : 'No specific service request noted.';
 
-    // Thematic investment product recommendation
     let themeRecommendation = '';
     if (client.customTags?.includes('ESG')) {
       themeRecommendation = '<b>Recommend ESG funds—these align with your interest and have strong recent performance.</b>';
@@ -810,180 +886,14 @@ Reason for connect: ${client.reason}`;
         engagementInfo,
         themeRecommendation,
         `Review ${client.tier} tier market trends and risk profile (${client.riskProfile || 'N/A'}).`,
-        
         `Suggest rebalancing based on NNIA and last transaction ($${client.lastTransactionAmount?.toLocaleString() || 'N/A'}).`,
         `Mention new opportunities for ${client.taxResidency || 'global'} clients.`,
         `Highlight regulatory changes for compliance${client.complianceFlag ? ' (flagged)' : ''}.`
       ];
     }
   }
-  askAssistant() {
-    // Simulate AI response
-    this.assistantAnswer = "Based on the transcript, the client's main concern is portfolio performance. Recommend sharing a summary and next steps.";
-  }
-  onCellClicked(event: any) {
-    // Show AI popup for client name
-    if (event.colDef.field === 'name') {
-      this.selectedClient = event.data;
-      this.generateTalkingPoints(event.data);
-      this.showPopup = true;
-    }
-    // Show mail popup for email icon
-    if (event.colDef.headerName === 'Reach Client' && event.event?.target?.closest('.email-btn')) {
-      const client = event.data;
-      this.mailRecipient = client.name;
-      this.mailTo = client.email || '';
 
-      this.mailSubject = `Portfolio Update for ${client.name}`;
-      this.mailTemplate = `Dear ${client.name},\n\nThank you for your continued trust in our services. Please let us know if you have any questions about your portfolio or recent market developments.\n\n${this.userSignature}`;
-      this.showMailPopup = true;
-    }
-    // Show WhatsApp popup for whatsapp icon
-    if (event.colDef.headerName === 'Reach Client' && event.event?.target?.closest('.whatsapp-btn')) {
-      const client = event.data;
-      this.whatsappRecipient = client.name;
-      this.whatsappMessages = [
-        { from: 'client', text: `Hi, this is ${client.name}.` },
-        { from: 'me', text: 'Hello! How can I assist you today?' }
-      ];
-      this.whatsappInput = '';
-      this.showWhatsappPopup = true;
-    }
-    // Show Call popup for call icon
-    if (event.colDef.headerName === 'Reach Client' && event.event?.target?.closest('.call-btn')) {
-      this.callRecipient = event.data.name;
-      this.callStatus = 'Calling...';
-      this.listening = false;
-      this.showCallPopup = true;
-
-      // Simulate call connecting and assistant listening
-      setTimeout(() => {
-        this.ngZone.run(() => {
-          this.callStatus = `Connected to ${event.data.name}`;
-          this.listening = true;
-          this.startTranscriptSimulation();
-          const tones: Array<'angry' | 'happy' | 'neutral'> = ['angry', 'happy', 'neutral'];
-          const idx = Math.floor(Math.random() * tones.length);
-          this.startAssistantListening(event.data, tones[idx]);
-          this.cdr.markForCheck();
-        });
-      }, 1500);
-    }
-    // Show Zoom popup for zoom icon
-    if (event.colDef.headerName === 'Reach Client' && event.event?.target?.closest('.zoom-btn')) {
-      const client = event.data;
-      this.zoomTopic = `Meeting with ${client.name}`;
-      this.zoomDateTime = '';
-      this.zoomInvitees = client.email || '';
-      this.zoomMessage = `Hi ${client.name},\n\nI'd like to invite you to a Zoom meeting to discuss your portfolio and any questions you may have.\n\nBest regards,\nJohn Doe`;
-      this.showZoomPopup = true;
-    }
-  }
-  closeZoomPopup() {
-    this.showZoomPopup = false;
-    this.zoomTopic = '';
-    this.zoomDateTime = '';
-    this.zoomInvitees = '';
-    this.zoomMessage = '';
-  }
-  clearAITypingTimeouts() {
-    this.aiTypingTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
-    this.aiTypingPoints = [];
-    this.aiTypingIndex = 0;
-  }
-
-  hangupCall() {
-    this.callStatus = 'Call ended';
-    this.listening = false;
-    this.clearAITypingTimeouts();
-    this.aiTypingPoints = [];
-    setTimeout(() => {
-      this.showCallPopup = false;
-      this.cdr.detectChanges();
-    }, 900);
-  }
-
-  sendZoomInvite() {
-    // Simulate sending invite (replace with real API call)
-    alert('Zoom invite sent to: ' + this.zoomInvitees + '\n\nTopic: ' + this.zoomTopic + '\nDate & Time: ' + this.zoomDateTime + '\n\nMessage:\n' + this.zoomMessage);
-    this.closeZoomPopup();
-  }
-
-  closeCallPopup() {
-    this.showCallPopup = false;
-    this.callRecipient = '';
-    this.callStatus = 'Calling...';
-    this.listening = false;
-  }
-
-
-  closeWhatsappPopup() {
-    this.showWhatsappPopup = false;
-    this.whatsappRecipient = '';
-    this.whatsappMessages = [];
-    this.whatsappInput = '';
-  }
-  onBackdropClick(event: MouseEvent) {
-    // Only close if click is directly on the backdrop, not if it bubbles from the popup
-
-  }
-  sendWhatsappMessage() {
-    if (this.whatsappInput.trim()) {
-      this.whatsappMessages.push({ from: 'me', text: this.whatsappInput });
-      // Simulate bot reply after user sends a message
-      setTimeout(() => {
-        this.whatsappMessages.push({
-          from: 'bot',
-          text: '🤖 Bot: Thank you for your message! I will notify your advisor or help you with quick info.'
-        });
-        this.cdr.markForCheck();
-      }, 900);
-      this.whatsappInput = '';
-    }
-  }
-
-  closeMailPopup() {
-    this.showMailPopup = false;
-    this.mailTemplate = '';
-    this.mailRecipient = '';
-  }
-
-  sendMail() {
-    const subject = this.mailSubject || '';
-    const to = this.mailRecipient || '';
-    const cc = this.mailCc || '';
-    const bcc = this.mailBcc || '';
-    const body = (this.mailTemplate || '') + '\n\n' + (this.userSignature || '');
-    let eml =
-      `To: ${to}\r\n` +
-      (cc ? `Cc: ${cc}\r\n` : '') +
-      (bcc ? `Bcc: ${bcc}\r\n` : '') +
-      `Subject: ${subject}\r\n` +
-      `Content-Type: text/plain; charset=UTF-8\r\n` +
-      `\r\n` +
-      `${body}`;
-
-    const blob = new Blob([eml], { type: 'message/rfc822' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${subject.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'email'}.eml`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    this.closeMailPopup();
-  }
-
-
-  closePopup() {
-    this.showPopup = false;
-    this.selectedClient = null;
-    this.aiTalkingPoints = [];
-  }
   showAITypingPoints(points: string[]) {
-
     this.clearAITypingTimeouts();
     const typeNext = () => {
       if (this.aiTypingIndex < points.length) {
@@ -1008,14 +918,38 @@ Reason for connect: ${client.reason}`;
     typeNext();
   }
 
-  // Call this when assistant starts listening
   startAssistantListening(client: Client, tone: 'neutral' | 'angry' | 'happy' = 'neutral') {
     this.generateTalkingPoints(client, tone);
     setTimeout(() => {
       this.showAITypingPoints(this.talkingPointsList);
-    }, 4000);
+    }, 3000);
     this.listening = true;
   }
+
+  clearAITypingTimeouts() {
+    this.aiTypingTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    this.aiTypingPoints = [];
+    this.aiTypingIndex = 0;
+  }
+
+  startTranscriptSimulation() {
+    this.transcriptLines = [];
+    let idx = 0;
+    if (this.transcriptInterval) clearInterval(this.transcriptInterval);
+    this.transcriptInterval = setInterval(() => {
+      if (idx < this.fullTranscript.length) {
+        this.transcriptLines.push(this.fullTranscript[idx]);
+        idx++;
+        setTimeout(() => {
+          const transcriptBox = document.querySelector('.transcript-box');
+          if (transcriptBox) transcriptBox.scrollTop = transcriptBox.scrollHeight;
+        }, 10);
+      } else {
+        clearInterval(this.transcriptInterval);
+      }
+    }, 1200);
+  }
+
   onTemplateChange() {
     const template = this.mailTemplates.find(t => t.id === this.selectedTemplate);
     this.mailTemplate = template ? template.body : '';

@@ -13,6 +13,7 @@ interface Interaction {
   nextBestAction: string;
   action: string;
 }
+
 @Component({
   selector: 'app-customer-interactions',
   imports: [CommonModule, AgGridModule],
@@ -21,42 +22,50 @@ interface Interaction {
   styleUrl: './customer-interactions-component.scss'
 })
 export class CustomerInteractionsComponent {
-theme = themeQuartz; // Use the material theme
-gridOptions: GridOptions;
-  // Typed columnDefs array
-columnDefs: ColDef<Interaction>[] = [
-  { headerName: 'Type', field: 'type', filter: true, sortable: true },
-  {
-    headerName: 'Category',
-    field: 'category',
-    filter: true,
-    sortable: true,
-    cellClass: params => 'category-highlight'
-  },
-  { headerName: 'Client', field: 'client', filter: true, sortable: true },
-  {
-    headerName: 'Date',
-    field: 'date',
-    filter: true,
-    sortable: true,
-    valueFormatter: params => {
-      if (!params.value) return '';
-      const date = new Date(params.value);
-      return date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      }).replace(/ /g, ' ');
+  theme = themeQuartz;
+  gridOptions: GridOptions = {
+    defaultColDef: {
+      resizable: true,
+      minWidth: 80,
+      flex: 1
+    },
+    onGridReady: (params: any) => {
+      params.api.sizeColumnsToFit();
     }
-  },
-  { headerName: 'Status', field: 'status', filter: true, sortable: true },
-  { headerName: 'Notes', field: 'notes', filter: true },
-  { headerName: 'Next Best Action', field: 'nextBestAction', filter: true, sortable: true },
-  {
-    headerName: 'Action',
-    field: 'action',
-    cellRenderer: (params: any) => {
-      return `
+  };
+
+  columnDefs: ColDef<Interaction>[] = [
+    { headerName: 'Type', field: 'type', filter: true, sortable: true },
+    {
+      headerName: 'Category',
+      field: 'category',
+      filter: true,
+      sortable: true,
+      cellClass: () => 'category-highlight'
+    },
+    { headerName: 'Client', field: 'client', filter: true, sortable: true },
+    {
+      headerName: 'Date',
+      field: 'date',
+      filter: true,
+      sortable: true,
+      valueFormatter: params => {
+        if (!params.value) return '';
+        const date = new Date(params.value);
+        return date.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }).replace(/ /g, ' ');
+      }
+    },
+    { headerName: 'Status', field: 'status', filter: true, sortable: true },
+    { headerName: 'Notes', field: 'notes', filter: true },
+    { headerName: 'Next Best Action', field: 'nextBestAction', filter: true, sortable: true },
+    {
+      headerName: 'Action',
+      field: 'action',
+      cellRenderer: (params: any) => `
         <span class="action-icon" title="Complete" data-action="Completed" data-row="${params.rowIndex}">
           <svg width="20" height="20" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10" fill="#3cb371"/>
@@ -75,11 +84,11 @@ columnDefs: ColDef<Interaction>[] = [
             <circle cx="12" cy="12" r="5" fill="#fff"/>
           </svg>
         </span>
-      `;
+      `
     }
-  }
-];                                                  
-interactions = [
+  ];
+
+  interactions: Interaction[] = [
     {
       type: 'Service Request',
       category: 'Update Risk Profile',
@@ -141,19 +150,7 @@ interactions = [
       action: 'Pending'
     }
   ];
-  selectedCategory: string = 'Engagement Idea';
-  categorySummary = [
-    { type: 'Service Request', count: 0 },
-     { type: 'Engagement Idea', count: 0 },
-    { type: 'Transaction', count: 0 },
-    { type: 'Query/Feedback', count: 0 }
-  ];
 
-
-
-  showCategoryPopup = false;
-  popupCategoryType = '';
-  popupCategoryInteractions: any[] = [];
   ideas = [
     { type: 'Birthday', client: 'Alice Johnson', date: '2024-08-02', action: 'Send personalized wishes and offer a special portfolio review.' },
     { type: 'Anniversary', client: 'Bob Smith', date: '2024-08-10', action: 'Congratulate and discuss long-term investment goals.' },
@@ -163,59 +160,58 @@ interactions = [
     { type: 'Anniversary', client: 'Frank Miller', date: '2024-08-12', action: 'Send anniversary wishes and discuss new investment opportunities.' },
     { type: 'Portfolio Review', client: 'Grace Lee', date: '2024-08-18', action: 'Invite for portfolio review and discuss diversification.' },
     { type: 'Performance Checkpoint', client: 'Henry Ford', date: '2024-08-22', action: 'Share performance summary and suggest next steps.' }
-     ];
+  ];
 
+  selectedCategory: string = 'Engagement Idea';
+  categorySummary = [
+    { type: 'Service Request', count: 0 },
+    { type: 'Engagement Idea', count: 0 },
+    { type: 'Transaction', count: 0 },
+    { type: 'Query/Feedback', count: 0 }
+  ];
 
+  showCategoryPopup = false;
+  popupCategoryType = '';
+  popupCategoryInteractions: Interaction[] = [];
 
-
-
-
-constructor() {
-    this.gridOptions = {
-      defaultColDef: {
-        resizable: true,
-        minWidth: 80,
-        flex: 1 // auto-size columns based on available space
-      },
-      onGridReady: (params: any) => {
-        params.api.sizeColumnsToFit();
-      }
-    };
+  constructor() {
+    this.mergeIdeasWithInteractions();
+    this.updateCategorySummary();
   }
-ngOnInit() {
-  document.addEventListener('click', (e: any) => {
-    if (e.target && (e.target.closest('.action-icon'))) {
-      const icon = e.target.closest('.action-icon');
-      const rowIndex = Number(icon.getAttribute('data-row'));
-      const action = icon.getAttribute('data-action');
-      const item = this.filteredInteractions[rowIndex];
-      if (item) {
-        item.action = action;
-        item.status = action;
+
+  ngOnInit() {
+    document.addEventListener('click', (e: any) => {
+      if (e.target && e.target.closest('.action-icon')) {
+        const icon = e.target.closest('.action-icon');
+        const rowIndex = Number(icon.getAttribute('data-row'));
+        const action = icon.getAttribute('data-action');
+        const item = this.filteredInteractions[rowIndex];
+        if (item) {
+          item.action = action;
+          item.status = action;
+        }
       }
-    }
-  });
-  this.mergeIdeasWithInteractions();
-  this.updateCategorySummary();
-}
-onGridReady(params: any) {
-  params.api.sizeColumnsToFit();
-}
-mergeIdeasWithInteractions() {
-  // Convert ideas to interaction-like objects and add to interactions array
-  const ideasAsInteractions = this.ideas.map(idea => ({
-    type: 'Engagement Idea',
-    category: idea.type,
-    client: idea.client,
-    date: idea.date,
-    status: 'Planned',
-    notes: idea.action,                                                       
-    nextBestAction: idea.action,
-    action: 'Planned'
-  }));
-  this.interactions = [...this.interactions, ...ideasAsInteractions];
-}
-    
+    });
+  }
+
+  onGridReady(params: any) {
+    params.api.sizeColumnsToFit();
+  }
+
+  mergeIdeasWithInteractions() {
+    const ideasAsInteractions: Interaction[] = this.ideas.map(idea => ({
+      type: 'Engagement Idea',
+      category: idea.type,
+      client: idea.client,
+      date: idea.date,
+      status: 'Planned',
+      notes: idea.action,
+      nextBestAction: idea.action,
+      action: 'Planned'
+    }));
+    this.interactions = [...this.interactions, ...ideasAsInteractions];
+  }
+
   updateCategorySummary() {
     this.categorySummary.forEach(cat => {
       cat.count = this.interactions.filter(i => i.type === cat.type).length;
@@ -236,7 +232,7 @@ mergeIdeasWithInteractions() {
     this.selectedCategory = type;
   }
 
-  get filteredInteractions() {
+  get filteredInteractions(): Interaction[] {
     if (this.selectedCategory === 'All') return this.interactions;
     return this.interactions.filter(i => i.type === this.selectedCategory);
   }
@@ -249,16 +245,4 @@ mergeIdeasWithInteractions() {
       year: 'numeric'
     }).replace(/ /g, ' ');
   }
-
-
-  markCompleted(item: any) {
-    item.status = 'Completed';
-  }
-  markScheduled(item: any) {
-    item.status = 'Scheduled';
-  }
-  closeTodo(item: any) {
-    item.status = 'Closed';
-  }
-
 }

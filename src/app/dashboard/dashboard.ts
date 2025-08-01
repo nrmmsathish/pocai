@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import {
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponentInterface
-} from 'angular-gridster2';
-import { GridsterModule } from 'angular-gridster2';
+import { GridsterConfig, GridsterModule } from 'angular-gridster2';
 import { ChatComponent } from '../chat-component/chat-component';
 import { ClientsContactWidgetComponent } from '../clients-contact-widget-component/clients-contact-widget-component';
 import { CustomerInteractionsComponent } from '../customer-interactions-component/customer-interactions-component';
@@ -15,40 +9,39 @@ import { CioInsightsComponent } from '../cio-insights-component/cio-insights-com
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
-  imports: [ ChatComponent,CustomerInteractionsComponent,ClientsContactWidgetComponent,CioInsightsComponent, CommonModule, GridsterModule],
+  imports: [
+    ChatComponent,
+    CustomerInteractionsComponent,
+    ClientsContactWidgetComponent,
+    CioInsightsComponent,
+    CommonModule,
+    GridsterModule
+  ],
   styleUrls: ['./dashboard.scss']
 })
 export class Dashboard {
-  options: GridsterConfig;
+  options: GridsterConfig = {
+    draggable: {
+      enabled: true,
+      ignoreContent: true,
+      dragHandleClass: 'widget-header'
+    },
+    resizable: { enabled: true },
+    minCols: 6,
+    minRows: 4,
+    maxCols: 12,
+    maxRows: 8,
+    pushItems: true,
+    displayGrid: 'onDrag&Resize'
+  };
   navOpen = false;
   showChat = false;
   isDarkTheme = false;
   activeTab: 'clients' | 'nba' | 'campaigns' | 'ideas' = 'clients';
 
- 
-  constructor() {
-    this.options = {
-     draggable: {
-      enabled: true,
-      ignoreContent: true,
-      dragHandleClass: 'widget-header' // <-- Only drag on icon!
-    },
-      resizable: { enabled: true },
-      minCols: 6,
-      minRows: 4,
-      maxCols: 12,
-      maxRows: 8,
-      pushItems: true,
-      displayGrid: 'onDrag&Resize'
-    };
-
-
-   
-  }
   toggleNav() {
     this.navOpen = !this.navOpen;
   }
-
 
   minimizeItem(item: any) {
     item.rows = 1;
@@ -57,10 +50,11 @@ export class Dashboard {
   }
 
   maximizeItem(item: any) {
-    item.rows = 3; // or your preferred max
-    item.cols = 4; // or your preferred max
+    item.rows = 3;
+    item.cols = 4;
     item.minimized = false;
   }
+
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
   }

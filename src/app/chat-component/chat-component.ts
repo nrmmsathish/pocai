@@ -3,7 +3,6 @@ import { io } from 'socket.io-client';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-chat',
   standalone: true,
@@ -11,8 +10,6 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss']
 })
-
-// ...existing code...
 export class ChatComponent {
   socket = io('http://localhost:3000');
   messages: { from: string, text: string, partial?: boolean }[] = [];
@@ -20,39 +17,30 @@ export class ChatComponent {
   recognition: any;
   isSpeaking = false;
   mouthShape: 'normal' | 'wide' | 'narrow' = 'normal';
-
   chatInput: string = '';
   listeningSeconds: number = 0;
+  @ViewChild('widgetContainer') widgetContainer!: ElementRef;
+
   private speechPauseTimeout: any;
   private mediaRecorder: any;
   private audioChunks: any[] = [];
   private timerInterval: any;
-  @ViewChild('widgetContainer') widgetContainer!: ElementRef;
   private dragging = false;
   private dragOffset = { x: 0, y: 0 };
   autoRestartTimeout: any = null;
+  private lipSyncInterval: any;
+
   constructor(private zone: NgZone, private cdr: ChangeDetectorRef) {
     this.socket.on('bot', (msg: string) => {
       this.zone.run(() => {
         this.messages.push({ from: 'Bot', text: msg });
-        this.cdr.detectChanges(); // Force update after bot message
+        this.cdr.detectChanges();
         this.speak(msg);
       });
     });
+  }
 
-  }
-  resetSpeechPauseTimer() {
-    this.clearSpeechPauseTimer();
-    this.speechPauseTimeout = setTimeout(() => {
-      // Auto stop listening when user pauses speech
-      if (this.recognizing) {
-        this.recognition.stop();
-        this.recognizing = false;
-        this.stopTimer();
-        this.clearSpeechPauseTimer();
-      }
-    }, 2000); // 2 seconds pause
-  }
+  // --- Widget Drag ---
   startDrag(event: MouseEvent) {
     this.dragging = true;
     const widget = this.widgetContainer.nativeElement;
@@ -61,7 +49,6 @@ export class ChatComponent {
     document.addEventListener('mousemove', this.onDragMove);
     document.addEventListener('mouseup', this.stopDrag);
   }
-
   onDragMove = (event: MouseEvent) => {
     if (!this.dragging) return;
     const widget = this.widgetContainer.nativeElement;
@@ -70,17 +57,17 @@ export class ChatComponent {
     widget.style.position = 'fixed';
     widget.style.zIndex = 9999;
   };
-
   stopDrag = () => {
     this.dragging = false;
     document.removeEventListener('mousemove', this.onDragMove);
     document.removeEventListener('mouseup', this.stopDrag);
   };
-
   closeWidget() {
     const widget = this.widgetContainer.nativeElement;
     widget.style.display = 'none';
   }
+
+  // --- Audio Recording ---
   async startAudioRecording() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     this.mediaRecorder = new (window as any).MediaRecorder(stream);
@@ -89,87 +76,31 @@ export class ChatComponent {
     this.mediaRecorder.ondataavailable = (event: any) => {
       if (event.data.size > 0) {
         this.audioChunks.push(event.data);
-        // Send chunk to backend
         this.socket.emit('audio', event.data);
       }
     };
 
     this.mediaRecorder.onstop = () => {
-      // Optionally send the full audio blob
       const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
       this.socket.emit('audio-complete', audioBlob);
     };
 
-    this.mediaRecorder.start(250); // Send chunks every 250ms
+    this.mediaRecorder.start(250);
   }
 
   stopAudioRecording() {
     if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-      this.mediaRecorder.ondataavailable = null; // Prevent further chunk sending
-      this.mediaRecorder.onstop = null; // Prevent sending audio-complete
+      this.mediaRecorder.ondataavailable = null;
+      this.mediaRecorder.onstop = null;
       this.mediaRecorder.stop();
-
-      // Release the media stream tracks
       if (this.mediaRecorder.stream) {
         this.mediaRecorder.stream.getTracks().forEach((track: any) => track.stop());
       }
       this.mediaRecorder = null;
     }
   }
-  // async startAudioRecording() {
-  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  //     this.mediaRecorder = new (window as any).MediaRecorder(stream);
-  //     this.audioChunks = [];
 
-  //     this.mediaRecorder.ondataavailable = (event: any) => {
-  //       if (event.data.size > 0) {
-  //         this.audioChunks.push(event.data);
-  //       }
-  //     };
-
-  //     this.mediaRecorder.onstop = () => {
-  //       const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-  //       // Send the audio blob to the backend for transcription
-  //       const reader = new FileReader();
-  //       reader.onload = () => {
-  //         const arrayBuffer = reader.result as ArrayBuffer;
-  //         this.socket.emit('audio-for-transcription', arrayBuffer);
-  //       };
-  //       reader.readAsArrayBuffer(audioBlob);
-  //     };
-
-  //     this.mediaRecorder.start();
-  //   }
-
-  //   startListening() {
-  //     this.startAudioRecording();
-  //     this.zone.run(() => {
-  //       this.recognizing = true;
-  //       this.listeningSeconds = 0;
-  //       this.startTimer();
-  //     });
-  //     this.resetSpeechPauseTimer();
-  //   }
-
-  //   stopListening() {
-  //     if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-  //       this.mediaRecorder.stop();
-  //       this.recognizing = false;
-  //       this.stopTimer();
-  //       this.clearSpeechPauseTimer();
-  //     }
-  //   }
-
-  //   ngOnInit() {
-  //     this.socket.on('transcription-result', (transcript: string) => {
-  //       this.zone.run(() => {
-  //         this.messages.push({ from: 'You', text: transcript });
-  //         this.socket.emit('chat', transcript);
-  //       });
-  //     });
-
-  //   }
-
+  // --- Speech Recognition ---
   startListening() {
     if (!('webkitSpeechRecognition' in window)) {
       alert('Speech Recognition not supported in this browser.');
@@ -188,14 +119,10 @@ export class ChatComponent {
       });
     };
     this.recognition.onend = () => {
-
       this.zone.run(() => {
         this.recognizing = false;
         this.stopTimer();
         this.clearSpeechPauseTimer();
-        // Restart listening automatically
-        //this.autoRestartTimeout = setTimeout(() => this.startListening(), 400);
-
       });
     };
     this.recognition.onresult = (event: any) => {
@@ -203,58 +130,57 @@ export class ChatComponent {
       this.zone.run(() => {
         this.messages.push({ from: 'You', text: transcript });
         this.socket.emit('chat', transcript);
-        this.cdr.detectChanges(); // Ensure UI updates immediately
+        this.cdr.detectChanges();
       });
       this.stopAudioRecording();
       this.resetSpeechPauseTimer();
-      // Stop listening after result so message appears immediately
       this.stopListening();
-      // Optionally, restart listening automatically
-      //this.autoRestartTimeout = setTimeout(() => this.startListening(), 400);
     };
 
     this.recognition.start();
-    //this.resetSpeechPauseTimer();
-    //this.recognizing = true;
     this.listeningSeconds = 0;
     this.startTimer();
   }
 
-
   stopListening() {
     if (this.recognition && this.recognizing) {
-      // Prevent auto-restart by removing the onend handler
       this.recognition.onend = null;
       this.recognition.stop();
       this.recognizing = false;
       this.stopTimer();
       this.clearSpeechPauseTimer();
-      // Clear auto-restart timeout if set
       if (this.autoRestartTimeout) {
         clearTimeout(this.autoRestartTimeout);
         this.autoRestartTimeout = null;
-        
       }
     }
-    // Stop audio recording and prevent further chunks
     this.stopAudioRecording();
   }
 
-
+  // --- Timers ---
+  resetSpeechPauseTimer() {
+    this.clearSpeechPauseTimer();
+    this.speechPauseTimeout = setTimeout(() => {
+      if (this.recognizing) {
+        this.recognition.stop();
+        this.recognizing = false;
+        this.stopTimer();
+        this.clearSpeechPauseTimer();
+      }
+    }, 2000);
+  }
   clearSpeechPauseTimer() {
     if (this.speechPauseTimeout) {
       clearTimeout(this.speechPauseTimeout);
       this.speechPauseTimeout = null;
     }
   }
-
   startTimer() {
     this.stopTimer();
     this.timerInterval = setInterval(() => {
       this.zone.run(() => this.listeningSeconds++);
     }, 1000);
   }
-
   stopTimer() {
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
@@ -262,6 +188,7 @@ export class ChatComponent {
     }
   }
 
+  // --- Chat ---
   sendMessage() {
     if (this.chatInput.trim()) {
       this.messages.push({ from: 'You', text: this.chatInput });
@@ -270,40 +197,25 @@ export class ChatComponent {
     }
   }
 
+  // --- Speech Synthesis & Lip Sync ---
   speak(text: string) {
     const synth = window.speechSynthesis;
     const utter = new SpeechSynthesisUtterance(text);
-
-    // Select Indian English voice if available
     const voices = synth.getVoices();
     const indianVoice = voices.find(v => v.name.includes('Heera')) || voices.find(v => v.lang === 'en-IN') || voices.find(v => v.name.includes('India')) || voices[0];
     if (indianVoice) utter.voice = indianVoice;
-
-    // Set pitch for tone (optional)
     utter.pitch = 1.1;
-
-    utter.onstart = () => {
-      this.startLipSync(text, utter.pitch);
-    };
-    utter.onend = () => {
-      this.stopLipSync();
-    };
-
+    utter.onstart = () => this.startLipSync(text, utter.pitch);
+    utter.onend = () => this.stopLipSync();
     synth.speak(utter);
   }
-
-  private lipSyncInterval: any;
 
   startLipSync(text: string, pitch: number) {
     this.isSpeaking = true;
     const words = text.split(/\s+/);
     let wordIndex = 0;
-
-    // Set mouth shape based on pitch
     this.mouthShape = pitch > 1.2 ? 'wide' : pitch < 0.9 ? 'narrow' : 'normal';
-
     this.lipSyncInterval = setInterval(() => {
-      // Animate mouth for each word
       this.mouthShape = (wordIndex % 2 === 0)
         ? (pitch > 1.2 ? 'wide' : 'normal')
         : (pitch < 0.9 ? 'narrow' : 'normal');
@@ -312,11 +224,10 @@ export class ChatComponent {
         clearInterval(this.lipSyncInterval);
         this.mouthShape = 'normal';
       }
-    }, 350); // Change every 350ms per word
+    }, 350);
   }
 
   stopLipSync() {
-    //this.isSpeaking = false;
     this.mouthShape = 'normal';
     if (this.lipSyncInterval) {
       clearInterval(this.lipSyncInterval);

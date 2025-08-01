@@ -1,6 +1,13 @@
 <div class="widget-content">
-  <ag-grid-angular style="width: 100%; height: 650px;" [theme]="theme" [gridOptions]="gridOptions" [rowData]="rowData"
-    pagination="true" [paginationPageSize]="20" (cellClicked)="onCellClicked($event)" [columnDefs]="columnDefs"
+  <ag-grid-angular
+    style="width: 100%; height: 650px;"
+    [theme]="theme"
+    [gridOptions]="gridOptions"
+    [rowData]="rowData"
+    pagination="true"
+    [paginationPageSize]="20"
+    (cellClicked)="onCellClicked($event)"
+    [columnDefs]="columnDefs"
     rowSelection="single">
   </ag-grid-angular>
 </div>
@@ -14,47 +21,27 @@
   </div>
   <div class="ai-popup-content">
     <div class="ai-theme-gradient"></div>
-    <div *ngIf="showPopup" class="ai-talking-points-popup">
+    <div class="ai-talking-points-popup">
       <div class="ai-tabs">
         <button [class.active]="activeTab === 'summary'" (click)="activeTab = 'summary'">Client Summary</button>
         <button [class.active]="activeTab === 'talking'" (click)="activeTab = 'talking'">Pre-Meeting Points</button>
       </div>
       <div class="ai-tab-content">
         <div *ngIf="activeTab === 'summary'" class="client-summary-section">
-
           <div class="client-summary-details two-column">
             <div class="summary-col">
-              <!-- <div><strong>Name:</strong> {{selectedClient?.name}}</div>
-    <div><strong>Tier:</strong> <span class="tier">{{selectedClient?.tier}}</span></div>
-    <div>
-      <strong>Portfolio Value:</strong>
-      <span class="aum">${{selectedClient?.aum | number}}</span>
-      <span *ngIf="selectedClient?.aumTrend === 'up'" class="trend-up">▲</span>
-      <span *ngIf="selectedClient?.aumTrend === 'down'" class="trend-down">▼</span>
-    </div>
-    <div>
-      <strong>NNIA:</strong> ${{selectedClient?.nnia | number}}
-      <span *ngIf="selectedClient?.nniaTrend === 'up'" class="trend-up">▲</span>
-      <span *ngIf="selectedClient?.nniaTrend === 'down'" class="trend-down">▼</span>
-    </div> -->
               <div><strong>Risk Profile:</strong> {{selectedClient?.riskProfile}}</div>
               <div>
                 <strong>Last Transaction Amount:</strong>
-                <span *ngIf="selectedClient?.lastTransactionAmount">${{selectedClient?.lastTransactionAmount |
-                  number}}</span>
+                <span *ngIf="selectedClient?.lastTransactionAmount">${{selectedClient?.lastTransactionAmount | number}}</span>
                 <span *ngIf="!selectedClient?.lastTransactionAmount">N/A</span>
               </div>
-              <!-- <div>
-      <strong>Diversification:</strong>
-      <span *ngIf="selectedClient?.portfolioDiversification">{{selectedClient?.portfolioDiversification}} assets</span>
-      <span *ngIf="!selectedClient?.portfolioDiversification">N/A</span>
-    </div> -->
               <div>
                 <strong>Recent Articles Read:</strong>
                 <span *ngIf="selectedClient?.recentArticles?.length; else noArticles">
                   <ul>
                     <li *ngFor="let article of selectedClient?.recentArticles">
-                      <a [href]="article.url" target="_blank">{{article.title}} </a>
+                      <a [href]="article.url" target="_blank">{{article.title}}</a>
                       <span *ngIf="article.readDate"> ({{article.readDate | date:'dd MMM yyyy'}})</span>
                     </li>
                   </ul>
@@ -63,51 +50,33 @@
               </div>
               <div>
                 <strong>Activity Status:</strong>
-                <span
-                  [ngClass]="{'active-investing': selectedClient?.isActiveInvestor, 'inactive-investing': !selectedClient?.isActiveInvestor}">
+                <span [ngClass]="{'active-investing': selectedClient?.isActiveInvestor, 'inactive-investing': !selectedClient?.isActiveInvestor}">
                   {{selectedClient?.isActiveInvestor ? 'Actively Investing' : 'Not Active'}}
                 </span>
               </div>
             </div>
-
-            <!-- <div>
-      <strong>Compliance Flag:</strong>
-      <span [ngClass]="{'flagged': selectedClient?.complianceFlag, 'ok': !selectedClient?.complianceFlag}">
-        {{selectedClient?.complianceFlag ? 'Yes' : 'No'}}
-      </span>
-    </div> -->
-            <div><strong>Tax Residency:</strong> {{selectedClient?.taxResidency}}</div>
-            <!-- <div>
-      <strong>Tags:</strong>
-      <span *ngIf="selectedClient?.customTags?.length; else noTags">
-        <span *ngFor="let tag of selectedClient?.customTags" class="tag">{{tag}}</span>
-      </span>
-      <ng-template #noTags>None</ng-template>
-    </div> -->
-            <div><strong>Last Contact:</strong> {{selectedClient?.lastContact | date:'dd MMM yyyy'}}
-            </div>
             <div>
-              <strong>Last Contact Summary:</strong> <img src="aiIcon.png" alt="AI Icon"
-                style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
-              {{selectedClient?.lastContactSummary || 'No summary available.'}}
-
+              <strong>Tax Residency:</strong> {{selectedClient?.taxResidency}}
             </div>
-
+            <div><strong>Last Contact:</strong> {{selectedClient?.lastContact | date:'dd MMM yyyy'}}</div>
+            <div>
+              <strong>Last Contact Summary:</strong>
+              <img src="aiIcon.png" alt="AI Icon" style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
+              {{selectedClient?.lastContactSummary || 'No summary available.'}}
+            </div>
           </div>
         </div>
         <div *ngIf="activeTab === 'talking'" class="talking-points-section">
-
-         <ul>
-  <li *ngFor="let point of talkingPointsList; let i = index" [innerHTML]="point" [style.--i]="i"></li>
-</ul>
+          <ul>
+            <li *ngFor="let point of talkingPointsList; let i = index" [innerHTML]="point" [style.--i]="i"></li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- Add this after your AI popup -->
+<!-- Mail Popup -->
 <div class="mail-popup-backdrop" *ngIf="showMailPopup"></div>
 <div class="mail-popup outlook-style" *ngIf="showMailPopup">
   <div class="mail-popup-header">
@@ -154,7 +123,8 @@
   </div>
 </div>
 
-<div class="whatsapp-popup-backdrop" *ngIf="showWhatsappPopup" (click)="onBackdropClick($event)"></div>
+<!-- WhatsApp Popup -->
+<div class="whatsapp-popup-backdrop" *ngIf="showWhatsappPopup" (click)="closeWhatsappPopup()"></div>
 <div class="whatsapp-popup" *ngIf="showWhatsappPopup">
   <div class="whatsapp-popup-header">
     <span>🟢 WhatsApp Chat with {{whatsappRecipient}}</span>
@@ -176,6 +146,7 @@
   </div>
 </div>
 
+<!-- Zoom Popup -->
 <div class="zoom-popup-backdrop" *ngIf="showZoomPopup" (click)="closeZoomPopup()"></div>
 <div class="zoom-popup" *ngIf="showZoomPopup">
   <div class="zoom-popup-header">
@@ -210,8 +181,9 @@
     </div>
   </div>
 </div>
-<!-- Add after other popups -->
-<div class="call-popup-backdrop" *ngIf="showCallPopup" (click)="onBackdropClick($event)"></div>
+
+<!-- Call Popup -->
+<div class="call-popup-backdrop" *ngIf="showCallPopup" (click)="hangupCall()"></div>
 <div class="call-popup" *ngIf="showCallPopup">
   <div class="call-popup-header">
     <span>
@@ -236,9 +208,7 @@
     <div class="call-animation">
       <div class="call-wave" *ngIf="!listening"></div>
       <div class="call-wave listening" *ngIf="listening"></div>
-      <div class="call-status">
-        {{callStatus}}
-      </div>
+      <div class="call-status">{{callStatus}}</div>
       <div *ngIf="listening" class="assistant-listening">
         <span>🧑‍💼 AI Meeting expert is listening...</span>
         <span *ngIf="listening" class="record-indicator">
@@ -260,17 +230,20 @@
         <span>🧠 Intelli Assist</span>
       </div>
       <div class="assistant-transcript futuristic-transcript">
-        <strong><svg width="18" height="18" style="vertical-align:middle;margin-right:4px;">
-            <circle cx="9" cy="9" r="8" fill="#2d8cff" /><text x="9" y="13" text-anchor="middle" font-size="10"
-              fill="#fff">AI</text>
-          </svg> Live Transcript:</strong>
+        <strong>
+          <svg width="18" height="18" style="vertical-align:middle;margin-right:4px;">
+            <circle cx="9" cy="9" r="8" fill="#2d8cff" />
+            <text x="9" y="13" text-anchor="middle" font-size="10" fill="#fff">AI</text>
+          </svg>
+          Live Transcript:
+        </strong>
         <div class="transcript-box">
           <div *ngFor="let line of transcriptLines">
             <span class="transcript-line" [ngClass]="{
-            'advisor': line.startsWith('Advisor:'),
-            'client': line.startsWith('Client:'),
-            'ai': line.startsWith('AI:')
-          }">
+              'advisor': line.startsWith('Advisor:'),
+              'client': line.startsWith('Client:'),
+              'ai': line.startsWith('AI:')
+            }">
               {{ line }}
             </span>
           </div>
