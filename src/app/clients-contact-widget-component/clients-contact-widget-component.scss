@@ -1158,3 +1158,52 @@ ag-grid-angular {
 /* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\clients-contact-widget-component\clients-contact-widget-component.scss */
 
 
+
+
+// Example: Responsive container
+.widget-content,
+.ai-popup,
+.call-assistant-extension {
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+}
+
+@media (max-width: 900px) {
+  .ai-popup,
+  .call-assistant-extension {
+    padding: 12px 6px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .widget-content,
+  .ai-popup,
+  .call-assistant-extension {
+    padding: 6px 2px;
+    border-radius: 8px;
+    font-size: 0.98em;
+  }
+  .ag-theme-alpine,
+  .ag-theme-balham {
+    font-size: 0.95em;
+  }
+  .ai-tabs button {
+    padding: 8px 10px;
+    font-size: 0.98em;
+  }
+  .premeeting-points-container {
+    padding: 10px 4px;
+  }
+}// Example for a two-column layout
+@media (max-width: 700px) {
+  .client-summary-details {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+}     
+
+.mobile .gridster-item {
+    height: 100% !important;
+}

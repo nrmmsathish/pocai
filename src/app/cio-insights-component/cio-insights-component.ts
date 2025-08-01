@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgGridModule } from 'ag-grid-angular';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions,themeQuartz } from 'ag-grid-community';
 @Component({
   selector: 'app-cio-insights-component',
   imports: [CommonModule, AgGridModule],
@@ -10,6 +10,7 @@ import { GridOptions } from 'ag-grid-community';
   styleUrl: './cio-insights-component.scss'
 })
 export class CioInsightsComponent {
+  theme = themeQuartz; // Use the material theme
   insights = [
     {
       title: 'ESG Investing: The Future of Wealth',
@@ -45,7 +46,15 @@ export class CioInsightsComponent {
   customerTableData: any[] = [];
  customerGridOptions: GridOptions = {
   pagination: true,
-  paginationPageSize: 20 // Show 20 rows per page
+  paginationPageSize: 20, // Show 20 rows per page
+  defaultColDef: {
+        resizable: true,
+        minWidth: 80,
+        flex: 1 // auto-size columns based on available space
+      },
+      onGridReady: (params: any) => {
+        params.api.sizeColumnsToFit();
+      }
   
 };
  

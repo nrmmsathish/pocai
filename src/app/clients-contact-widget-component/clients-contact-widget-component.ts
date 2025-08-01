@@ -42,10 +42,12 @@ export class ClientsContactWidgetComponent {
       }
     };
   }
+  isMobile = window.innerWidth <= 600;
+
   showReasonTooltip = false;
   recentArticles?: { title: string; url: string; readDate?: string }[];
   isActiveInvestor?: boolean;
-  gridOptions: any;
+  gridOptions: GridOptions;
   mailTemplates = [
     { id: 'welcome', name: 'Welcome Email', body: 'Dear {{name}},\n\nWelcome to our Private Wealth service...' },
     { id: 'review', name: 'Portfolio Review', body: 'Dear {{name}},\n\nWe would like to schedule a review of your portfolio...' },

@@ -9,3 +9,7 @@ body, .dashboard-root,button {
   color: #193b6a;
   margin: 0;
 }
+
+.mobile .gridster-item {
+    height: 100% !important;
+}

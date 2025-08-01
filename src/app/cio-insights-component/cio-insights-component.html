@@ -34,6 +34,7 @@
      class="ag-theme-alpine"
     [columnDefs]="customerColumnDefs"
     rowSelection="multiple"
+     [theme]="theme" 
     [animateRows]="true"
     [gridOptions]="customerGridOptions"
     (gridReady)="onCustomerGridReady($event)">

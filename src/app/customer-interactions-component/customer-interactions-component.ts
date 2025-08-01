@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgGridModule } from 'ag-grid-angular';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridOptions, themeQuartz } from 'ag-grid-community';
 
 interface Interaction {
   type: string;
@@ -21,8 +21,8 @@ interface Interaction {
   styleUrl: './customer-interactions-component.scss'
 })
 export class CustomerInteractionsComponent {
-
-
+theme = themeQuartz; // Use the material theme
+gridOptions: GridOptions;
   // Typed columnDefs array
 columnDefs: ColDef<Interaction>[] = [
   { headerName: 'Type', field: 'type', filter: true, sortable: true },
@@ -170,7 +170,18 @@ interactions = [
 
 
 
-
+constructor() {
+    this.gridOptions = {
+      defaultColDef: {
+        resizable: true,
+        minWidth: 80,
+        flex: 1 // auto-size columns based on available space
+      },
+      onGridReady: (params: any) => {
+        params.api.sizeColumnsToFit();
+      }
+    };
+  }
 ngOnInit() {
   document.addEventListener('click', (e: any) => {
     if (e.target && (e.target.closest('.action-icon'))) {
