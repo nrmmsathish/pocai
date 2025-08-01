@@ -1,0 +1,50 @@
+<div class="chat-avatar">
+  <div class="mouth"
+    [class.speaking]="isSpeaking"
+    [class.wide]="mouthShape === 'wide'"
+    [class.narrow]="mouthShape === 'narrow'">
+  </div>
+</div>
+<div class="widget-container" #widgetContainer>
+  <div class="widget-header" (mousedown)="startDrag($event)">
+    <span class="header-title">🤖 Intelli Assist</span>
+    <button class="close-btn" (click)="closeWidget()" aria-label="Close">&times;</button>
+  </div>
+  
+  <div class="chat-container">
+   
+    <div class="chat-messages">
+      <div *ngFor="let msg of messages" [ngClass]="{
+             'user-msg': msg.from === 'You', 
+             'bot-msg': msg.from === 'Bot',
+             'partial-msg': msg.partial
+           }">
+        <span class="msg-from" *ngIf="msg.from === 'Bot'">🤖</span>
+        <span class="msg-from" *ngIf="msg.from === 'You'">🧑</span>
+        <span class="msg-text">{{msg.text}}</span>
+        <span *ngIf="msg.partial" class="msg-partial-indicator">...</span>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input [(ngModel)]="chatInput" placeholder="Type your message..." (keyup.enter)="sendMessage()" class="chat-input"
+        autocomplete="off" />
+      <button (click)="sendMessage()" class="send-btn" aria-label="Send">
+        <svg width="20" height="20" fill="currentColor">
+          <path d="M2 10l15-7v14z" />
+        </svg>
+      </button>
+    </div>
+    <div class="chat-actions">
+      <button (click)="startListening()" [disabled]="recognizing" class="mic-btn" aria-label="Start Listening">
+        <span *ngIf="!recognizing">🎤 Speak</span>
+        <span *ngIf="recognizing">🎤 Listening...</span>
+      </button>
+      <button (click)="stopListening()" class="stop-btn" aria-label="Stop Listening">
+        ⏹️
+      </button>
+      <div *ngIf="recognizing" class="timer">
+        <span>⏱️ {{ listeningSeconds }}s</span>
+      </div>
+    </div>
+  </div>
+</div>

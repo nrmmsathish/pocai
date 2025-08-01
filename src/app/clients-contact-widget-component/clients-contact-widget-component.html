@@ -1,0 +1,289 @@
+<div class="widget-content">
+  <ag-grid-angular style="width: 100%; height: 650px;" [theme]="theme" [gridOptions]="gridOptions" [rowData]="rowData"
+    pagination="true" [paginationPageSize]="20" (cellClicked)="onCellClicked($event)" [columnDefs]="columnDefs"
+    rowSelection="single">
+  </ag-grid-angular>
+</div>
+
+<!-- Generative AI Popup -->
+<div class="ai-popup-backdrop" *ngIf="showPopup" (click)="closePopup()"></div>
+<div class="ai-popup" *ngIf="showPopup">
+  <div class="ai-popup-header">
+    <span>🧠 AI Overview of {{selectedClient?.name}}</span>
+    <button class="close-btn" (click)="closePopup()" aria-label="Close">&times;</button>
+  </div>
+  <div class="ai-popup-content">
+    <div class="ai-theme-gradient"></div>
+    <div *ngIf="showPopup" class="ai-talking-points-popup">
+      <div class="ai-tabs">
+        <button [class.active]="activeTab === 'summary'" (click)="activeTab = 'summary'">Client Summary</button>
+        <button [class.active]="activeTab === 'talking'" (click)="activeTab = 'talking'">Pre-Meeting Points</button>
+      </div>
+      <div class="ai-tab-content">
+        <div *ngIf="activeTab === 'summary'" class="client-summary-section">
+
+          <div class="client-summary-details two-column">
+            <div class="summary-col">
+              <!-- <div><strong>Name:</strong> {{selectedClient?.name}}</div>
+    <div><strong>Tier:</strong> <span class="tier">{{selectedClient?.tier}}</span></div>
+    <div>
+      <strong>Portfolio Value:</strong>
+      <span class="aum">${{selectedClient?.aum | number}}</span>
+      <span *ngIf="selectedClient?.aumTrend === 'up'" class="trend-up">▲</span>
+      <span *ngIf="selectedClient?.aumTrend === 'down'" class="trend-down">▼</span>
+    </div>
+    <div>
+      <strong>NNIA:</strong> ${{selectedClient?.nnia | number}}
+      <span *ngIf="selectedClient?.nniaTrend === 'up'" class="trend-up">▲</span>
+      <span *ngIf="selectedClient?.nniaTrend === 'down'" class="trend-down">▼</span>
+    </div> -->
+              <div><strong>Risk Profile:</strong> {{selectedClient?.riskProfile}}</div>
+              <div>
+                <strong>Last Transaction Amount:</strong>
+                <span *ngIf="selectedClient?.lastTransactionAmount">${{selectedClient?.lastTransactionAmount |
+                  number}}</span>
+                <span *ngIf="!selectedClient?.lastTransactionAmount">N/A</span>
+              </div>
+              <!-- <div>
+      <strong>Diversification:</strong>
+      <span *ngIf="selectedClient?.portfolioDiversification">{{selectedClient?.portfolioDiversification}} assets</span>
+      <span *ngIf="!selectedClient?.portfolioDiversification">N/A</span>
+    </div> -->
+              <div>
+                <strong>Recent Articles Read:</strong>
+                <span *ngIf="selectedClient?.recentArticles?.length; else noArticles">
+                  <ul>
+                    <li *ngFor="let article of selectedClient?.recentArticles">
+                      <a [href]="article.url" target="_blank">{{article.title}} </a>
+                      <span *ngIf="article.readDate"> ({{article.readDate | date:'dd MMM yyyy'}})</span>
+                    </li>
+                  </ul>
+                </span>
+                <ng-template #noArticles>None</ng-template>
+              </div>
+              <div>
+                <strong>Activity Status:</strong>
+                <span
+                  [ngClass]="{'active-investing': selectedClient?.isActiveInvestor, 'inactive-investing': !selectedClient?.isActiveInvestor}">
+                  {{selectedClient?.isActiveInvestor ? 'Actively Investing' : 'Not Active'}}
+                </span>
+              </div>
+            </div>
+
+            <!-- <div>
+      <strong>Compliance Flag:</strong>
+      <span [ngClass]="{'flagged': selectedClient?.complianceFlag, 'ok': !selectedClient?.complianceFlag}">
+        {{selectedClient?.complianceFlag ? 'Yes' : 'No'}}
+      </span>
+    </div> -->
+            <div><strong>Tax Residency:</strong> {{selectedClient?.taxResidency}}</div>
+            <!-- <div>
+      <strong>Tags:</strong>
+      <span *ngIf="selectedClient?.customTags?.length; else noTags">
+        <span *ngFor="let tag of selectedClient?.customTags" class="tag">{{tag}}</span>
+      </span>
+      <ng-template #noTags>None</ng-template>
+    </div> -->
+            <div><strong>Last Contact:</strong> {{selectedClient?.lastContact | date:'dd MMM yyyy'}}
+            </div>
+            <div>
+              <strong>Last Contact Summary:</strong> <img src="aiIcon.png" alt="AI Icon"
+                style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
+              {{selectedClient?.lastContactSummary || 'No summary available.'}}
+
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="activeTab === 'talking'" class="talking-points-section">
+
+          <ul>
+            <li *ngFor="let point of talkingPointsList" [innerHTML]="point"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Add this after your AI popup -->
+<div class="mail-popup-backdrop" *ngIf="showMailPopup"></div>
+<div class="mail-popup outlook-style" *ngIf="showMailPopup">
+  <div class="mail-popup-header">
+    <span>
+      <svg width="22" height="22" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;">
+        <rect x="3" y="5" width="18" height="14" rx="2" stroke="#193b6a" stroke-width="2" />
+        <path d="M3 7l9 6 9-6" stroke="#193b6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      New Message
+    </span>
+    <button class="close-btn" (click)="closeMailPopup()" aria-label="Close">&times;</button>
+  </div>
+  <div class="mail-popup-content">
+    <div class="mail-fields">
+      <div class="mail-field-row">
+        <label>To:</label>
+        <input [(ngModel)]="mailRecipient" type="email" placeholder="client@domain.com" />
+      </div>
+      <div class="mail-field-row">
+        <label>Cc:</label>
+        <input [(ngModel)]="mailCc" type="email" placeholder="cc@domain.com" />
+      </div>
+      <div class="mail-field-row">
+        <label>Bcc:</label>
+        <input [(ngModel)]="mailBcc" type="email" placeholder="bcc@domain.com" />
+      </div>
+      <div class="mail-field-row">
+        <label>Subject:</label>
+        <input [(ngModel)]="mailSubject" type="text" placeholder="Subject" />
+      </div>
+    </div>
+    <div class="mail-template-select">
+      <label for="templateSelect"><strong>Select Template:</strong></label>
+      <select id="templateSelect" [(ngModel)]="selectedTemplate" (change)="onTemplateChange()">
+        <option *ngFor="let t of mailTemplates" [value]="t.id">{{t.name}}</option>
+      </select>
+      <button class="customize-btn" (click)="customizeTemplate()">Customize</button>
+    </div>
+    <textarea [(ngModel)]="mailTemplate" rows="10" class="mail-body" placeholder="Type your message here..."></textarea>
+    <div class="mail-signature">{{userSignature}}</div>
+    <div style="margin-top:12px;text-align:right;">
+      <button class="send-btn" (click)="sendMail()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="whatsapp-popup-backdrop" *ngIf="showWhatsappPopup" (click)="onBackdropClick($event)"></div>
+<div class="whatsapp-popup" *ngIf="showWhatsappPopup">
+  <div class="whatsapp-popup-header">
+    <span>🟢 WhatsApp Chat with {{whatsappRecipient}}</span>
+    <button class="close-btn" (click)="closeWhatsappPopup()" aria-label="Close">&times;</button>
+  </div>
+  <div class="whatsapp-popup-content">
+    <div class="whatsapp-chat-window">
+      <div *ngFor="let msg of whatsappMessages"
+        [ngClass]="{'me': msg.from === 'me', 'client': msg.from === 'client', 'bot': msg.from === 'bot'}"
+        class="whatsapp-message">
+        <span>{{msg.text}}</span>
+      </div>
+    </div>
+    <div class="whatsapp-input-row">
+      <input id="whatsapp-msg-input" (keydown.enter)="sendWhatsappMessage()" [(ngModel)]="whatsappInput" type="text"
+        placeholder="Type a message..." />
+      <button class="send-btn" (click)="sendWhatsappMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="zoom-popup-backdrop" *ngIf="showZoomPopup" (click)="closeZoomPopup()"></div>
+<div class="zoom-popup" *ngIf="showZoomPopup">
+  <div class="zoom-popup-header">
+    <span>
+      <svg width="22" height="22" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;">
+        <rect x="3" y="7" width="13" height="10" rx="2" stroke="#2D8CFF" stroke-width="2" />
+        <path d="M21 7v10l-5-5V12l5-5z" fill="#2D8CFF" />
+        <circle cx="9.5" cy="12" r="1.5" fill="#2D8CFF" />
+      </svg>
+      Invite to Zoom Meeting
+    </span>
+    <button class="close-btn" (click)="closeZoomPopup()" aria-label="Close">&times;</button>
+  </div>
+  <div class="zoom-popup-content">
+    <div class="zoom-fields">
+      <div class="zoom-field-row">
+        <label>Topic:</label>
+        <input [(ngModel)]="zoomTopic" type="text" placeholder="Meeting Topic" />
+      </div>
+      <div class="zoom-field-row">
+        <label>Date & Time:</label>
+        <input [(ngModel)]="zoomDateTime" type="datetime-local" />
+      </div>
+      <div class="zoom-field-row">
+        <label>Invite:</label>
+        <input [(ngModel)]="zoomInvitees" type="text" placeholder="client@domain.com, advisor@domain.com" />
+      </div>
+    </div>
+    <textarea [(ngModel)]="zoomMessage" rows="6" class="zoom-body" placeholder="Add a message (optional)..."></textarea>
+    <div style="margin-top:12px;text-align:right;">
+      <button class="send-btn" (click)="sendZoomInvite()">Send Invite</button>
+    </div>
+  </div>
+</div>
+<!-- Add after other popups -->
+<div class="call-popup-backdrop" *ngIf="showCallPopup" (click)="onBackdropClick($event)"></div>
+<div class="call-popup" *ngIf="showCallPopup">
+  <div class="call-popup-header">
+    <span>
+      <svg width="22" height="22" viewBox="0 0 24 24" style="vertical-align:middle;">
+        <path
+          d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.21.49 2.53.76 3.88.76a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 9.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.35.27 2.67.76 3.88a1 1 0 01-.21 1.11l-2.2 2.2z"
+          fill="#3cb371" />
+      </svg> Call: {{callRecipient}}
+    </span>
+    <button class="hangup-btn" (click)="hangupCall()" aria-label="Hang Up">
+      <span>
+        <svg width="22" height="22" viewBox="0 0 24 24" style="vertical-align:middle;">
+          <path
+            d="M17.38 13.21a15.053 15.053 0 00-6.59-6.59l-2.2 2.2a1 1 0 01-1.11.21c-1.21-.49-2.53-.76-3.88-.76a1 1 0 01-1-1V5.5a1 1 0 011-1C16.39 2 22 7.61 22 14.5a1 1 0 01-1 1H17.5a1 1 0 01-1-1c0-1.35-.27-2.67-.76-3.88a1 1 0 01.21-1.11l2.2-2.2z"
+            fill="#c11b16" />
+        </svg>
+      </span>
+      Hang Up
+    </button>
+  </div>
+  <div class="call-popup-content-with-assistant">
+    <div class="call-animation">
+      <div class="call-wave" *ngIf="!listening"></div>
+      <div class="call-wave listening" *ngIf="listening"></div>
+      <div class="call-status">
+        {{callStatus}}
+      </div>
+      <div *ngIf="listening" class="assistant-listening">
+        <span>🧑‍💼 AI Meeting expert is listening...</span>
+        <span *ngIf="listening" class="record-indicator">
+          <span class="record-dot"></span> Recording
+        </span>
+        <div class="call-prompts">
+          <ul>
+            <li *ngFor="let point of aiTypingPoints">
+              <span>{{ point.text }}</span>
+              <span *ngIf="point.typing" class="typing-dot">|</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Virtual Assistant Extension -->
+    <div class="call-assistant-extension">
+  <div class="assistant-header">
+    <span>🧠 Intelli Assist</span>
+  </div>
+  <div class="assistant-transcript futuristic-transcript">
+    <strong><svg width="18" height="18" style="vertical-align:middle;margin-right:4px;"><circle cx="9" cy="9" r="8" fill="#2d8cff"/><text x="9" y="13" text-anchor="middle" font-size="10" fill="#fff">AI</text></svg> Live Transcript:</strong>
+    <div class="transcript-box">
+      <div *ngFor="let line of transcriptLines">
+        <span
+          class="transcript-line"
+          [ngClass]="{
+            'advisor': line.startsWith('Advisor:'),
+            'client': line.startsWith('Client:'),
+            'ai': line.startsWith('AI:')
+          }"
+        >
+          {{ line }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="assistant-question">
+    <input id="assistantQuestion" [(ngModel)]="assistantQuestion" type="text" placeholder="Type your question..." />
+    <button class="ask-btn" (keydown.enter)="askAssistant()" (click)="askAssistant()">Ask</button>
+  </div>
+  <div class="assistant-answer" *ngIf="assistantAnswer">
+    <strong>AI Response:</strong>
+    <div>{{ assistantAnswer }}</div>
+  </div>
+</div>
+  </div>
+</div>

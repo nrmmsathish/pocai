@@ -1,0 +1,230 @@
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
+.interactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px #2d8cff11;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.interactions-table th, .interactions-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e3f0ff;
+  text-align: left;
+  font-size: 1em;
+}
+
+.interactions-table th {
+  background: #e3f0ff;
+  color: #193b6a;
+  font-weight: 600;
+}
+
+.interactions-table tr:last-child td {
+  border-bottom: none;
+}
+
+.next-action {
+  color: #3cb371;
+  font-weight: 500;
+}
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
+.interaction-summary-row {
+  display: flex;
+  gap: 18px;
+  margin: 16px;
+}
+.summary-chip {
+  background: #e3f0ff;
+  color: #193b6a;
+  border-radius: 18px;
+  padding: 6px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+.summary-chip:hover {
+  background: #2d8cff;
+  color: #fff;
+}
+.summary-count {
+  background: #2d8cff;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 8px;
+  margin-left: 8px;
+  font-size: 0.95em;
+  font-weight: 600;
+}
+
+.category-popup-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #193b6a44;
+  z-index: 1001;
+}
+
+.category-popup {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px #2d8cff33;
+  z-index: 1002;
+  min-width: 520px;
+  max-width: 90vw;
+  padding: 22px 28px;
+}
+.category-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 14px;
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.6em;
+  color: #2d8cff;
+  cursor: pointer;
+  font-weight: 700;
+}
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\ideas-to-engage\ideas-to-engage.component.scss */
+.engage-widget {
+  background: #f7fafd;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #2d8cff11;
+  padding: 18px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.engage-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.engage-table th, .engage-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e3eaf2;
+  text-align: left;
+}
+
+.engage-table th {
+  background: #e3eaf2;
+  color: #193b6a;
+  font-weight: 600;
+}
+
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
+.action-btn {
+  //  background: #2d8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-right: 4px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.action-btn:last-child {
+  margin-right: 0;
+}
+.action-btn:hover {
+  background: #193b6a;
+}
+
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
+::ng-deep {
+.category-highlight {
+  //background: #e3f0ff !important;
+  color: #2d8cff !important;
+  font-weight: 600;
+  border-radius: 8px;
+}
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
+.action-btn {
+  background: #2d8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-right: 4px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.action-btn:last-child {
+  margin-right: 0;
+}
+.action-btn:hover {
+  background: #193b6a;
+}
+.action-btn {
+  background: linear-gradient(90deg, #2d8cff 60%, #6ec6ff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  padding: 6px 18px;
+  margin-right: 6px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #2d8cff22;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn:last-child {
+  margin-right: 0;
+}
+
+.action-btn:hover, .action-btn:focus {
+  background: linear-gradient(90deg, #193b6a 60%, #2d8cff 100%);
+  box-shadow: 0 4px 16px #2d8cff44;
+  transform: translateY(-2px) scale(1.04);
+}
+
+.action-btn:active {
+  background: linear-gradient(90deg, #2d8cff 60%, #193b6a 100%);
+  transform: scale(0.98);
+}
+}
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
+.action-icon {
+  display: inline-block;
+  margin-right: 8px;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: transform 0.15s;
+}
+.action-icon:last-child {
+  margin-right: 0;
+}
+.action-icon:hover, .action-icon:focus {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px #2d8cff33;
+}
+
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
+.summary-chip.active {
+  background: #2d8cff;
+  color: #fff;
+  box-shadow: 0 2px 8px #2d8cff33;
+}

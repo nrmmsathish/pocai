@@ -1,0 +1,103 @@
+<div [ngClass]="isDarkTheme ? 'dark-theme' : 'light-theme'">
+  <div class="dashboard-header">
+    <!-- <button class="hamburger" (click)="toggleNav()" aria-label="Toggle Navigation">
+      <span></span><span></span><span></span>
+    </button> -->
+    <span class="dashboard-title">🏦 ConnectWealth AI</span>
+    <button class="theme-toggle-btn" (click)="toggleTheme()" aria-label="Toggle Theme">
+      <span *ngIf="isDarkTheme">🌙</span>
+      <span *ngIf="!isDarkTheme">☀️</span>
+    </button>
+    <span class="profile-icon" title="User Profile">
+      <svg width="32" height="32" viewBox="0 0 32 32" style="vertical-align:middle;">
+        <circle cx="16" cy="16" r="16" fill="#e3f0ff" />
+        <circle cx="16" cy="13" r="7" fill="#2d8cff" />
+        <ellipse cx="16" cy="25" rx="10" ry="5" fill="#b3d1ff" />
+      </svg>
+    </span>
+  </div>
+
+  <!-- Left Navigation -->
+  <!-- <nav class="side-nav" [class.open]="navOpen">
+    <ul>
+      <li><a href="#">🏠 Dashboard</a></li>
+      <li><a href="#">📊 NBA</a></li>
+      <li><a href="#">💸 Thought till Sales</a></li>
+    </ul>
+  </nav> -->
+
+  <div class="banner-row">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80"
+      alt="Banking Banner" class="banner-img full-width-banner" />
+  </div>
+  <div class="dashboard-widgets-toolbar">
+    <button title='Open Chat Assistant' class="open-chat-btn sticky-chat-btn" (click)="showChat = !showChat">
+      💬
+    </button>
+  </div>
+
+  <div class="dashboard-tabs">
+  <button [class.active]="activeTab === 'clients'" (click)="activeTab = 'clients'">
+    <img src="aiIcon.png" alt="AI Icon" style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
+    Clients
+  </button>
+  <button [class.active]="activeTab === 'nba'" (click)="activeTab = 'nba'">Ideas to Engage</button>
+  <button [class.active]="activeTab === 'campaigns'" (click)="activeTab = 'campaigns'">Campaigns</button>
+</div>
+
+<div class="main-content">
+  <gridster [options]="options" class="dashboard-grid">
+    <gridster-item *ngIf="activeTab === 'clients'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Clients Contact' }" class="gridster-item">
+      <div class="widget-header">
+        <span>Clients to Contact</span>
+        <span class="my-drag-handle" title="Drag widget">
+          <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
+            <circle cx="5" cy="5" r="2" fill="#888" />
+            <circle cx="15" cy="5" r="2" fill="#888" />
+            <circle cx="5" cy="15" r="2" fill="#888" />
+            <circle cx="15" cy="15" r="2" fill="#888" />
+          </svg>
+        </span>
+      </div>
+      <div>
+        <app-clients-contact-widget-component></app-clients-contact-widget-component>
+      </div>
+    </gridster-item>
+    <gridster-item *ngIf="activeTab === 'nba'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Customer Interactions' }" class="gridster-item">
+      <div class="widget-header">
+        <span>Customer Interactions Todo</span>
+        <span class="my-drag-handle" title="Drag widget">
+          <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
+            <circle cx="5" cy="5" r="2" fill="#888" />
+            <circle cx="15" cy="5" r="2" fill="#888" />
+            <circle cx="5" cy="15" r="2" fill="#888" />
+            <circle cx="15" cy="15" r="2" fill="#888" />
+          </svg>
+        </span>
+      </div>
+      <div>
+        <app-customer-interactions></app-customer-interactions>
+      </div>
+    </gridster-item>
+    <gridster-item *ngIf="activeTab === 'campaigns'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Campaigns' }" class="gridster-item">
+      <div class="widget-header">
+        <span>Campaigns</span>
+        <span class="my-drag-handle" title="Drag widget">
+          <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
+            <circle cx="5" cy="5" r="2" fill="#888" />
+            <circle cx="15" cy="5" r="2" fill="#888" />
+            <circle cx="5" cy="15" r="2" fill="#888" />
+            <circle cx="15" cy="15" r="2" fill="#888" />
+          </svg>
+        </span>
+      </div>
+      <div>
+        <!-- Campaigns widget here -->
+        <app-cio-insights-component></app-cio-insights-component>
+      </div>
+    </gridster-item>
+   
+  </gridster>
+  <app-chat *ngIf="showChat" class="chat-assistant-widget"></app-chat>
+</div>
+</div>
