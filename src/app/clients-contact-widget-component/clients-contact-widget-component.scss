@@ -790,8 +790,8 @@ ag-grid-angular {
   margin-top: 12px;
   background: #f5faff;
   border-radius: 8px;
-  padding: 4px 4px;
-  margin-left: 150px;
+  padding: 20px;
+  
   box-shadow: 0 2px 8px #2d8cff11;
 }
 .call-prompts h4 {
@@ -1022,191 +1022,139 @@ ag-grid-angular {
   text-align: center;
 }
 
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\clients-contact-widget-component\clients-contact-widget-component.scss */
+/* Elegant banking theme for HNI's - call-assistant-extension */
 .call-assistant-extension {
-  flex: 1;
-  background: #f6faff;
-  border-left: 1px solid #e3f0ff;
-  padding: 18px 16px;
-  min-width: 320px;
+  background: linear-gradient(120deg, #f7fafc 60%, #e6f0fa 100%);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #193b6a22;
+  padding: 28px 32px 22px 32px;
+  margin-top: 18px;
+  border: 1.5px solid #e6f0fa;
+  font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+  color: #193b6a;
+  position: relative;
+}
+
+.call-assistant-extension .assistant-header {
+  font-size: 1.22em;
+  font-weight: 700;
+  color: #193b6a;
+  letter-spacing: 0.04em;
+  margin-bottom: 18px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  text-shadow: 0 2px 8px #2d8cff22;
 }
 
-.assistant-header {
-  font-weight: 600;
+.futuristic-transcript {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 18px 12px 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 12px #2d8cff11;
+  border: 1px solid #e6f0fa;
+}
+
+.futuristic-transcript strong {
   color: #2d8cff;
-  margin-bottom: 10px;
-  font-size: 1.1em;
-}
-
-.assistant-transcript {
-  margin-bottom: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
 }
 
 .transcript-box {
-  background: #fff;
-  border: 1px solid #e3f0ff;
-  border-radius: 6px;
-  padding: 8px;
-  min-height: 80px;
-  max-height: 160px;
+  max-height: 120px;
   overflow-y: auto;
-  font-size: 0.98em;
-  margin-top: 4px;
+  margin-top: 8px;
+  padding-right: 4px;
+}
+
+.transcript-line {
+  display: block;
+  margin-bottom: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 1.04em;
+  background: #f3f8ff;
+  color: #193b6a;
+  font-weight: 500;
+}
+
+.transcript-line.advisor {
+  background: linear-gradient(90deg, #e6f0fa 60%, #d1eaff 100%);
+  color: #2d8cff;
+  font-weight: 600;
+}
+.transcript-line.client {
+  background: linear-gradient(90deg, #f7fafc 60%, #e6f0fa 100%);
+  color: #3cb371;
+  font-weight: 600;
+}
+.transcript-line.ai {
+  background: linear-gradient(90deg, #fffbe6 60%, #ffe9a7 100%);
+  color: #b8860b;
+  font-weight: 600;
 }
 
 .assistant-question {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .assistant-question input {
   flex: 1;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #bcdcff;
-  font-size: 1em;
+  border: 1.5px solid #e6f0fa;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 1.06em;
+  background: #f7fafc;
+  color: #193b6a;
+  transition: border 0.2s;
+  outline: none;
+}
+.assistant-question input:focus {
+  border-color: #2d8cff;
+  background: #fff;
 }
 
-.ask-btn {
-  background: #2d8cff;
+.assistant-question .ask-btn {
+  background: linear-gradient(90deg, #2d8cff 60%, #6ec6ff 100%);
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 6px 16px;
+  border-radius: 8px;
+  padding: 8px 22px;
   font-weight: 600;
+  font-size: 1.06em;
   cursor: pointer;
+  box-shadow: 0 2px 8px #2d8cff22;
+  transition: background 0.2s, color 0.2s;
+}
+.assistant-question .ask-btn:hover {
+  background: linear-gradient(90deg, #193b6a 60%, #2d8cff 100%);
+  color: #ffd700;
 }
 
 .assistant-answer {
-  background: #e3f0ff;
-  border-radius: 6px;
-  padding: 8px;
-  margin-top: 8px;
-  color: #193b6a;
-  font-size: 0.98em;
-}
-
-/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\clients-contact-widget-component\clients-contact-widget-component.scss */
-.transcript-box {
-  background: #f5faff;
-  border: 1px solid #e3f0ff;
-  border-radius: 12px;
-  padding: 10px;
-  min-height: 120px;
-  max-height: 220px;
-  overflow-y: auto;
-  font-size: 1em;
-  margin-top: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.transcript-line {
-  max-width: 80%;
-  padding: 8px 14px;
-  border-radius: 16px;
-  font-size: 1em;
-  margin-bottom: 2px;
-  word-break: break-word;
-  display: inline-block;
-}
-
-.transcript-line.advisor {
-  background: #dcf8c6;
-  align-self: flex-end;
-  color: #193b6a;
-}
-
-.transcript-line.client {
-  background: #fff;
-  align-self: flex-start;
-  color: #2d8cff;
-  border: 1px solid #e3f0ff;
-}
-
-.transcript-line.ai {
-  background: #e3f0ff;
-  align-self: center;
-  color: #193b6a;
-  font-style: italic;
-}
-
-/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\clients-contact-widget-component\clients-contact-widget-component.scss */
-.futuristic-transcript {
-  background: linear-gradient(90deg, #101c2c 60%, #2d8cff 100%);
-  border-radius: 18px;
-  box-shadow: 0 4px 24px #2d8cff33;
-  padding: 18px 24px;
-  margin-bottom: 18px;
-  color: #e3f0ff;
-  position: relative;
-  overflow: hidden;
-}
-
-.futuristic-transcript strong {
-  font-size: 1.08em;
-  letter-spacing: 0.04em;
-  color: #fff;
-  text-shadow: 0 2px 8px #2d8cff44;
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.transcript-box {
-  background: rgba(255,255,255,0.06);
-  border-radius: 12px;
+  background: #f7fafc;
+  border-radius: 8px;
   padding: 12px 16px;
-  max-height: 180px;
-  overflow-y: auto;
-  box-shadow: 0 1px 8px #193b6a22;
+  color: #193b6a;
+  font-size: 1.08em;
+  border: 1px solid #e6f0fa;
+  box-shadow: 0 1px 6px #2d8cff11;
+  margin-top: 8px;
 }
 
-.transcript-line {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 1.02em;
-  font-family: 'Roboto Mono', 'Consolas', monospace;
-  padding-left: 8px;
-  border-left: 3px solid #2d8cff22;
-  transition: background 0.2s;
-}
-
-.transcript-line.advisor {
-  color: #ffd700;
-  border-left-color: #ffd70088;
-  background: rgba(255, 215, 0, 0.07);
-}
-
-.transcript-line.client {
-  color: #3cb371;
-  border-left-color: #3cb37188;
-  background: rgba(60, 179, 113, 0.07);
-}
-
-.transcript-line.ai {
+.assistant-answer strong {
   color: #2d8cff;
-  border-left-color: #2d8cff;
-  background: rgba(45, 140, 255, 0.09);
-}
-
-.transcript-line:last-child {
   font-weight: 600;
-  background: linear-gradient(90deg, #2d8cff22 60%, #101c2c 100%);
-  border-left-color: #fff;
+  margin-bottom: 6px;
+  display: block;
 }
+/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\clients-contact-widget-component\clients-contact-widget-component.scss */
 
-.assistant-header {
-  font-size: 1.15em;
-  font-weight: 700;
-  color: #2d8cff;
-  margin-bottom: 10px;
-  letter-spacing: 0.03em;
-  text-shadow: 0 2px 8px #2d8cff22;
-}
 

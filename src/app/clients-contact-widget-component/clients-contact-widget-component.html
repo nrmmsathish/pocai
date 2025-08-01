@@ -247,7 +247,7 @@
         <div class="call-prompts">
           <ul>
             <li *ngFor="let point of aiTypingPoints">
-              <span>{{ point.text }}</span>
+              <span [innerHTML]="point.text"></span>
               <span *ngIf="point.typing" class="typing-dot">|</span>
             </li>
           </ul>
