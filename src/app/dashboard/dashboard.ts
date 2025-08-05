@@ -6,6 +6,7 @@ import { ClientsContactWidgetComponent } from '../clients-contact-widget-compone
 import { CustomerInteractionsComponent } from '../customer-interactions-component/customer-interactions-component';
 import { CioInsightsComponent } from '../cio-insights-component/cio-insights-component';
 import { LeadsTableComponent } from '../leads-table-component/leads-table-component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
@@ -21,6 +22,7 @@ import { LeadsTableComponent } from '../leads-table-component/leads-table-compon
   styleUrls: ['./dashboard.scss']
 })
 export class Dashboard {
+  constructor(public router: Router) {}
   options: GridsterConfig = {
     draggable: {
       enabled: true,
