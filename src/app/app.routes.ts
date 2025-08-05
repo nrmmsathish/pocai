@@ -5,5 +5,5 @@ import { Dashboard } from './dashboard/dashboard';
 export const routes: Routes = [
     { path: 'leads', component: LeadsManagementDashboard },
     { path: 'advisor', component: Dashboard },
-    { path: '', component: Dashboard }
+    { path: '', redirectTo: 'advisor', pathMatch: 'full' } // Set default route to advisor
 ];
