@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FunnelController, TrapezoidElement } from 'chartjs-chart-funnel';
-import { LinearScale, CategoryScale } from 'chart.js';
+import { Chart, LinearScale, CategoryScale } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 @Component({
   selector: 'app-leads-management-dashboard',
@@ -18,10 +18,10 @@ export class LeadsManagementDashboard implements AfterViewInit {
   ngAfterViewInit() {
     // Chart.js must be installed: npm install chart.js
     // Import Chart.js dynamically to avoid SSR issues
-    Promise.all([
-      import('chart.js/auto'),
-      import('chartjs-chart-funnel')
-    ]).then(([{ default: Chart }]) => {
+    // Promise.all([
+    //   import('chart.js/auto'),
+    //   import('chartjs-chart-funnel')
+    // ]).then(([{ default: Chart }]) => {
       // register controller in chart.js and ensure the defaults are set
       Chart.register(FunnelController, TrapezoidElement, LinearScale, CategoryScale, ChartDataLabels);
 
@@ -474,6 +474,6 @@ new Chart('leadCluster', {
         }
       });
 
-    });
+    // });
   }
 }
