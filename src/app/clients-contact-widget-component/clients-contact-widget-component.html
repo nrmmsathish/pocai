@@ -1,13 +1,6 @@
 <div class="widget-content">
-  <ag-grid-angular
-    style="width: 100%; height: 650px;"
-    [theme]="theme"
-    [gridOptions]="gridOptions"
-    [rowData]="rowData"
-    pagination="true"
-    [paginationPageSize]="20"
-    (cellClicked)="onCellClicked($event)"
-    [columnDefs]="columnDefs"
+  <ag-grid-angular style="width: 100%; height: 550px;" [theme]="theme" [gridOptions]="gridOptions" [rowData]="rowData"
+    pagination="true" [paginationPageSize]="20" (cellClicked)="onCellClicked($event)" [columnDefs]="columnDefs"
     rowSelection="single">
   </ag-grid-angular>
 </div>
@@ -33,7 +26,8 @@
               <div><strong>Risk Profile:</strong> {{selectedClient?.riskProfile}}</div>
               <div>
                 <strong>Last Transaction Amount:</strong>
-                <span *ngIf="selectedClient?.lastTransactionAmount">${{selectedClient?.lastTransactionAmount | number}}</span>
+                <span *ngIf="selectedClient?.lastTransactionAmount">${{selectedClient?.lastTransactionAmount |
+                  number}}</span>
                 <span *ngIf="!selectedClient?.lastTransactionAmount">N/A</span>
               </div>
               <div>
@@ -50,7 +44,8 @@
               </div>
               <div>
                 <strong>Activity Status:</strong>
-                <span [ngClass]="{'active-investing': selectedClient?.isActiveInvestor, 'inactive-investing': !selectedClient?.isActiveInvestor}">
+                <span
+                  [ngClass]="{'active-investing': selectedClient?.isActiveInvestor, 'inactive-investing': !selectedClient?.isActiveInvestor}">
                   {{selectedClient?.isActiveInvestor ? 'Actively Investing' : 'Not Active'}}
                 </span>
               </div>
@@ -61,7 +56,8 @@
             <div><strong>Last Contact:</strong> {{selectedClient?.lastContact | date:'dd MMM yyyy'}}</div>
             <div>
               <strong>Last Contact Summary:</strong>
-              <img src="aiIcon.png" alt="AI Icon" style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
+              <img src="aiIcon.png" alt="AI Icon"
+                style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
               {{selectedClient?.lastContactSummary || 'No summary available.'}}
             </div>
           </div>

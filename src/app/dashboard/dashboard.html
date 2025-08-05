@@ -34,20 +34,22 @@
     <button title='Open Chat Assistant' class="open-chat-btn sticky-chat-btn" (click)="showChat = !showChat">
       💬
     </button>
+    
   </div>
 
-  <div class="dashboard-tabs">
+  <!-- <div class="dashboard-tabs">
   <button [class.active]="activeTab === 'clients'" (click)="activeTab = 'clients'">
     <img src="aiIcon.png" alt="AI Icon" style="height:20px;width:20px;vertical-align:middle;margin-right:6px;">
     Clients
   </button>
   <button [class.active]="activeTab === 'nba'" (click)="activeTab = 'nba'">Ideas to Engage</button>
   <button [class.active]="activeTab === 'campaigns'" (click)="activeTab = 'campaigns'">Campaigns</button>
-</div>
+</div> -->
 
-<div class="main-content">
-  <gridster [options]="options" class="dashboard-grid">
-    <gridster-item *ngIf="activeTab === 'clients'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Clients Contact' }" class="gridster-item">
+  <div class="main-content">
+    <!-- <gridster [options]="options" class="dashboard-grid"> -->
+    <!-- <gridster-item *ngIf="activeTab === 'clients'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Clients Contact' }" class="gridster-item"> -->
+    <div class="widget-container">
       <div class="widget-header">
         <span>Clients to Contact</span>
         <span class="my-drag-handle" title="Drag widget">
@@ -62,24 +64,10 @@
       <div>
         <app-clients-contact-widget-component></app-clients-contact-widget-component>
       </div>
-    </gridster-item>
-    <gridster-item *ngIf="activeTab === 'nba'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Customer Interactions' }" class="gridster-item">
-      <div class="widget-header">
-        <span>Customer Interactions Todo</span>
-        <span class="my-drag-handle" title="Drag widget">
-          <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
-            <circle cx="5" cy="5" r="2" fill="#888" />
-            <circle cx="15" cy="5" r="2" fill="#888" />
-            <circle cx="5" cy="15" r="2" fill="#888" />
-            <circle cx="15" cy="15" r="2" fill="#888" />
-          </svg>
-        </span>
-      </div>
-      <div>
-        <app-customer-interactions></app-customer-interactions>
-      </div>
-    </gridster-item>
-    <gridster-item *ngIf="activeTab === 'campaigns'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Campaigns' }" class="gridster-item">
+    </div>
+    <!-- </gridster-item>
+         <gridster-item *ngIf="activeTab === 'campaigns'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Campaigns' }" class="gridster-item"> -->
+    <div class="widget-container">
       <div class="widget-header">
         <span>Campaigns</span>
         <span class="my-drag-handle" title="Drag widget">
@@ -95,9 +83,47 @@
         <!-- Campaigns widget here -->
         <app-cio-insights-component></app-cio-insights-component>
       </div>
-    </gridster-item>
+    </div>
+    <!-- </gridster-item>
    
-  </gridster>
-  <app-chat *ngIf="showChat" class="chat-assistant-widget"></app-chat>
-</div>
+    <gridster-item *ngIf="activeTab === 'nba'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Customer Interactions' }" class="gridster-item"> -->
+    <div class="widget-container">
+      <div class="widget-header">
+        <span>Customer Interactions</span>
+        <span class="my-drag-handle" title="Drag widget">
+          <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
+            <circle cx="5" cy="5" r="2" fill="#888" />
+            <circle cx="15" cy="5" r="2" fill="#888" />
+            <circle cx="5" cy="15" r="2" fill="#888" />
+            <circle cx="15" cy="15" r="2" fill="#888" />
+          </svg>
+        </span>
+      </div>
+      <div>
+        <app-customer-interactions></app-customer-interactions>
+      </div>
+    </div>
+
+    <div class="widget-container">
+      <div class="widget-header">
+        <span>Potential Leads</span>
+        <span class="my-drag-handle" title="Drag widget">
+          <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
+            <circle cx="5" cy="5" r="2" fill="#888" />
+            <circle cx="15" cy="5" r="2" fill="#888" />
+            <circle cx="5" cy="15" r="2" fill="#888" />
+            <circle cx="15" cy="15" r="2" fill="#888" />
+          </svg>
+        </span>
+      </div>
+      <div>
+        <app-leads-table></app-leads-table>
+      </div>
+    </div>
+    <!-- </gridster-item>
+     
+
+  </gridster> -->
+    <app-chat *ngIf="showChat" class="chat-assistant-widget"></app-chat>
+  </div>
 </div>

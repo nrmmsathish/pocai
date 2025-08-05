@@ -236,8 +236,8 @@ export class ClientsContactWidgetComponent {
         cellRenderer: (params: any) =>
           Array.isArray(params.value)
             ? params.value.map((tag: any) =>
-                `<span style="background:#e3f0ff;color:#193b6a;border-radius:6px;padding:2px 8px;margin-right:4px;font-size:0.95em;">${tag}</span>`
-              ).join('')
+              `<span style="background:#e3f0ff;color:#193b6a;border-radius:6px;padding:2px 8px;margin-right:4px;font-size:0.95em;">${tag}</span>`
+            ).join('')
             : ''
       },
       {
@@ -264,29 +264,20 @@ export class ClientsContactWidgetComponent {
         headerName: 'Reach Client',
         cellRenderer: () => `
           <div class="reach-client-actions">
-            <span title="Call" class="reach-btn call-btn">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <span title="Call (AI Listen)" class="reach-btn call-btn">
+              <svg style="vertical-align: sub;" width="22" height="22" viewBox="0 0 24 24" fill="none">
                 <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 9.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" stroke="#3cb371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </span>
-            <span title="WhatsApp" class="reach-btn whatsapp-btn">
-              <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
-                <circle cx="16" cy="16" r="16" fill="#25D366"/>
-                <path d="M22.5 19.5c-.5-.25-1.5-.75-1.75-.75-.25 0-.5.25-.75.5-.25.25-.75.75-1 1-.25.25-.5.25-.75.25-.25 0-.5-.25-.75-.5-1.25-1-2.25-2-3.25-3.25-.25-.25-.5-.5-.5-.75 0-.25.25-.5.25-.75.25-.25.5-.5.5-.75 0-.25-.25-.5-.5-.75-.25-.25-.5-.5-.75-.5-.25 0-.5.25-.75.5-.25.25-.75.75-1 1-.25.25-.25.5-.25.75 0 .25.25.5.5.75 1.25 1.25 2.25 2.25 3.25 3.25.25.25.5.5.75.5.25 0 .5-.25.75-.5.25-.25.75-.75 1-1 .25-.25.25-.5.25-.75 0-.25-.25-.5-.5-.75z" fill="#fff"/>
-              </svg>
-            </span>
+           <span title="WhatsApp" class="reach-btn whatsapp-btn">
+        <img src="WhatsApp.svg" alt="WhatsApp" width="22" height="22" style="vertical-align:middle;border-radius:4px;" />
+      </span>
             <span title="Email" class="reach-btn email-btn">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="5" width="18" height="14" rx="2" stroke="#193b6a" stroke-width="2"/>
-                <path d="M3 7l9 6 9-6" stroke="#193b6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+            <img src="Outlook.svg" alt="Email" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
+      
             </span>
-            <span title="Zoom (AI Listen)" class="reach-btn zoom-btn">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="7" width="13" height="10" rx="2" stroke="#2D8CFF" stroke-width="2"/>
-                <path d="M21 7v10l-5-5V12l5-5z" fill="#2D8CFF"/>
-                <circle cx="9.5" cy="12" r="1.5" fill="#2D8CFF"/>
-              </svg>
+            <span   title="Zoom (AI Listen)" class="reach-btn zoom-btn">
+              <img src="zoom.svg" alt="Email" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
             </span>
           </div>
         `,
@@ -298,404 +289,404 @@ export class ClientsContactWidgetComponent {
   }
 
   getRowData(): Client[] {
-    
+
     return [
-     {
-      name: 'Alice Johnson',
-      tier: 'Platinum',
-      aum: 12000000,
-      aumTrend: 'up',
-      nnia: 350000,
-      nniaTrend: 'up',
-      reason: 'Portfolio review',
-      lastContact: '2025-07-10T09:30:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 500000,
-      portfolioDiversification: 7,
-      lastContactSummary: 'Discussed portfolio rebalancing and agreed to increase allocation to ESG funds. Client requested follow-up on new market opportunities.',
-      complianceFlag: false,
-      taxResidency: 'Singapore',
-      customTags: ['ESG', 'Succession'],
-      priority: 'High',
-      recentArticles: [
-        { title: 'Global Markets Rally', url: 'https://www.ft.com/content/markets-rally', readDate: '2025-07-08' },
-        { title: 'ESG Investing Trends', url: 'https://www.bloomberg.com/esg-trends', readDate: '2025-07-05' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Bob Smith',
-      tier: 'Gold',
-      aum: 8000000,
-      aumTrend: 'down',
-      nnia: 210000,
-      nniaTrend: 'down',
-      reason: 'New product',
-      lastContact: '2025-06-22T14:15:00',
-      riskProfile: 'Conservative',
-      lastTransactionAmount: 200000,
-      lastContactSummary: 'Explained new product features. Client expressed interest but requested more details before making a decision.',
-      portfolioDiversification: 5,
-      complianceFlag: true,
-      taxResidency: 'India',
-      priority: 'Medium',
-      customTags: ['NRI', 'Family Office'],
-      recentArticles: [
-        { title: 'India Wealth Outlook', url: 'https://www.economictimes.com/wealth-outlook', readDate: '2025-06-20' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Carol Lee',
-      tier: 'Silver',
-      aum: 3200000,
-      aumTrend: 'up',
-      nnia: 95000,
-      nniaTrend: 'up',
-      reason: 'Annual check-in',
-      lastContact: '2025-07-01T11:00:00',
-      riskProfile: 'Balanced',
-      lastContactSummary: 'Annual check-in completed. Reviewed performance and set goals for next quarter.',
-      lastTransactionAmount: 120000,
-      portfolioDiversification: 4,
-      complianceFlag: false,
-      taxResidency: 'Hong Kong',
-      priority: 'Low',
-      customTags: ['Real Estate'],
-      recentArticles: [
-        { title: 'Property Investment Guide', url: 'https://www.property.com/guide', readDate: '2025-06-28' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'David Kim',
-      tier: 'Platinum',
-      aum: 15000000,
-      aumTrend: 'down',
-      nnia: 420000,
-      nniaTrend: 'up',
-      reason: 'Tax planning',
-      lastContactSummary: 'Provided tax planning strategies. Client to share additional documents for further review.',
-      lastContact: '2025-07-15T16:45:00',
-      riskProfile: 'Aggressive',
-      lastTransactionAmount: 800000,
-      portfolioDiversification: 8,
-      complianceFlag: false,
-      taxResidency: 'South Korea',
-      priority: 'Low',
-      customTags: ['Succession', 'Tech'],
-      recentArticles: [
-        { title: 'Tech Stocks Analysis', url: 'https://www.techstocks.com/analysis', readDate: '2025-07-13' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Eva Green',
-      tier: 'Gold',
-      aum: 9500000,
-      aumTrend: 'up',
-      nnia: 275000,
-      nniaTrend: 'down',
-      reason: 'Performance update',
-      lastContact: '2025-07-05T10:20:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 300000,
-      lastContactSummary: 'Performance update shared. Client satisfied with results and will maintain current strategy.',
-      portfolioDiversification: 6,
-      complianceFlag: false,
-      taxResidency: 'UK',
-      priority: 'Low',
-      customTags: ['ESG'],
-      recentArticles: [
-        { title: 'UK Market Review', url: 'https://www.ukmarket.com/review', readDate: '2025-07-03' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Frank Miller',
-      tier: 'Bronze',
-      aum: 1200000,
-      aumTrend: 'down',
-      nnia: 35000,
-      lastContactSummary: 'Discussed fee structure and answered client queries. No immediate action required.',
-      nniaTrend: 'down',
-      reason: 'Fee discussion',
-      lastContact: '2025-06-18T13:00:00',
-      riskProfile: 'Conservative',
-      lastTransactionAmount: 25000,
-      portfolioDiversification: 2,
-      complianceFlag: false,
-      taxResidency: 'USA',
-      priority: 'Medium',
-      customTags: ['Startup'],
-      recentArticles: [
-        { title: 'Startup Funding Tips', url: 'https://www.startup.com/funding', readDate: '2025-06-15' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Grace Lee',
-      tier: 'Silver',
-      aum: 4100000,
-      aumTrend: 'up',
-      lastContactSummary: 'Quarterly review completed. Client interested in sustainable investment options.',
-      nnia: 110000,
-      nniaTrend: 'up',
-      reason: 'Quarterly review',
-      lastContact: '2025-07-12T15:30:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 95000,
-      portfolioDiversification: 3,
-      complianceFlag: false,
-      taxResidency: 'Singapore',
-      priority: 'Low',
-      customTags: ['ESG', 'Women Investor'],
-      recentArticles: [
-        { title: 'Women in Wealth', url: 'https://www.wealth.com/women', readDate: '2025-07-10' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Henry Ford',
-      tier: 'Gold',
-      aum: 7800000,
-      aumTrend: 'down',
-      lastContactSummary: 'Estate planning session held. Client to consult with legal advisor before next steps.',
-      nnia: 200000,
-      nniaTrend: 'down',
-      reason: 'Estate planning',
-      lastContact: '2025-07-03T09:00:00',
-      riskProfile: 'Conservative',
-      lastTransactionAmount: 400000,
-      portfolioDiversification: 5,
-      complianceFlag: true,
-      priority: 'High',
-      taxResidency: 'USA',
-      customTags: ['Family Office'],
-      recentArticles: [
-        { title: 'Estate Planning Basics', url: 'https://www.estate.com/planning', readDate: '2025-07-01' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Ivy Chen',
-      tier: 'Platinum',
-      aum: 18000000,
-      aumTrend: 'up',
-      nnia: 500000,
-      nniaTrend: 'up',
-      lastContactSummary: 'Shared market update and discussed tech sector trends. Client requested more frequent updates.',
-      reason: 'Market update',
-      lastContact: '2025-07-09T17:10:00',
-      riskProfile: 'Aggressive',
-      lastTransactionAmount: 1000000,
-      portfolioDiversification: 9,
-      complianceFlag: false,
-      taxResidency: 'China',
-      priority: 'Low',
-      customTags: ['Tech', 'ESG'],
-      recentArticles: [
-        { title: 'China Market Pulse', url: 'https://www.chinamarket.com/pulse', readDate: '2025-07-07' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Jack Black',
-      tier: 'Bronze',
-      aum: 900000,
-      aumTrend: 'down',
-      nnia: 25000,
-      nniaTrend: 'down',
-      reason: 'Account setup',
-      lastContactSummary: 'Account setup completed. Provided onboarding materials and answered initial questions.',
-      lastContact: '2025-06-25T12:00:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 15000,
-      portfolioDiversification: 1,
-      complianceFlag: false,
-      priority: 'High',
-      taxResidency: 'Australia',
-      customTags: ['Startup'],
-      recentArticles: [
-        { title: 'Australian Startups', url: 'https://www.austartups.com', readDate: '2025-06-22' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Linda Park',
-      tier: 'Silver',
-      aum: 5000000,
-      aumTrend: 'up',
-      nnia: 130000,
-      lastContactSummary: 'Reviewed portfolio performance. Client happy with returns and considering additional investments.',
-      nniaTrend: 'up',
-      reason: 'Performance review',
-      lastContact: '2025-07-14T10:00:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 100000,
-      portfolioDiversification: 4,
-      complianceFlag: false,
-      taxResidency: 'South Korea',
-      priority: 'Low',
-      customTags: ['Women Investor'],
-      recentArticles: [
-        { title: 'Korea Investment News', url: 'https://www.koreainvest.com/news', readDate: '2025-07-12' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Mike Brown',
-      tier: 'Gold',
-      aum: 7000000,
-      aumTrend: 'down',
-      nnia: 180000,
-      nniaTrend: 'down',
-      lastContactSummary: 'Explained recent tax changes. Client to review impact with accountant.',
-      reason: 'Tax update',
-      lastContact: '2025-07-02T09:45:00',
-      riskProfile: 'Conservative',
-      lastTransactionAmount: 350000,
-      portfolioDiversification: 5,
-      complianceFlag: true,
-      taxResidency: 'USA',
-      priority: 'Low',
-      customTags: ['Family Office'],
-      recentArticles: [
-        { title: 'US Tax Changes', url: 'https://www.ustax.com/changes', readDate: '2025-06-30' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Nina Patel',
-      tier: 'Platinum',
-      aum: 16000000,
-      aumTrend: 'up',
-      nnia: 480000,
-      lastContactSummary: 'Discussed portfolio expansion and new tech investments. Client approved proposed changes.',
-      nniaTrend: 'up',
-      reason: 'Portfolio expansion',
-      lastContact: '2025-07-11T14:20:00',
-      riskProfile: 'Aggressive',
-      lastTransactionAmount: 900000,
-      portfolioDiversification: 10,
-      complianceFlag: false,
-      taxResidency: 'India',
-      priority: 'High',
-      customTags: ['NRI', 'Tech'],
-      recentArticles: [
-        { title: 'India Tech Boom', url: 'https://www.indiatech.com/boom', readDate: '2025-07-09' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Oscar Wilde',
-      tier: 'Silver',
-      aum: 4200000,
-      aumTrend: 'up',
-      nnia: 115000,
-      lastContactSummary: 'Annual review completed. Client requested ESG report for next meeting.',
-      nniaTrend: 'up',
-      reason: 'Annual review',
-      lastContact: '2025-07-13T11:30:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 85000,
-      portfolioDiversification: 3,
-      complianceFlag: false,
-      taxResidency: 'UK',
-      priority: 'Low',
-      customTags: ['ESG'],
-      recentArticles: [
-        { title: 'ESG in UK', url: 'https://www.ukesg.com', readDate: '2025-07-11' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Priya Singh',
-      tier: 'Gold',
-      aum: 8500000,
-      aumTrend: 'down',
-      nnia: 220000,
-      nniaTrend: 'down',
-      reason: 'Product inquiry',
-      lastContact: '2025-07-04T08:00:00',
-      riskProfile: 'Conservative',
-      lastContactSummary: 'Answered product inquiry and sent additional resources. Awaiting client feedback.',
-      lastTransactionAmount: 250000,
-      portfolioDiversification: 6,
-      complianceFlag: false,
-      taxResidency: 'India',
-      priority: 'Low',
-      customTags: ['NRI'],
-      recentArticles: [
-        { title: 'NRI Investment Guide', url: 'https://www.nri.com/guide', readDate: '2025-07-02' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Quentin Blake',
-      tier: 'Bronze',
-      aum: 1100000,
-      aumTrend: 'down',
-      nnia: 30000,
-      nniaTrend: 'down',
-      reason: 'Fee update',
-      lastContact: '2025-06-20T10:30:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 20000,
-      portfolioDiversification: 2,
-      complianceFlag: false,
-      taxResidency: 'Australia',
-      lastContactSummary: 'Updated fee structure and clarified billing process. Client acknowledged changes.',
-      priority: 'Low',
-      customTags: ['Startup'],
-      recentArticles: [
-        { title: 'Startup Trends', url: 'https://www.startuptrends.com', readDate: '2025-06-18' }
-      ],
-      isActiveInvestor: false
-    },
-    {
-      name: 'Rita Gomez',
-      tier: 'Silver',
-      aum: 3900000,
-      aumTrend: 'up',
-      nnia: 105000,
-      nniaTrend: 'up',
-      reason: 'Quarterly review',
-      lastContactSummary: 'Quarterly review held. Client interested in diversifying portfolio further.',
-      lastContact: '2025-07-08T13:15:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 90000,
-      portfolioDiversification: 3,
-      complianceFlag: false,
-      taxResidency: 'Spain',
-      priority: 'Low',
-      customTags: ['Women Investor'],
-      recentArticles: [
-        { title: 'Spain Wealth Insights', url: 'https://www.spainwealth.com/insights', readDate: '2025-07-06' }
-      ],
-      isActiveInvestor: true
-    },
-    {
-      name: 'Sam Lee',
-      tier: 'Gold',
-      aum: 9200000,
-      aumTrend: 'up',
-      nnia: 260000,
-      nniaTrend: 'up',
-      reason: 'Performance update',
-      lastContact: '2025-07-06T09:40:00',
-      riskProfile: 'Balanced',
-      lastTransactionAmount: 350000,
-      portfolioDiversification: 6,
-      complianceFlag: false,
-      taxResidency: 'Singapore',
-      priority: 'High',
-      customTags: ['ESG', 'Tech'],
-      recentArticles: [
-        { title: 'Tech in Singapore', url: 'https://www.singaporetech.com', readDate: '2025-07-04' }
-      ],
-      isActiveInvestor: true
-    }
+      {
+        name: 'Alice Johnson',
+        tier: 'Platinum',
+        aum: 12000000,
+        aumTrend: 'up',
+        nnia: 350000,
+        nniaTrend: 'up',
+        reason: 'Portfolio review',
+        lastContact: '2025-07-10T09:30:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 500000,
+        portfolioDiversification: 7,
+        lastContactSummary: 'Discussed portfolio rebalancing and agreed to increase allocation to ESG funds. Client requested follow-up on new market opportunities.',
+        complianceFlag: false,
+        taxResidency: 'Singapore',
+        customTags: ['ESG', 'Succession'],
+        priority: 'High',
+        recentArticles: [
+          { title: 'Global Markets Rally', url: 'https://www.ft.com/content/markets-rally', readDate: '2025-07-08' },
+          { title: 'ESG Investing Trends', url: 'https://www.bloomberg.com/esg-trends', readDate: '2025-07-05' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Bob Smith',
+        tier: 'Gold',
+        aum: 8000000,
+        aumTrend: 'down',
+        nnia: 210000,
+        nniaTrend: 'down',
+        reason: 'New product',
+        lastContact: '2025-06-22T14:15:00',
+        riskProfile: 'Conservative',
+        lastTransactionAmount: 200000,
+        lastContactSummary: 'Explained new product features. Client expressed interest but requested more details before making a decision.',
+        portfolioDiversification: 5,
+        complianceFlag: true,
+        taxResidency: 'India',
+        priority: 'Medium',
+        customTags: ['NRI', 'Family Office'],
+        recentArticles: [
+          { title: 'India Wealth Outlook', url: 'https://www.economictimes.com/wealth-outlook', readDate: '2025-06-20' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Carol Lee',
+        tier: 'Silver',
+        aum: 3200000,
+        aumTrend: 'up',
+        nnia: 95000,
+        nniaTrend: 'up',
+        reason: 'Annual check-in',
+        lastContact: '2025-07-01T11:00:00',
+        riskProfile: 'Balanced',
+        lastContactSummary: 'Annual check-in completed. Reviewed performance and set goals for next quarter.',
+        lastTransactionAmount: 120000,
+        portfolioDiversification: 4,
+        complianceFlag: false,
+        taxResidency: 'Hong Kong',
+        priority: 'Low',
+        customTags: ['Real Estate'],
+        recentArticles: [
+          { title: 'Property Investment Guide', url: 'https://www.property.com/guide', readDate: '2025-06-28' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'David Kim',
+        tier: 'Platinum',
+        aum: 15000000,
+        aumTrend: 'down',
+        nnia: 420000,
+        nniaTrend: 'up',
+        reason: 'Tax planning',
+        lastContactSummary: 'Provided tax planning strategies. Client to share additional documents for further review.',
+        lastContact: '2025-07-15T16:45:00',
+        riskProfile: 'Aggressive',
+        lastTransactionAmount: 800000,
+        portfolioDiversification: 8,
+        complianceFlag: false,
+        taxResidency: 'South Korea',
+        priority: 'Low',
+        customTags: ['Succession', 'Tech'],
+        recentArticles: [
+          { title: 'Tech Stocks Analysis', url: 'https://www.techstocks.com/analysis', readDate: '2025-07-13' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Eva Green',
+        tier: 'Gold',
+        aum: 9500000,
+        aumTrend: 'up',
+        nnia: 275000,
+        nniaTrend: 'down',
+        reason: 'Performance update',
+        lastContact: '2025-07-05T10:20:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 300000,
+        lastContactSummary: 'Performance update shared. Client satisfied with results and will maintain current strategy.',
+        portfolioDiversification: 6,
+        complianceFlag: false,
+        taxResidency: 'UK',
+        priority: 'Low',
+        customTags: ['ESG'],
+        recentArticles: [
+          { title: 'UK Market Review', url: 'https://www.ukmarket.com/review', readDate: '2025-07-03' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Frank Miller',
+        tier: 'Bronze',
+        aum: 1200000,
+        aumTrend: 'down',
+        nnia: 35000,
+        lastContactSummary: 'Discussed fee structure and answered client queries. No immediate action required.',
+        nniaTrend: 'down',
+        reason: 'Fee discussion',
+        lastContact: '2025-06-18T13:00:00',
+        riskProfile: 'Conservative',
+        lastTransactionAmount: 25000,
+        portfolioDiversification: 2,
+        complianceFlag: false,
+        taxResidency: 'USA',
+        priority: 'Medium',
+        customTags: ['Startup'],
+        recentArticles: [
+          { title: 'Startup Funding Tips', url: 'https://www.startup.com/funding', readDate: '2025-06-15' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Grace Lee',
+        tier: 'Silver',
+        aum: 4100000,
+        aumTrend: 'up',
+        lastContactSummary: 'Quarterly review completed. Client interested in sustainable investment options.',
+        nnia: 110000,
+        nniaTrend: 'up',
+        reason: 'Quarterly review',
+        lastContact: '2025-07-12T15:30:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 95000,
+        portfolioDiversification: 3,
+        complianceFlag: false,
+        taxResidency: 'Singapore',
+        priority: 'Low',
+        customTags: ['ESG', 'Women Investor'],
+        recentArticles: [
+          { title: 'Women in Wealth', url: 'https://www.wealth.com/women', readDate: '2025-07-10' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Henry Ford',
+        tier: 'Gold',
+        aum: 7800000,
+        aumTrend: 'down',
+        lastContactSummary: 'Estate planning session held. Client to consult with legal advisor before next steps.',
+        nnia: 200000,
+        nniaTrend: 'down',
+        reason: 'Estate planning',
+        lastContact: '2025-07-03T09:00:00',
+        riskProfile: 'Conservative',
+        lastTransactionAmount: 400000,
+        portfolioDiversification: 5,
+        complianceFlag: true,
+        priority: 'High',
+        taxResidency: 'USA',
+        customTags: ['Family Office'],
+        recentArticles: [
+          { title: 'Estate Planning Basics', url: 'https://www.estate.com/planning', readDate: '2025-07-01' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Ivy Chen',
+        tier: 'Platinum',
+        aum: 18000000,
+        aumTrend: 'up',
+        nnia: 500000,
+        nniaTrend: 'up',
+        lastContactSummary: 'Shared market update and discussed tech sector trends. Client requested more frequent updates.',
+        reason: 'Market update',
+        lastContact: '2025-07-09T17:10:00',
+        riskProfile: 'Aggressive',
+        lastTransactionAmount: 1000000,
+        portfolioDiversification: 9,
+        complianceFlag: false,
+        taxResidency: 'China',
+        priority: 'Low',
+        customTags: ['Tech', 'ESG'],
+        recentArticles: [
+          { title: 'China Market Pulse', url: 'https://www.chinamarket.com/pulse', readDate: '2025-07-07' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Jack Black',
+        tier: 'Bronze',
+        aum: 900000,
+        aumTrend: 'down',
+        nnia: 25000,
+        nniaTrend: 'down',
+        reason: 'Account setup',
+        lastContactSummary: 'Account setup completed. Provided onboarding materials and answered initial questions.',
+        lastContact: '2025-06-25T12:00:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 15000,
+        portfolioDiversification: 1,
+        complianceFlag: false,
+        priority: 'High',
+        taxResidency: 'Australia',
+        customTags: ['Startup'],
+        recentArticles: [
+          { title: 'Australian Startups', url: 'https://www.austartups.com', readDate: '2025-06-22' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Linda Park',
+        tier: 'Silver',
+        aum: 5000000,
+        aumTrend: 'up',
+        nnia: 130000,
+        lastContactSummary: 'Reviewed portfolio performance. Client happy with returns and considering additional investments.',
+        nniaTrend: 'up',
+        reason: 'Performance review',
+        lastContact: '2025-07-14T10:00:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 100000,
+        portfolioDiversification: 4,
+        complianceFlag: false,
+        taxResidency: 'South Korea',
+        priority: 'Low',
+        customTags: ['Women Investor'],
+        recentArticles: [
+          { title: 'Korea Investment News', url: 'https://www.koreainvest.com/news', readDate: '2025-07-12' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Mike Brown',
+        tier: 'Gold',
+        aum: 7000000,
+        aumTrend: 'down',
+        nnia: 180000,
+        nniaTrend: 'down',
+        lastContactSummary: 'Explained recent tax changes. Client to review impact with accountant.',
+        reason: 'Tax update',
+        lastContact: '2025-07-02T09:45:00',
+        riskProfile: 'Conservative',
+        lastTransactionAmount: 350000,
+        portfolioDiversification: 5,
+        complianceFlag: true,
+        taxResidency: 'USA',
+        priority: 'Low',
+        customTags: ['Family Office'],
+        recentArticles: [
+          { title: 'US Tax Changes', url: 'https://www.ustax.com/changes', readDate: '2025-06-30' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Nina Patel',
+        tier: 'Platinum',
+        aum: 16000000,
+        aumTrend: 'up',
+        nnia: 480000,
+        lastContactSummary: 'Discussed portfolio expansion and new tech investments. Client approved proposed changes.',
+        nniaTrend: 'up',
+        reason: 'Portfolio expansion',
+        lastContact: '2025-07-11T14:20:00',
+        riskProfile: 'Aggressive',
+        lastTransactionAmount: 900000,
+        portfolioDiversification: 10,
+        complianceFlag: false,
+        taxResidency: 'India',
+        priority: 'High',
+        customTags: ['NRI', 'Tech'],
+        recentArticles: [
+          { title: 'India Tech Boom', url: 'https://www.indiatech.com/boom', readDate: '2025-07-09' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Oscar Wilde',
+        tier: 'Silver',
+        aum: 4200000,
+        aumTrend: 'up',
+        nnia: 115000,
+        lastContactSummary: 'Annual review completed. Client requested ESG report for next meeting.',
+        nniaTrend: 'up',
+        reason: 'Annual review',
+        lastContact: '2025-07-13T11:30:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 85000,
+        portfolioDiversification: 3,
+        complianceFlag: false,
+        taxResidency: 'UK',
+        priority: 'Low',
+        customTags: ['ESG'],
+        recentArticles: [
+          { title: 'ESG in UK', url: 'https://www.ukesg.com', readDate: '2025-07-11' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Priya Singh',
+        tier: 'Gold',
+        aum: 8500000,
+        aumTrend: 'down',
+        nnia: 220000,
+        nniaTrend: 'down',
+        reason: 'Product inquiry',
+        lastContact: '2025-07-04T08:00:00',
+        riskProfile: 'Conservative',
+        lastContactSummary: 'Answered product inquiry and sent additional resources. Awaiting client feedback.',
+        lastTransactionAmount: 250000,
+        portfolioDiversification: 6,
+        complianceFlag: false,
+        taxResidency: 'India',
+        priority: 'Low',
+        customTags: ['NRI'],
+        recentArticles: [
+          { title: 'NRI Investment Guide', url: 'https://www.nri.com/guide', readDate: '2025-07-02' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Quentin Blake',
+        tier: 'Bronze',
+        aum: 1100000,
+        aumTrend: 'down',
+        nnia: 30000,
+        nniaTrend: 'down',
+        reason: 'Fee update',
+        lastContact: '2025-06-20T10:30:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 20000,
+        portfolioDiversification: 2,
+        complianceFlag: false,
+        taxResidency: 'Australia',
+        lastContactSummary: 'Updated fee structure and clarified billing process. Client acknowledged changes.',
+        priority: 'Low',
+        customTags: ['Startup'],
+        recentArticles: [
+          { title: 'Startup Trends', url: 'https://www.startuptrends.com', readDate: '2025-06-18' }
+        ],
+        isActiveInvestor: false
+      },
+      {
+        name: 'Rita Gomez',
+        tier: 'Silver',
+        aum: 3900000,
+        aumTrend: 'up',
+        nnia: 105000,
+        nniaTrend: 'up',
+        reason: 'Quarterly review',
+        lastContactSummary: 'Quarterly review held. Client interested in diversifying portfolio further.',
+        lastContact: '2025-07-08T13:15:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 90000,
+        portfolioDiversification: 3,
+        complianceFlag: false,
+        taxResidency: 'Spain',
+        priority: 'Low',
+        customTags: ['Women Investor'],
+        recentArticles: [
+          { title: 'Spain Wealth Insights', url: 'https://www.spainwealth.com/insights', readDate: '2025-07-06' }
+        ],
+        isActiveInvestor: true
+      },
+      {
+        name: 'Sam Lee',
+        tier: 'Gold',
+        aum: 9200000,
+        aumTrend: 'up',
+        nnia: 260000,
+        nniaTrend: 'up',
+        reason: 'Performance update',
+        lastContact: '2025-07-06T09:40:00',
+        riskProfile: 'Balanced',
+        lastTransactionAmount: 350000,
+        portfolioDiversification: 6,
+        complianceFlag: false,
+        taxResidency: 'Singapore',
+        priority: 'High',
+        customTags: ['ESG', 'Tech'],
+        recentArticles: [
+          { title: 'Tech in Singapore', url: 'https://www.singaporetech.com', readDate: '2025-07-04' }
+        ],
+        isActiveInvestor: true
+      }
     ];
   }
 

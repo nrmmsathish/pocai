@@ -60,31 +60,39 @@ export class CustomerInteractionsComponent {
       }
     },
     { headerName: 'Status', field: 'status', filter: true, sortable: true },
-    { headerName: 'Notes', field: 'notes', filter: true },
-    { headerName: 'Next Best Action', field: 'nextBestAction', filter: true, sortable: true },
     {
-      headerName: 'Action',
-      field: 'action',
-      cellRenderer: (params: any) => `
-        <span class="action-icon" title="Complete" data-action="Completed" data-row="${params.rowIndex}">
-          <svg width="20" height="20" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" fill="#3cb371"/>
-            <path d="M8 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/>
-          </svg>
-        </span>
-        <span class="action-icon" title="Schedule" data-action="Scheduled" data-row="${params.rowIndex}">
-          <svg width="20" height="20" viewBox="0 0 24 24">
-            <rect x="4" y="6" width="16" height="14" rx="3" fill="#ffd700"/>
-            <path d="M8 10h8v2H8z" fill="#fff"/>
-          </svg>
-        </span>
-        <span class="action-icon" title="Pending" data-action="Pending" data-row="${params.rowIndex}">
-          <svg width="20" height="20" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" fill="#2d8cff"/>
-            <circle cx="12" cy="12" r="5" fill="#fff"/>
-          </svg>
-        </span>
-      `
+      headerName: 'Notes', field: 'notes', filter: true, cellRenderer: ({ value }: any) =>
+        `<span title="${value}">${value.length > 40 ? value.slice(0, 40) + '...' : value}</span>`
+    },
+
+    {
+      headerName: 'Next Best Action', field: 'nextBestAction', filter: true, sortable: true, cellRenderer: ({ value }: any) =>
+        `<span title="${value}">${value.length > 40 ? value.slice(0, 40) + '...' : value}</span>`
+    },
+    {
+      headerName: 'Reach Client',
+      cellRenderer: () => `
+          <div class="reach-client-actions">
+            <span title="Call (AI Listen)" class="reach-btn call-btn">
+              <svg style="vertical-align: sub;" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 9.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" stroke="#3cb371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+           <span title="WhatsApp" class="reach-btn whatsapp-btn">
+        <img src="WhatsApp.svg" alt="WhatsApp" width="22" height="22" style="vertical-align:middle;border-radius:4px;" />
+      </span>
+            <span title="Email" class="reach-btn email-btn">
+            <img src="Outlook.svg" alt="Email" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
+      
+            </span>
+            <span   title="Zoom (AI Listen)" class="reach-btn zoom-btn">
+              <img src="zoom.svg" alt="Email" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
+            </span>
+          </div>
+        `,
+      sortable: false,
+      filter: false,
+      minWidth: 180
     }
   ];
 

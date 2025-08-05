@@ -5,7 +5,7 @@ import { ChatComponent } from '../chat-component/chat-component';
 import { ClientsContactWidgetComponent } from '../clients-contact-widget-component/clients-contact-widget-component';
 import { CustomerInteractionsComponent } from '../customer-interactions-component/customer-interactions-component';
 import { CioInsightsComponent } from '../cio-insights-component/cio-insights-component';
-
+import { LeadsTableComponent } from '../leads-table-component/leads-table-component';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
@@ -14,6 +14,7 @@ import { CioInsightsComponent } from '../cio-insights-component/cio-insights-com
     CustomerInteractionsComponent,
     ClientsContactWidgetComponent,
     CioInsightsComponent,
+    LeadsTableComponent,
     CommonModule,
     GridsterModule
   ],

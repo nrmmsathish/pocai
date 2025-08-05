@@ -1,0 +1,192 @@
+<div [ngClass]="isDarkTheme ? 'dark-theme' : 'light-theme'">
+  <div class="dashboard-header">
+    <!-- <button class="hamburger" (click)="toggleNav()" aria-label="Toggle Navigation">
+      <span></span><span></span><span></span>
+    </button> -->
+    <span class="dashboard-title">🏦 ConnectWealth</span>
+    <button class="theme-toggle-btn" (click)="toggleTheme()" aria-label="Toggle Theme">
+      <span *ngIf="isDarkTheme">🌙</span>
+      <span *ngIf="!isDarkTheme">☀️</span>
+    </button>
+    <span class="profile-icon" title="User Profile">
+      <svg width="32" height="32" viewBox="0 0 32 32" style="vertical-align:middle;">
+        <circle cx="16" cy="16" r="16" fill="#e3f0ff" />
+        <circle cx="16" cy="13" r="7" fill="#2d8cff" />
+        <ellipse cx="16" cy="25" rx="10" ry="5" fill="#b3d1ff" />
+      </svg>
+    </span>
+  </div>
+
+  <!-- Left Navigation -->
+  <!-- <nav class="side-nav" [class.open]="navOpen">
+    <ul>
+      <li><a href="#">🏠 Dashboard</a></li>
+      <li><a href="#">📊 NBA</a></li>
+      <li><a href="#">💸 Thought till Sales</a></li>
+    </ul>
+  </nav> -->
+
+  <div class="banner-row">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80"
+      alt="Banking Banner" class="banner-img full-width-banner" />
+  </div>
+  
+</div>
+<div class="sales-overview-root">
+  <h2 class="sales-title">Lead Management</h2>
+  <div class="sales-overview-cards">
+    <div class="sales-card">
+      <div class="sales-card-label">Revenue</div>
+      <div class="sales-card-value">$8.01M <span class="sales-card-arrow down"></span></div>
+      <div class="sales-card-desc">% Diff from Last Month : 26.94%</div>
+    </div>
+    <div class="sales-card">
+      <div class="sales-card-label">Expected Revenue: Aug 2025</div>
+      <div class="sales-card-value">$3.22M</div>
+    </div>
+    <div class="sales-card">
+      <div class="sales-card-label">Deals in Pipeline</div>
+      <div class="sales-card-value">496 <span class="sales-card-arrow up"></span></div>
+      <div class="sales-card-desc">Oct 2020: 347</div>
+    </div>
+    <div class="sales-card">
+      <div class="sales-card-label">Won Deals: Aug 2025</div>
+      <div class="sales-card-value">198 <span class="sales-card-arrow up"></span></div>
+      <div class="sales-card-desc">Oct 2020: 139</div>
+    </div>
+    <div class="sales-card">
+      <div class="sales-card-label">Lost Deals Count</div>
+      <div class="sales-card-value">1,269</div>
+    </div>
+    <div class="sales-card">
+      <div class="sales-card-label">Conversion %</div>
+      <div class="sales-card-value">69.23% <span class="sales-card-arrow up"></span></div>
+    </div>
+  </div>
+  <div class="sales-overview-main">
+    <div class="sales-overview-left">
+      <div class="sales-panel">
+        <div class="sales-panel-title">This Month Conversion Pipeline</div>
+        <canvas id="salesFunnel"></canvas>
+        <div class="sales-panel-legend">
+          <span style="color:#19e6e6">■ Qualification</span>
+          <span style="color:#2d8cff">■ Needs Analysis</span>
+          <span style="color:#4faaff">■ Prospect</span>
+          <span style="color:#ff5a99">■ Initial Offer</span>
+          <span style="color:#ffb347">■ Negotiation/Review</span>
+          <span style="color:#ffd700">■ Proposal/Price Quote</span>
+        </div>
+      </div>
+    </div>
+    <div class="sales-overview-center">
+      <div class="sales-panel">
+        <div class="sales-panel-title">Leads Revenue Trend with Forecast</div>
+        <canvas id="salesTrend"></canvas>
+      </div>
+    </div>
+    <div class="sales-overview-right">
+      <div class="sales-panel">
+        <div class="sales-panel-title">Leads Conversion Target</div>
+        <canvas id="salesTarget"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="lead-dashboard-grid">
+  <div class="lead-dashboard-row">
+    <div class="lead-card">
+      <div class="lead-card-title">Total # of leads</div>
+      <div class="lead-card-value">123</div>
+    </div>
+    <div class="lead-card">
+      <div class="lead-card-title">Total # of qualified leads</div>
+      <div class="lead-card-value">30</div>
+    </div>
+    <div class="lead-card">
+      <div class="lead-card-title">Leads in current quarter</div>
+      <div class="lead-card-value">27</div>
+    </div>
+    <div class="lead-card">
+      <div class="lead-card-title">Leads in current month</div>
+      <div class="lead-card-value">11</div>
+    </div>
+  </div>
+
+  <div class="lead-dashboard-row">
+    <div class="lead-card lead-card-chart">
+      <div class="lead-card-title">Current quarter lead dynamics</div>
+      <canvas id="quarterLeadDynamics"></canvas>
+    </div>
+    <div class="lead-card lead-card-chart">
+      <div class="lead-card-title">Lead dynamics by month</div>
+      <canvas id="leadDynamicsByMonth"></canvas>
+    </div>
+    <div class="lead-card lead-card-chart">
+      <div class="lead-card-title">Lead stages</div>
+      <canvas id="leadStages"></canvas>
+    </div>
+  </div>
+
+  <div class="lead-dashboard-row">
+    
+    
+
+  
+    <div class="lead-card lead-card-table">
+      <div class="lead-card-title">Current month top 5 leads</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Lead</th>
+            <th>AUM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Opportunity management system / Bedford, Test</td><td>$20,000.00</td></tr>
+          <tr><td>Service management system / Hales Panel, Sunlight Co</td><td>$2,543.00</td></tr>
+          <tr><td>Service management system / Unite Team, Axon</td><td>$2,345.00</td></tr>
+          <tr><td>Workflow automation system / Trendy division, GreenView</td><td>$2,213.00</td></tr>
+          <tr><td>Opportunity management system / Titan Sensors</td><td>$1,930.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="lead-card lead-card-table">
+      <div class="lead-card-title">Current month top 5 lead owners by converted leads</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Lead owner / Client Advisor</th>
+            <th># of leads</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Megan Lewis</td><td>9</td></tr>
+          <tr><td>Major Jones</td><td>7</td></tr>
+          <tr><td>Cash Kinsey</td><td>5</td></tr>
+          <tr><td>Mary King</td><td>3</td></tr>
+          <tr><td>Violet E. Murphy</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- <div class="lead-card lead-card-chart">
+      <div class="lead-card-title">Current month lead conversion rate</div>
+      <canvas id="leadConversionRate"></canvas>
+    </div> -->
+  
+
+  
+</div>
+<div class="lead-dashboard-row">
+   <div class="lead-card lead-card-chart">
+  <div class="lead-card-title">Lead Classification</div>
+  <canvas id="leadCluster"></canvas>
+</div>
+  <div class="lead-card lead-card-chart">
+      <div class="lead-card-title">Current month lead sources</div>
+      <canvas id="leadSources"></canvas>
+    </div>
+    <div class="lead-card lead-card-chart">
+      <div class="lead-card-title">Leads revenue generated by customer needs</div>
+      <canvas id="leadsByNeeds"></canvas>
+    </div>
+  </div>

@@ -2,6 +2,9 @@ import { Component, NgZone, ViewChild, ElementRef, ChangeDetectorRef } from '@an
 import { io } from 'socket.io-client';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import WaveSurfer from 'wavesurfer.js';
+import Timeline from 'wavesurfer.js/plugins/timeline';
+
 
 @Component({
   selector: 'app-chat',
@@ -19,6 +22,7 @@ export class ChatComponent {
   mouthShape: 'normal' | 'wide' | 'narrow' = 'normal';
   chatInput: string = '';
   listeningSeconds: number = 0;
+  waveSurfer: any;
   @ViewChild('widgetContainer') widgetContainer!: ElementRef;
 
   private speechPauseTimeout: any;
@@ -39,7 +43,34 @@ export class ChatComponent {
       });
     });
   }
+ ngAfterViewInit() {
+  this.waveSurfer = WaveSurfer.create({
+    container: '#waveform-circle',
+    waveColor: '#2d8cff',
+    progressColor: '#ffd700',
+    cursorColor: '#193b6a',
+    height: 80,
+    plugins: [
+      Timeline.create({
+        container: '#waveform-timeline',
+        timeInterval: 0.5,
+        primaryLabelInterval: 1,
+        secondaryLabelInterval: 5,
+        style: {
+          fontSize: '12px',
+          color: '#193b6a'
+        }
+      })
+    ]
+  });
+}
 
+  playAudio(audioUrl: string) {
+    if (this.waveSurfer) {
+      this.waveSurfer.load(audioUrl);
+      this.waveSurfer.play();
+    }
+  }
   // --- Widget Drag ---
   startDrag(event: MouseEvent) {
     this.dragging = true;
@@ -199,16 +230,35 @@ export class ChatComponent {
 
   // --- Speech Synthesis & Lip Sync ---
   speak(text: string) {
-    const synth = window.speechSynthesis;
-    const utter = new SpeechSynthesisUtterance(text);
-    const voices = synth.getVoices();
-    const indianVoice = voices.find(v => v.name.includes('Heera')) || voices.find(v => v.lang === 'en-IN') || voices.find(v => v.name.includes('India')) || voices[0];
-    if (indianVoice) utter.voice = indianVoice;
-    utter.pitch = 1.1;
-    utter.onstart = () => this.startLipSync(text, utter.pitch);
-    utter.onend = () => this.stopLipSync();
-    synth.speak(utter);
-  }
+  const synth = window.speechSynthesis;
+  const utter = new SpeechSynthesisUtterance(text);
+  const voices = synth.getVoices();
+  const indianVoice = voices.find(v => v.name.includes('Heera')) || voices.find(v => v.lang === 'en-IN') || voices.find(v => v.name.includes('India')) || voices[0];
+  if (indianVoice) utter.voice = indianVoice;
+  utter.pitch = 1.1;
+
+  utter.onstart = () => {
+    this.isSpeaking = true;
+    // Trigger envelope animation (visual only)
+    if (this.waveSurfer) {
+      this.waveSurfer.empty();
+      this.waveSurfer.setOptions({ waveColor: '#2d8cff', progressColor: '#ffd700' });
+      this.waveSurfer.load('sample.wav'); // Place a short silence.wav in your assets folder
+      // Optionally, you can load a short silent audio file to animate the envelope
+      // Or just call play() to animate
+      this.waveSurfer.play();
+    }
+  };
+  utter.onend = () => {
+    this.isSpeaking = false;
+    if (this.waveSurfer) {
+      this.waveSurfer.pause();
+    }
+  };
+
+  synth.speak(utter); // This will produce audible speech
+  this.stopAudioRecording();
+}
 
   startLipSync(text: string, pitch: number) {
     this.isSpeaking = true;

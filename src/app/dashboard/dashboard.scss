@@ -2,17 +2,21 @@
 .dark-theme {
   background: linear-gradient(135deg, #181818 0%, #232526 100%);
   color: #fff;
+
   .dashboard-header {
     background: linear-gradient(90deg, #0a2342 0%, #193b6a 100%);
     color: #e5b95f;
   }
+
   .side-nav {
     background: #193b6a;
     color: #fff;
   }
+
   .dashboard-title {
     color: #e5b95f;
   }
+
   .theme-toggle-btn {
     background: #232526;
     color: #e5b95f;
@@ -22,18 +26,22 @@
 .light-theme {
   background: linear-gradient(135deg, #f5f7fa 0%, #e9eef5 100%);
   color: #193b6a;
+
   .dashboard-header {
     background: #fff;
     color: #193b6a;
-    box-shadow: 0 2px 8px rgba(10,35,66,0.08);
+    box-shadow: 0 2px 8px rgba(10, 35, 66, 0.08);
   }
+
   .side-nav {
     background: #f5f7fa;
     color: #193b6a;
   }
+
   .dashboard-title {
     color: #193b6a;
   }
+
   .theme-toggle-btn {
     background: #fff;
     color: #193b6a;
@@ -60,6 +68,7 @@
   justify-content: center;
   margin-left: 8px;
   background: #e5b95f22;
+
   img {
     width: 100%;
     height: 100%;
@@ -74,7 +83,7 @@
   align-items: center;
   height: 60px;
   //background: linear-gradient(90deg, #0a2342 0%, #193b6a 100%);
-  box-shadow: 0 2px 8px rgba(10,35,66,0.08);
+  box-shadow: 0 2px 8px rgba(10, 35, 66, 0.08);
   padding: 0 32px;
   position: relative;
   z-index: 10;
@@ -91,6 +100,7 @@
   gap: 5px;
   cursor: pointer;
   margin-right: 18px;
+
   span {
     display: block;
     height: 4px;
@@ -105,7 +115,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 1px;
- //color: #e5b95f;
+  //color: #e5b95f;
 }
 
 .banner-row {
@@ -116,6 +126,7 @@
   padding: 0;
   z-index: 1;
 }
+
 .banner-img.full-width-banner {
   width: 100vw;
   height: 70px;
@@ -126,10 +137,33 @@
   box-shadow: none;
 }
 
+.widget-container {
+  margin: 20px;
+  border: solid 1px color-mix(in srgb, transparent, #181d1f 15%);
+  border-radius: 8px;
+}
+
 .dashboard-grid {
-  height: calc(100vh - 200px);
+
   background: linear-gradient(135deg, #f5f7fa 0%, #e9eef5 100%);
   padding: 32px;
+}
+
+.scrollable-content {
+  max-height: calc(100vh - 120px);
+  /* adjust for header/banner height */
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+
+.dashboard-grid {
+  min-height: 600px;
+  /* or whatever fits your design */
+}
+
+.gridster-item {
+  min-height: 320px;
+  /* ensures widgets don't get too small */
 }
 
 .widget-header {
@@ -153,6 +187,7 @@
   cursor: pointer;
   transition: color 0.2s;
 }
+
 .widget-controls button:hover {
   color: #193b6a;
   background: #e5b95f22;
@@ -170,7 +205,7 @@
 
 .gridster-item {
   border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(10,35,66,0.10);
+  box-shadow: 0 2px 12px rgba(10, 35, 66, 0.10);
   border: 1.5px solid #e5b95f;
   background: #fff;
   overflow: hidden;
@@ -178,7 +213,8 @@
 
 .side-nav {
   position: fixed;
-  top: 60px; /* height of header */
+  top: 60px;
+  /* height of header */
   left: 0;
   width: 220px;
   height: calc(100vh - 60px);
@@ -186,15 +222,18 @@
   //color: #fff;
   border-right: 2px solid #e5b95f;
   transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
   z-index: 20;
   padding-top: 32px;
+
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
+
     li {
       margin: 18px 0;
+
       a {
         color: #193b6a;
         text-decoration: none;
@@ -203,6 +242,7 @@
         display: block;
         border-radius: 6px;
         transition: background 0.2s;
+
         &:hover {
           background: #fff2ce22;
         }
@@ -210,40 +250,47 @@
     }
   }
 }
+
 .side-nav.open {
   transform: translateX(0);
 }
+
 .main-content {
   margin-left: 0;
-  transition: margin-left 0.3s cubic-bezier(.4,0,.2,1);
+  transition: margin-left 0.3s cubic-bezier(.4, 0, .2, 1);
 }
+
 @media (min-width: 700px) {
-  .side-nav.open + .main-content {
+  .side-nav.open+.main-content {
     margin-left: 220px;
   }
 }
+
 .dashboard-widgets-toolbar {
   display: flex;
   justify-content: flex-end;
   padding: 0;
 }
+
 .open-chat-btn {
   background: #193b6a;
   color: #e5b95f;
   border: none;
   border-radius: 8px;
   padding: 10px 20px;
-  font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(10,35,66,0.08);
+  box-shadow: 0 2px 8px rgba(10, 35, 66, 0.08);
   transition: background 0.2s, color 0.2s;
 }
+
 .open-chat-btn:hover {
   background: #e5b95f;
   color: #193b6a;
 }
+
 .chat-assistant-widget {
   position: fixed;
   bottom: 32px;
@@ -263,13 +310,14 @@
   border: none;
   border-radius: 8px 0 0 8px;
   padding: 14px 22px;
-  font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   font-size: 1.08rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(10,35,66,0.12);
+  box-shadow: 0 2px 8px rgba(10, 35, 66, 0.12);
   transition: background 0.2s, color 0.2s;
 }
+
 .open-chat-btn.sticky-chat-btn:hover {
   background: #e5b95f;
   color: #193b6a;
@@ -285,12 +333,14 @@
   border-top-right-radius: 10px;
   letter-spacing: 0.03em;
 }
+
 .drag-handle {
   cursor: grab;
   margin-left: 12px;
   display: inline-block;
   user-select: none;
 }
+
 .drag-handle:active {
   cursor: grabbing;
 }
@@ -315,7 +365,7 @@
 }
 
 .dashboard-tabs button.active {
- border-bottom: 5px solid #193b6a;
+  border-bottom: 5px solid #193b6a;
 }
 
 /* Light theme variables */
