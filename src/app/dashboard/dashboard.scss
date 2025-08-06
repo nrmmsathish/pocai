@@ -479,3 +479,50 @@
   font-weight: 400;
   margin-bottom: 2px;
 }
+@media (max-width: 1800px) {
+  .greeting-title {
+    font-size: 2.2em;
+  }
+  .metric-card{
+    padding: 5px;
+  }
+  .greeting-desc {
+    font-size: 0.82em;
+  }
+  .metric-value {
+    font-size: 1.3em;
+  }
+  .metric-title {
+    font-size: 0.92em;
+  }
+}
+
+@media (max-width: 900px) {
+  .greeting-title {
+    font-size: 2em;
+  }
+  .greeting-desc {
+    font-size: 0.92em;
+  }
+  .metric-value {
+    font-size: 1.2em;
+  }
+  .metric-title {
+    font-size: 0.92em;
+  }
+}
+
+@media (max-width: 600px) {
+  .greeting-title {
+    font-size: 1.3em;
+  }
+  .greeting-desc {
+    font-size: 0.88em;
+  }
+  .metric-value {
+    font-size: 1em;
+  }
+  .metric-title {
+    font-size: 0.88em;
+  }
+}
