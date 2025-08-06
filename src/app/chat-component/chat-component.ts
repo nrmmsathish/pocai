@@ -2,14 +2,12 @@ import { Component, NgZone, ViewChild, ElementRef, ChangeDetectorRef } from '@an
 import { io } from 'socket.io-client';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import WaveSurfer from 'wavesurfer.js';
-import Timeline from 'wavesurfer.js/plugins/timeline';
-
+import { CircularWaveformComponent } from '../circular-waveform-component/circular-waveform-component';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CircularWaveformComponent],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss']
 })
@@ -119,6 +117,7 @@ private generateSessionId(): string {
       alert('Speech Recognition not supported in this browser.');
       return;
     }
+    this.recognizing = true;
     this.recognition = new (window as any).webkitSpeechRecognition();
     this.recognition.lang = 'en-US';
     this.recognition.continuous = false;
@@ -126,14 +125,12 @@ private generateSessionId(): string {
     this.recognition.onstart = () => {
       this.startAudioRecording();
       this.zone.run(() => {
-        this.recognizing = true;
         this.listeningSeconds = 0;
         this.startTimer();
       });
     };
     this.recognition.onend = () => {
       this.zone.run(() => {
-        this.recognizing = false;
         this.stopTimer();
         this.clearSpeechPauseTimer();
       });
@@ -173,12 +170,15 @@ private generateSessionId(): string {
     const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
     const reader = new FileReader();
     reader.onloadend = () => {
-      const base64Audio = (reader.result as string).split(',')[1];
+       // Use the last transcript from messages as converted text
+      const lastUserMsg = this.messages.filter(m => m.from === 'You').slice(-1)[0];
+      const convertedText = lastUserMsg ? lastUserMsg.text : '';
+     
       fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify({
-          audio_data: base64Audio,
+          audio_data: convertedText,
           session_id: this.sessionId || ''
         })
       });

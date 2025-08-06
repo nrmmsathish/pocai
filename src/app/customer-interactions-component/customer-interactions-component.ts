@@ -71,25 +71,30 @@ export class CustomerInteractionsComponent {
     },
     {
       headerName: 'Reach Client',
-      cellRenderer: () => `
-          <div class="reach-client-actions">
-            <span title="Call (AI Listen)" class="reach-btn call-btn">
-              <svg style="vertical-align: sub;" width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 9.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" stroke="#3cb371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-           <span title="WhatsApp" class="reach-btn whatsapp-btn">
-        <img src="WhatsApp.svg" alt="WhatsApp" width="22" height="22" style="vertical-align:middle;border-radius:4px;" />
-      </span>
-            <span title="Email" class="reach-btn email-btn">
-            <img src="Outlook.svg" alt="Email" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
-      
-            </span>
-            <span   title="Zoom (AI Listen)" class="reach-btn zoom-btn">
-              <img src="zoom.svg" alt="Email" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
-            </span>
-          </div>
-        `,
+      cellRenderer: (params: any) => {
+    const rowIndex = params.rowIndex ?? params.node?.rowIndex;
+    return `
+      <div class="reach-client-actions">
+        <span title="Call (AI Listen)" class="reach-btn call-btn">
+          <svg style="vertical-align: sub;" width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 22 2 16.39 2 9.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" stroke="#3cb371" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span title="WhatsApp" class="reach-btn whatsapp-btn">
+          <img src="WhatsApp.svg" alt="WhatsApp" width="22" height="22" style="vertical-align:middle;border-radius:4px;" />
+        </span>
+        <span title="Email" class="reach-btn email-btn">
+          <img src="Outlook.svg" alt="Email" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
+        </span>
+        <span title="Zoom (AI Listen)" class="reach-btn zoom-btn">
+          <img src="zoom.svg" alt="Zoom" width="18" height="18" style="vertical-align:middle;border-radius:4px;" />
+        </span>
+        <span title="Notify Customer" class="notify-icon action-icon" data-row="${rowIndex}" style="cursor:pointer;">
+          <img src="notify.png" alt="Notify Customer" width="22" height="22" style="vertical-align:middle;border-radius:4px;" />
+        </span>
+      </div>
+    `;
+  },
       sortable: false,
       filter: false,
       minWidth: 180
@@ -197,6 +202,15 @@ export class CustomerInteractionsComponent {
         if (item) {
           item.action = action;
           item.status = action;
+        }
+      }
+      if (e.target && e.target.closest('.notify-icon')) {
+        const icon = e.target.closest('.notify-icon');
+        const rowIndex = Number(icon.getAttribute('data-row'));
+        const item = this.filteredInteractions[rowIndex];
+        if (item) {
+          // Trigger your notification logic here
+          alert(`Notification sent to ${item.client}`);
         }
       }
     });
