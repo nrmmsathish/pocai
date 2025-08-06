@@ -52,10 +52,7 @@
   transition: background 0.2s;
 }
 
-.summary-chip:hover {
-  background: #2d8cff;
-  color: #fff;
-}
+
 
 .summary-count {
   background: #2d8cff;
@@ -164,7 +161,7 @@
 ::ng-deep {
   .category-highlight {
     //background: #e3f0ff !important;
-    color: #2d8cff !important;
+    //color: #2d8cff !important;
     font-weight: 600;
     border-radius: 8px;
   }
@@ -245,13 +242,45 @@
   box-shadow: 0 2px 8px #2d8cff33;
 }
 
-/* filepath: c:\Users\Administrator\Videos\Hackathon\pocai\src\app\customer-interactions-component\customer-interactions-component.scss */
-.summary-chip.active {
-  background: #2d8cff;
-  color: #fff;
-  box-shadow: 0 2px 8px #2d8cff33;
-}
+
 
 // .padding-15{
 //   padding: 15px;
 // }
+
+
+.summary-chip {
+  background: rgb(239 242 248) 100%;
+  color: #a5782a;
+  border-radius: 18px;
+  padding: 6px 16px;
+  margin-right: 8px;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(229, 185, 80, 0.12);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.summary-chip.active {
+  background:rgb(121 99 54);
+  color: #fff8e1;
+  box-shadow: 0 2px 8px #e5b95033;
+  .summary-count{
+    background: #fff8e1;
+  }
+}
+
+.summary-count {
+  background: rgba(229, 185, 80, 0.22);
+  color: #a5782a;
+  border-radius: 10px;
+  padding: 2px 8px;
+  margin-left: 6px;
+  font-size: 0.92em;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s;
+}

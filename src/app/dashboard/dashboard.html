@@ -4,8 +4,8 @@
       <span></span><span></span><span></span>
     </button> -->
     <span class="dashboard-title">🏦 ConnectWealth</span>
-    
-     <button style="color:black;     margin-left: auto;
+
+    <button style="color:black;     margin-left: auto;
     margin-right: 16px;cursor:pointer;background:white;
     text-decoration: underline;" (click)="router.navigate(['/leads'])">Go to Leads Management</button>
     <button class="theme-toggle-btn" (click)="toggleTheme()" aria-label="Toggle Theme">
@@ -30,9 +30,44 @@
     </ul>
   </nav> -->
 
+  <!-- <div class="banner-row">
+    <img src="aesthetic.png"
+    alt="Banking Banner" class="banner-img full-width-banner" />
+  </div> -->
   <div class="banner-row">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80"
-      alt="Banking Banner" class="banner-img full-width-banner" />
+    <img src="aesthetic.png" alt="Banking Banner" class="banner-img full-width-banner" />
+    <div class="book-overview-banner" style="left:0px;">
+      <div class="book-overview-greeting">
+        <div class="greeting-title">Good day, John Tan!</div>
+        
+      </div>
+      <div class="book-overview-greeting" style="border:none;">
+        
+        <div class="greeting-desc">Below dashboard gives a quick overview of clients to reach, book overview, potential leads and customer requests.
+          for today.</div>
+      </div>
+    </div>
+    <div class="book-overview-banner">
+
+      <div class="book-overview-metrics">
+        <div class="metric-card">
+          <div class="metric-title">In Progress Deals</div>
+          <div class="metric-value">$51,000</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Completed Deals</div>
+          <div class="metric-value">$120,000</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Pending Authorization</div>
+          <div class="metric-value">$8,500</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Pending Customer Request</div>
+          <div class="metric-value">$3,200</div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="dashboard-widgets-toolbar">
     <button title='Open Chat Assistant' class="open-chat-btn sticky-chat-btn" (click)="showChat = !showChat">
@@ -93,7 +128,7 @@
     <gridster-item *ngIf="activeTab === 'nba'" [item]="{ cols: 12, rows: 4, y: 0, x: 0, label: 'Customer Interactions' }" class="gridster-item"> -->
     <div class="widget-container">
       <div class="widget-header">
-        <span>Customer Interactions</span>
+        <span>Opportunity</span>
         <span class="my-drag-handle" title="Drag widget">
           <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
             <circle cx="5" cy="5" r="2" fill="#888" />
@@ -111,7 +146,7 @@
     <div class="widget-container">
       <div class="widget-header">
         <span>Potential Leads</span>
-       
+
         <span class="my-drag-handle" title="Drag widget">
           <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
             <circle cx="5" cy="5" r="2" fill="#888" />

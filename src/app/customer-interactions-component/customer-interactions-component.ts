@@ -170,10 +170,10 @@ export class CustomerInteractionsComponent {
     { type: 'Performance Checkpoint', client: 'Henry Ford', date: '2024-08-22', action: 'Share performance summary and suggest next steps.' }
   ];
 
-  selectedCategory: string = 'Engagement Idea';
+  selectedCategory: string = 'Ideas to Engage';
   categorySummary = [
     { type: 'Service Request', count: 0 },
-    { type: 'Engagement Idea', count: 0 },
+    { type: 'Ideas to Engage', count: 0 },
     { type: 'Transaction', count: 0 },
     { type: 'Query/Feedback', count: 0 }
   ];
@@ -208,7 +208,7 @@ export class CustomerInteractionsComponent {
 
   mergeIdeasWithInteractions() {
     const ideasAsInteractions: Interaction[] = this.ideas.map(idea => ({
-      type: 'Engagement Idea',
+      type: 'Ideas to Engage',
       category: idea.type,
       client: idea.client,
       date: idea.date,

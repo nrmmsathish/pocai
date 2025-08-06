@@ -14,6 +14,7 @@ import Timeline from 'wavesurfer.js/plugins/timeline';
   styleUrls: ['./chat-component.scss']
 })
 export class ChatComponent {
+  sessionId: string = this.generateSessionId();
   socket = io('http://localhost:3000');
   messages: { from: string, text: string, partial?: boolean }[] = [];
   recognizing = false;
@@ -43,33 +44,14 @@ export class ChatComponent {
       });
     });
   }
- ngAfterViewInit() {
-  this.waveSurfer = WaveSurfer.create({
-    container: '#waveform-circle',
-    waveColor: '#2d8cff',
-    progressColor: '#ffd700',
-    cursorColor: '#193b6a',
-    height: 80,
-    plugins: [
-      Timeline.create({
-        container: '#waveform-timeline',
-        timeInterval: 0.5,
-        primaryLabelInterval: 1,
-        secondaryLabelInterval: 5,
-        style: {
-          fontSize: '12px',
-          color: '#193b6a'
-        }
-      })
-    ]
-  });
-}
+
+private generateSessionId(): string {
+    // Generates a random 16-character alphanumeric session ID
+    return Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
+  }
 
   playAudio(audioUrl: string) {
-    if (this.waveSurfer) {
-      this.waveSurfer.load(audioUrl);
-      this.waveSurfer.play();
-    }
+   
   }
   // --- Widget Drag ---
   startDrag(event: MouseEvent) {
@@ -186,6 +168,23 @@ export class ChatComponent {
       }
     }
     this.stopAudioRecording();
+     // Send audio to API as base64
+  if (this.audioChunks && this.audioChunks.length > 0) {
+    const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Audio = (reader.result as string).split(',')[1];
+      fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({
+          audio_data: base64Audio,
+          session_id: this.sessionId || ''
+        })
+      });
+    };
+    reader.readAsDataURL(audioBlob);
+  }
   }
 
   // --- Timers ---
@@ -240,20 +239,11 @@ export class ChatComponent {
   utter.onstart = () => {
     this.isSpeaking = true;
     // Trigger envelope animation (visual only)
-    if (this.waveSurfer) {
-      this.waveSurfer.empty();
-      this.waveSurfer.setOptions({ waveColor: '#2d8cff', progressColor: '#ffd700' });
-      this.waveSurfer.load('sample.wav'); // Place a short silence.wav in your assets folder
-      // Optionally, you can load a short silent audio file to animate the envelope
-      // Or just call play() to animate
-      this.waveSurfer.play();
-    }
+    
   };
   utter.onend = () => {
     this.isSpeaking = false;
-    if (this.waveSurfer) {
-      this.waveSurfer.pause();
-    }
+    
   };
 
   synth.speak(utter); // This will produce audible speech

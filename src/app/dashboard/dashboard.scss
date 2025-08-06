@@ -29,7 +29,7 @@
 
   .dashboard-header {
     background: #fff;
-    color: #193b6a;
+    color: #1b1912;
     box-shadow: 0 2px 8px rgba(10, 35, 66, 0.08);
   }
 
@@ -39,7 +39,7 @@
   }
 
   .dashboard-title {
-    color: #193b6a;
+    color: #1b1912;
   }
 
   .theme-toggle-btn {
@@ -129,8 +129,8 @@
 
 .banner-img.full-width-banner {
   width: 100vw;
-  height: 70px;
-  object-fit: cover;
+  height: 25vh;
+  object-fit: fill;
   display: block;
   border-radius: 0;
   margin: 0;
@@ -167,7 +167,7 @@
 }
 
 .widget-header {
-  background: #193b6a;
+  background: #1b1912;
   color: #fff;
   font-weight: 600;
   padding: 12px 18px;
@@ -273,7 +273,7 @@
 }
 
 .open-chat-btn {
-  background: #193b6a;
+  background: #1b1912;
   color: #e5b95f;
   border: none;
   border-radius: 8px;
@@ -288,7 +288,7 @@
 
 .open-chat-btn:hover {
   background: #e5b95f;
-  color: #193b6a;
+  color: #1b1912;
 }
 
 .chat-assistant-widget {
@@ -305,7 +305,7 @@
   right: 0;
   transform: translateY(-50%);
   z-index: 1001;
-  background: #193b6a;
+  background: #1b1912;
   color: #e5b95f;
   border: none;
   border-radius: 8px 0 0 8px;
@@ -320,11 +320,11 @@
 
 .open-chat-btn.sticky-chat-btn:hover {
   background: #e5b95f;
-  color: #193b6a;
+  color: #1b1912;
 }
 
 .widget-header {
-  background: #193b6a;
+  background: #1b1912;
   color: #e5b95f;
   font-weight: 600;
   padding: 14px 20px;
@@ -382,4 +382,100 @@
   --tab-color: #e3f0ff;
   --tab-active-bg: #2d8cff;
   --tab-active-color: #fff;
+}
+
+
+
+.book-overview-heading {
+  font-size: 1.25em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.book-overview-metrics {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.metric-card {
+  background: rgba(255,255,255,0.14); /* Subtle translucent white */
+  border-radius: 8px;
+  padding: 10px 18px;
+  min-width: 200px;
+  text-align: center;
+  box-shadow: 0 1px 6px #193b6a22;
+}
+
+.metric-title {
+  font-size: 0.98em;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 1.68em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #e5b950;
+}
+.book-overview-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 18px;
+  width: 270px;
+  position: absolute;
+  top: 32px;
+  right: 40px;
+}
+
+.book-overview-banner {
+  position: absolute;
+  top: 0;
+  right: 340px; /* leave space for metrics on right */
+  background: none;
+  color: #fff;
+  border-radius: 12px;
+  padding: 18px 28px;
+  box-shadow: 0 2px 12px #193b6a33;
+  z-index: 2;
+  min-width: 220px;
+}
+
+@media (max-width: 900px) {
+  .book-overview-metrics {
+    position: static;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    margin-top: 18px;
+  }
+  .book-overview-banner {
+    position: static;
+    right: auto;
+    min-width: 220px;
+    margin-bottom: 18px;
+  }
+}
+/* Add to dashboard.scss */
+.book-overview-greeting {
+  padding-top:22px;
+  padding-bottom: 18px;
+  border-bottom: 1.5px solid rgba(255,255,255,0.18);
+}
+
+.greeting-title {
+  font-size: 2.8em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+}
+
+.greeting-desc {
+  font-size: 0.98em;
+  color: #e3e3e3;
+  font-weight: 400;
+  margin-bottom: 2px;
 }
