@@ -3,16 +3,14 @@ import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy } fro
 @Component({
   selector: 'app-circular-waveform',
   template: `
-    <canvas #waveformCanvas width="800" height="800" style="width:160px;height:160px;"></canvas>
-    <div style="margin-top:10px;">
-      <button (click)="playAudio()" [disabled]="!audioLoaded || isPlaying">Play</button>
-      <button (click)="stopAudio()" [disabled]="!isPlaying">Stop</button>
-      <span id="info">{{info}}</span>
+    <canvas #waveformCanvas width="800" height="800" style="width:300px;height:300px;"></canvas>
+    <div style="margin-top:10px;text-align:center;">
+      <button (click)="playAudio()" >Play</button>
     </div>
-    <input type="file" (change)="loadAudioFromFile($event)" accept="audio/*" style="margin-top:10px;" />
+    
   `,
   styles: [`
-    canvas { background: #111; border-radius: 50%; }
+    canvas { background: #111;  }
     button { margin-right: 8px; }
   `]
 })
