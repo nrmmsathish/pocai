@@ -4,6 +4,10 @@
       <span></span><span></span><span></span>
     </button> -->
     <span class="dashboard-title">🏦 ConnectWealth</span>
+    
+     <button style="color:black;     margin-left: auto;
+    margin-right: 16px;cursor:pointer;background:white;
+    text-decoration: underline;" (click)="router.navigate(['/leads'])">Go to Leads Management</button>
     <button class="theme-toggle-btn" (click)="toggleTheme()" aria-label="Toggle Theme">
       <span *ngIf="isDarkTheme">🌙</span>
       <span *ngIf="!isDarkTheme">☀️</span>
@@ -107,8 +111,7 @@
     <div class="widget-container">
       <div class="widget-header">
         <span>Potential Leads</span>
-        <button style="color:white; padding-left: 70vw;cursor:pointer;
-    text-decoration: underline;" (click)="router.navigate(['/leads'])">Go to Leads Management</button>
+       
         <span class="my-drag-handle" title="Drag widget">
           <svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:middle;">
             <circle cx="5" cy="5" r="2" fill="#888" />
