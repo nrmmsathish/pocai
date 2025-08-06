@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FunnelController, TrapezoidElement } from 'chartjs-chart-funnel';
 import { Chart, LinearScale, CategoryScale } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-leads-management-dashboard',
   imports: [CommonModule],
@@ -12,6 +13,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 })
 export class LeadsManagementDashboard implements AfterViewInit {
   isDarkTheme = false;
+   constructor(public router: Router) {}
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
   }
