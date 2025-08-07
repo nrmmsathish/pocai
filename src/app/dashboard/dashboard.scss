@@ -4,9 +4,40 @@
   color: #fff;
 
   .dashboard-header {
-    background: linear-gradient(90deg, #0a2342 0%, #193b6a 100%);
+    background: #000;
     color: #e5b95f;
   }
+  .widget-header{
+   background: #503b0d;
+    color: white;
+  }
+
+  .routeLink {
+    color: white;
+    margin-left: auto;
+    margin-right: 16px;
+    cursor: pointer;
+    background: #000;
+    text-decoration: underline;
+  }
+  .book-overview-greeting {
+ 
+  border-bottom: 1.5px solid #999;
+}
+
+.greeting-title {
+  color: black;
+}
+
+.greeting-desc {  
+  color: #333;  
+}
+.metric-title{
+  color: #666;
+}
+.metric-value{
+  color:black;
+}
 
   .side-nav {
     background: #193b6a;
@@ -14,11 +45,12 @@
   }
 
   .dashboard-title {
-    color: #e5b95f;
+    color: white;
+    font-weight: normal;
   }
 
   .theme-toggle-btn {
-    background: #232526;
+   // background: #232526;
     color: #e5b95f;
   }
 }
@@ -31,6 +63,14 @@
     background: #fff;
     color: #1b1912;
     box-shadow: 0 2px 8px rgba(10, 35, 66, 0.08);
+  }
+  .routeLink {
+    color: black;
+    margin-left: auto;
+    margin-right: 16px;
+    cursor: pointer;
+    background: white;
+    text-decoration: underline;
   }
 
   .side-nav {
@@ -52,7 +92,7 @@
   border: none;
   background: transparent;
   font-size: 1.5rem;
-  
+
   margin-right: 16px;
   cursor: pointer;
   transition: color 0.2s;
@@ -138,7 +178,7 @@
 }
 
 .widget-container {
-  margin: 20px;
+  padding: 20px;
   border: solid 1px color-mix(in srgb, transparent, #181d1f 15%);
   border-radius: 8px;
 }
@@ -400,7 +440,8 @@
 }
 
 .metric-card {
-  background: rgba(255,255,255,0.14); /* Subtle translucent white */
+  background: rgba(255, 255, 255, 0.14);
+  /* Subtle translucent white */
   border-radius: 8px;
   padding: 10px 18px;
   min-width: 200px;
@@ -420,6 +461,7 @@
   letter-spacing: 0.01em;
   color: #e5b950;
 }
+
 .book-overview-metrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -434,12 +476,13 @@
 .book-overview-banner {
   position: absolute;
   top: 0;
-  right: 340px; /* leave space for metrics on right */
+  right: 340px;
+  /* leave space for metrics on right */
   background: none;
   color: #fff;
   border-radius: 12px;
   padding: 18px 28px;
-  box-shadow: 0 2px 12px #193b6a33;
+  //box-shadow: 0 2px 12px #193b6a33;
   z-index: 2;
   min-width: 220px;
 }
@@ -452,6 +495,7 @@
     grid-template-rows: auto;
     margin-top: 18px;
   }
+
   .book-overview-banner {
     position: static;
     right: auto;
@@ -459,11 +503,12 @@
     margin-bottom: 18px;
   }
 }
+
 /* Add to dashboard.scss */
 .book-overview-greeting {
-  padding-top:22px;
+  padding-top: 22px;
   padding-bottom: 18px;
-  border-bottom: 1.5px solid rgba(255,255,255,0.18);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.18);
 }
 
 .greeting-title {
@@ -479,19 +524,26 @@
   font-weight: 400;
   margin-bottom: 2px;
 }
+
+
+
 @media (max-width: 1800px) {
   .greeting-title {
     font-size: 2.2em;
   }
-  .metric-card{
+
+  .metric-card {
     padding: 5px;
   }
+
   .greeting-desc {
     font-size: 0.82em;
   }
+
   .metric-value {
     font-size: 1.3em;
   }
+
   .metric-title {
     font-size: 0.92em;
   }
@@ -501,12 +553,15 @@
   .greeting-title {
     font-size: 2em;
   }
+
   .greeting-desc {
     font-size: 0.92em;
   }
+
   .metric-value {
     font-size: 1.2em;
   }
+
   .metric-title {
     font-size: 0.92em;
   }
@@ -516,13 +571,19 @@
   .greeting-title {
     font-size: 1.3em;
   }
+
   .greeting-desc {
     font-size: 0.88em;
   }
+
   .metric-value {
     font-size: 1em;
   }
+
   .metric-title {
     font-size: 0.88em;
   }
+}
+::ng-deep .ag-root-wrapper{
+  border-radius: 0;
 }
