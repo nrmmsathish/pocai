@@ -39,7 +39,7 @@ export class Dashboard {
   };
   navOpen = false;
   showChat = false;
-  isDarkTheme = false;
+  isDarkTheme = true;
   activeTab: 'clients' | 'nba' | 'campaigns' | 'ideas' = 'clients';
 
   toggleNav() {
