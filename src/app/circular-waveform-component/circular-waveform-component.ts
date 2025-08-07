@@ -3,20 +3,17 @@ import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy } fro
 @Component({
   selector: 'app-circular-waveform',
   template: `
-    <canvas #waveformCanvas width="800" height="800" style="width:300px;height:300px;"></canvas>
-    <div style="margin-top:10px;text-align:center;">
-      <button (click)="playAudio()" >Play</button>
-    </div>
+    <canvas #waveformCanvas width="800" height="800" style="width:400px;height:400px;"></canvas>
     
   `,
   styles: [`
-    canvas { background: #111;  }
+    canvas { background: #fff;  }
     button { margin-right: 8px; }
   `]
 })
 export class CircularWaveformComponent implements AfterViewInit, OnDestroy {
   @ViewChild('waveformCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
-  @Input() audioUrl: string = 'speech.mp3';
+  @Input() audioUrl: string = '';
 
   audioContext: AudioContext | null = null;
   audioBuffer: AudioBuffer | null = null;
@@ -54,7 +51,7 @@ export class CircularWaveformComponent implements AfterViewInit, OnDestroy {
   setupCanvas() {
     const ctx = this.canvasRef.nativeElement.getContext('2d');
     if (ctx) {
-      ctx.fillStyle = 'black';
+      ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
       this.drawBaseCircle(ctx);
     }
@@ -72,7 +69,7 @@ export class CircularWaveformComponent implements AfterViewInit, OnDestroy {
   }
 
   async loadDefaultAudio() {
-    this.info = 'Loading speech.mp3...';
+    this.info = 'Loading ...';
     try {
       const response = await fetch(this.audioUrl);
       if (response.ok) {
@@ -162,7 +159,7 @@ export class CircularWaveformComponent implements AfterViewInit, OnDestroy {
       this.targetAmplitudes = this.processWaveformData(timeDataArray);
       this.interpolateAmplitudes();
 
-      ctx!.fillStyle = 'black';
+      ctx!.fillStyle = 'white';
       ctx!.fillRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
 
       this.drawBaseCircle(ctx!);
@@ -242,16 +239,41 @@ export class CircularWaveformComponent implements AfterViewInit, OnDestroy {
 
     return smoothed;
   }
+async playAudioBlob(blob: Blob) {
+  const url = URL.createObjectURL(blob);
+  this.audioUrl = url;
+  await this.loadAudioFromUrl(url);
+  this.playAudio();
+}
+async playAudioUrl(url: string) {
+  this.audioUrl = url;
+  await this.loadAudioFromUrl(url);
+  this.playAudio();
+}
+
+async loadAudioFromUrl(url: string) {
+  this.info = 'Loading audio...';
+  try {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    this.audioBuffer = await this.audioContext!.decodeAudioData(arrayBuffer);
+    this.audioLoaded = true;
+    this.info = `Audio loaded: ${this.audioBuffer.duration.toFixed(2)} seconds - Ready to visualize!`;
+  } catch (error) {
+    this.info = 'Error loading audio from blob/url.';
+    this.audioLoaded = false;
+  }
+}
 
   drawEnhancedCircularWaveform(ctx: CanvasRenderingContext2D, points: {x: number, y: number}[]) {
     if (points.length === 0) return;
 
-    ctx.strokeStyle = 'cyan';
+    ctx.strokeStyle = '#9745d5';
     ctx.lineWidth = 3.2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.globalAlpha = 1.0;
-    ctx.shadowColor = 'cyan';
+    ctx.shadowColor = '#9745d5';
     ctx.shadowBlur = 8;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
