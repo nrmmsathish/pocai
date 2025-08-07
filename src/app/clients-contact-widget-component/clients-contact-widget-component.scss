@@ -324,6 +324,23 @@ ag-grid-angular {
   align-items: center;
 }
 
+::ng-deep{
+  .tag-badge {
+  background: #e3f0ff;
+  color: #193b6a;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-right: 4px;
+  font-size: 0.95em;
+}
+
+/* Dark theme override */
+.dark-theme .tag-badge {
+  background: #4e4e4e;
+  color: #fff;
+}
+}
+
 
 .mail-popup-backdrop {
   position: fixed;

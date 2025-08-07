@@ -233,12 +233,13 @@ export class ClientsContactWidgetComponent {
         field: 'customTags',
         filter: 'agTextColumnFilter',
         minWidth: 160,
-        cellRenderer: (params: any) =>
-          Array.isArray(params.value)
+        cellRenderer: (params: any) => {
+          return Array.isArray(params.value)
             ? params.value.map((tag: any) =>
-              `<span style="background:#e3f0ff;color:#193b6a;border-radius:6px;padding:2px 8px;margin-right:4px;font-size:0.95em;">${tag}</span>`
+              `<span class="tag-badge">${tag}</span>`
             ).join('')
-            : ''
+            : '';
+        }
       },
       {
         headerName: 'Last Contact',
