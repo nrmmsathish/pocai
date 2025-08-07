@@ -1,7 +1,24 @@
+<div class="smart-filters-row">
+  <button class="smart-filter-btn" [class.active]="activeSmartFilter === 'upsell'" (click)="applySmartFilter('upsell')">
+    Top 10 Upsell Opportunities
+  </button>
+  <button class="smart-filter-btn" [class.active]="activeSmartFilter === 'crosssell'"
+    (click)="applySmartFilter('crosssell')">
+    Top 10 Cross-sell Opportunities
+  </button>
+  <button class="smart-filter-btn" [class.active]="activeSmartFilter === 'newinvest'"
+    (click)="applySmartFilter('newinvest')">
+    Top 10 New to Investment Opportunities
+  </button>
+  <button class="smart-filter-btn" [class.active]="activeSmartFilter === 'reinvest'"
+    (click)="applySmartFilter('reinvest')">
+    Re-investment Opportunities
+  </button>
+</div>
 <div class="widget-content">
-  <ag-grid-angular style="width: 100%; height: 550px;" [theme]="theme" [gridOptions]="gridOptions" [rowData]="rowData"
-    pagination="true" [paginationPageSize]="20" (cellClicked)="onCellClicked($event)" [columnDefs]="columnDefs"
-    rowSelection="single">
+  <ag-grid-angular style="width: 100%; height: 550px;" [theme]="theme" [gridOptions]="gridOptions"
+    [rowData]="filteredRowData" pagination="true" [paginationPageSize]="20" (cellClicked)="onCellClicked($event)"
+    [columnDefs]="columnDefs" rowSelection="single">
   </ag-grid-angular>
 </div>
 
