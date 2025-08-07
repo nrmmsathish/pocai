@@ -349,6 +349,28 @@ export class ClientsContactWidgetComponent {
 
     return [
       {
+        name: 'Carol Lee',
+        tier: 'Platinum',
+        aum: 38551,
+        aumTrend: 'down',
+        nnia: 95000,
+        nniaTrend: 'up',
+        reason: 'Annual check-in',
+        lastContact: '2025-07-01T11:00:00',
+        riskProfile: 'Aggressive',
+        lastContactSummary: 'Annual check-in completed. Reviewed performance and set goals for next quarter.',
+        lastTransactionAmount: 120000,
+        portfolioDiversification: 4,
+        complianceFlag: true,
+        taxResidency: 'Hong Kong',
+        priority: 'High',
+        customTags: ['Real Estate'],
+        recentArticles: [
+          { title: 'Property Investment Guide', url: 'https://www.property.com/guide', readDate: '2025-06-28' },
+          { title: 'Dont let inflation eat your returns', url: 'https://www.markettrends.com/trends', readDate: '2025-08-12' }
+        ],
+        isActiveInvestor: true
+      },{
         name: 'Alice Johnson',
         tier: 'Platinum',
         aum: 12000000,
@@ -393,28 +415,7 @@ export class ClientsContactWidgetComponent {
         ],
         isActiveInvestor: false
       },
-      {
-        name: 'Carol Lee',
-        tier: 'Silver',
-        aum: 3200000,
-        aumTrend: 'up',
-        nnia: 95000,
-        nniaTrend: 'up',
-        reason: 'Annual check-in',
-        lastContact: '2025-07-01T11:00:00',
-        riskProfile: 'Balanced',
-        lastContactSummary: 'Annual check-in completed. Reviewed performance and set goals for next quarter.',
-        lastTransactionAmount: 120000,
-        portfolioDiversification: 4,
-        complianceFlag: false,
-        taxResidency: 'Hong Kong',
-        priority: 'Low',
-        customTags: ['Real Estate'],
-        recentArticles: [
-          { title: 'Property Investment Guide', url: 'https://www.property.com/guide', readDate: '2025-06-28' }
-        ],
-        isActiveInvestor: true
-      },
+      
       {
         name: 'David Kim',
         tier: 'Platinum',
