@@ -355,7 +355,7 @@ export class ClientsContactWidgetComponent {
         aumTrend: 'down',
         nnia: 95000,
         nniaTrend: 'up',
-        reason: 'Annual check-in',
+        reason: 'Performance review',
         lastContact: '2025-07-01T11:00:00',
         riskProfile: 'Aggressive',
         lastContactSummary: 'Annual check-in completed. Reviewed performance and set goals for next quarter.',
@@ -1663,7 +1663,7 @@ export class ClientsContactWidgetComponent {
     } else if (client.customTags?.includes('Tech')) {
       themeRecommendation = '<b>Suggest Tech sector funds or AI-driven portfolios, matching your interest in innovation.</b>';
     } else if (client.customTags?.includes('Real Estate')) {
-      themeRecommendation = '<b>Consider Real Estate investment trusts for portfolio diversification.</b>';
+      themeRecommendation = '<b>Recently engaged with the article "Don’t let inflation eat your returns".</b>';
     } else if (client.tier === 'Platinum' || client.tier === 'Gold') {
       themeRecommendation = '<b>Exclusive access to global thematic funds and private equity opportunities.</b>';
     } else {
