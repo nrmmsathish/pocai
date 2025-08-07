@@ -22,7 +22,7 @@ export class CioInsightsComponent {
   mailBody = '';
   insights = [
     {
-      title: 'Q3 Investment Bonus – 20% more returns on structured notes',
+      title: 'Exclusive Structured Note Picks This Quarter',
       image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80',
       visits: 77,
       proposed: 25,
@@ -102,20 +102,20 @@ export class CioInsightsComponent {
   showProductsPopup = false;
   productsTableData: any[] = [];
   productsColumnDefs = [
-    { headerName: 'Product Name', field: 'name', minWidth: 180, flex: 1 },
+    { headerName: 'Product Name', field: 'name', minWidth: 400, flex: 1 },
     { headerName: 'Type', field: 'type', minWidth: 120, flex: 1 },
-    { headerName: 'Suitability', field: 'suitability', minWidth: 140, flex: 1 },
+    { headerName: 'Suitability', field: 'suitability', minWidth: 100, flex: 1 },
     { headerName: 'Risk Level', field: 'risk', minWidth: 120, flex: 1 },
-    { headerName: 'Returns (5Y)', field: 'returns', minWidth: 120, flex: 1 }
+    { headerName: 'Projected Returns (p.a)', field: 'returns', minWidth: 140, flex: 1 }
   ];
 
   showRelatedProducts() {
     this.showProductsPopup = true;
     this.productsTableData = [
-      { name: 'ESG Balanced Fund', type: 'Mutual Fund', suitability: 'High', risk: 'Moderate', returns: '12.5%' },
-      { name: 'Green Bond', type: 'Bond', suitability: 'Medium', risk: 'Low', returns: '7.2%' },
-      { name: 'Sustainable Equity Portfolio', type: 'Equity', suitability: 'High', risk: 'High', returns: '15.8%' },
-      { name: 'ESG ETF', type: 'ETF', suitability: 'Medium', risk: 'Moderate', returns: '10.1%' }
+      { name: 'USD 12-Month Callable Barrier Autocall on Tech Basket', type: 'Bond', suitability: 'High', risk: 'Medium-High', returns: '9.2%' },
+      { name: 'SGD Step-Down Autocall Linked to Asia Ex-Japan Index', type: 'Mutual Fund', suitability: 'Medium', risk: 'Medium', returns: '6.8%' },
+      { name: 'EUR Digital Note on Global Inflation-Linked Bonds', type: 'Bond', suitability: 'High', risk: 'Medium	', returns: '5.5%' },
+      { name: 'Multi-Asset Dual Currency Structured Note (USD/SGD)', type: 'SN', suitability: 'Medium', risk: 'High', returns: '10.4%' }
     ];
   }
 

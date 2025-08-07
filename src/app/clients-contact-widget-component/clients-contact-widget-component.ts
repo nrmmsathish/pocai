@@ -854,6 +854,7 @@ export class ClientsContactWidgetComponent {
         nniaTrend: 'up',
         reason: 'Portfolio expansion',
         lastContact: '2025-07-13T13:30:00',
+        lastContactSummary: 'Angelina expressed interest in income-generating products. Portfolio underweight in fixed income.',
         riskProfile: 'Aggressive',
         lastTransactionAmount: 400000,
         portfolioDiversification: 7,
