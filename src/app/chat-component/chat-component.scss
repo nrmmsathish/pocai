@@ -102,23 +102,6 @@
   border-color: #4f8cff;
 }
 
-.send-btn {
-  background: #4f8cff;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.send-btn:hover {
-  background: #3358e6;
-}
 
 .chat-actions {
   display: flex;
@@ -205,6 +188,14 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e5b950;
+  background: #fff;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.send-btn{
+    width: 32px;
+  height: 32px;
+  object-fit: cover;
   background: #fff;
   margin-right: 6px;
   vertical-align: middle;

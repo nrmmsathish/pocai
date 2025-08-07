@@ -36,9 +36,9 @@
       <input [(ngModel)]="chatInput" placeholder="Type your message..." (keyup.enter)="sendMessage()" class="chat-input"
         autocomplete="off" />
       <button (click)="sendMessage()" class="send-btn" aria-label="Send">
-        <svg width="20" height="20" fill="currentColor">
-          <path d="M2 10l15-7v14z" />
-        </svg>
+        <span class="msg-from">
+          <img src="send-button.png" alt="You" class="send-btn" />
+        </span>
       </button>
     </div>
 

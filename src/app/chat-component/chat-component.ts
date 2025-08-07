@@ -77,70 +77,70 @@ export class ChatComponent {
 
   }
 
-  // --- SSE Streaming ---
-  startEventSourceStreaming(transcript: string) {
-    // Close previous connection
-    if (this.eventSource) {
-      this.eventSource.close();
-    }
+  // // --- SSE Streaming ---
+  // startEventSourceStreaming(transcript: string) {
+  //   // Close previous connection
+  //   if (this.eventSource) {
+  //     this.eventSource.close();
+  //   }
 
-    // Lambda Function URL
-    const lambdaUrl = 'YOUR_LAMBDA_FUNCTION_URL_HERE';
+  //   // Lambda Function URL
+  //   const lambdaUrl = 'YOUR_LAMBDA_FUNCTION_URL_HERE';
 
-    // Request body
-    const requestBody = {
-      inputText: transcript,
-      agentId: 'YOUR_AGENT_ID',
-      agentAliasId: 'TSTALIASID'
-    };
+  //   // Request body
+  //   const requestBody = {
+  //     inputText: transcript,
+  //     agentId: 'YOUR_AGENT_ID',
+  //     agentAliasId: 'TSTALIASID'
+  //   };
 
-    // SSE URL with encoded data
-    const url = `${lambdaUrl}?data=${encodeURIComponent(JSON.stringify(requestBody))}`;
-    this.eventSource = new EventSource(url);
+  //   // SSE URL with encoded data
+  //   const url = `${lambdaUrl}?data=${encodeURIComponent(JSON.stringify(requestBody))}`;
+  //   this.eventSource = new EventSource(url);
 
-    this.eventSource.onopen = (event) => {
-      // Optionally show status
-    };
+  //   this.eventSource.onopen = (event) => {
+  //     // Optionally show status
+  //   };
 
-    this.eventSource.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        switch (data.type) {
-          case 'connection':
-            this.lastSessionId = data.sessionId;
-            break;
-          case 'chunk':
-            this.zone.run(() => {
-              this.messages.push({ from: 'Bot', text: data.data, partial: true });
-              this.cdr.detectChanges();
-            });
-            break;
-          case 'complete':
-            // Optionally handle completion
-            break;
-          case 'error':
-            this.zone.run(() => {
-              this.messages.push({ from: 'Bot', text: `Error: ${data.error}` });
-              this.cdr.detectChanges();
-            });
-            break;
-          case 'end':
-            this.eventSource?.close();
-            break;
-        }
-      } catch (e) {
-        console.error('Error parsing SSE data:', e);
-      }
-    };
+  //   this.eventSource.onmessage = (event) => {
+  //     try {
+  //       const data = JSON.parse(event.data);
+  //       switch (data.type) {
+  //         case 'connection':
+  //           this.lastSessionId = data.sessionId;
+  //           break;
+  //         case 'chunk':
+  //           this.zone.run(() => {
+  //             this.messages.push({ from: 'Bot', text: data.data, partial: true });
+  //             this.cdr.detectChanges();
+  //           });
+  //           break;
+  //         case 'complete':
+  //           // Optionally handle completion
+  //           break;
+  //         case 'error':
+  //           this.zone.run(() => {
+  //             this.messages.push({ from: 'Bot', text: `Error: ${data.error}` });
+  //             this.cdr.detectChanges();
+  //           });
+  //           break;
+  //         case 'end':
+  //           this.eventSource?.close();
+  //           break;
+  //       }
+  //     } catch (e) {
+  //       console.error('Error parsing SSE data:', e);
+  //     }
+  //   };
 
-    this.eventSource.onerror = (event) => {
-      this.zone.run(() => {
-        this.messages.push({ from: 'Bot', text: 'Connection error' });
-        this.cdr.detectChanges();
-      });
-      this.eventSource?.close();
-    };
-  }
+  //   this.eventSource.onerror = (event) => {
+  //     this.zone.run(() => {
+  //       this.messages.push({ from: 'Bot', text: 'Connection error' });
+  //       this.cdr.detectChanges();
+  //     });
+  //     this.eventSource?.close();
+  //   };
+  // }
 
 
   // --- Widget Drag ---
@@ -239,6 +239,7 @@ export class ChatComponent {
         this.messages.push({ from: 'You', text: transcript });
         // this.socket.emit('chat', transcript);
         this.cdr.detectChanges();
+        this.triggerMl(transcript);
       });
       this.stopAudioRecording();
       this.resetSpeechPauseTimer();
@@ -263,23 +264,11 @@ export class ChatComponent {
       }
     }
     this.stopAudioRecording();
-    // Send audio to API as base64
-    if (this.audioChunks && this.audioChunks.length > 0) {
-      const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Use the last transcript from messages as converted text
-        const lastUserMsg = this.messages.filter(m => m.from === 'You').slice(-1)[0];
-        const convertedText = lastUserMsg ? lastUserMsg.text : '';       
-        this.triggerMl(convertedText);
-
-      };
-      reader.readAsDataURL(audioBlob);
-    }
+    
   }
   triggerMl(convertedText: string) {
      //this.sessionId = this.generateSessionId();
-     this.messages.push({ from: 'You', text: convertedText });
+     
     fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -344,7 +333,7 @@ export class ChatComponent {
   // --- Chat ---
   sendMessage() {
     if (this.chatInput.trim()) {
-      //this.messages.push({ from: 'You', text: this.chatInput });
+      this.messages.push({ from: 'You', text: this.chatInput });
       this.triggerMl(this.chatInput); 
       //this.socket.emit('chat', this.chatInput);
       this.chatInput = '';
