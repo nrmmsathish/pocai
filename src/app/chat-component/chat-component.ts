@@ -270,9 +270,17 @@ export class ChatComponent {
       reader.onloadend = () => {
         // Use the last transcript from messages as converted text
         const lastUserMsg = this.messages.filter(m => m.from === 'You').slice(-1)[0];
-        const convertedText = lastUserMsg ? lastUserMsg.text : '';
+        const convertedText = lastUserMsg ? lastUserMsg.text : '';       
+        this.triggerMl(convertedText);
 
-        fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
+      };
+      reader.readAsDataURL(audioBlob);
+    }
+  }
+  triggerMl(convertedText: string) {
+     //this.sessionId = this.generateSessionId();
+     this.messages.push({ from: 'You', text: convertedText });
+    fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -300,10 +308,6 @@ export class ChatComponent {
         //   },
         //   body: { action: "sendmessage", message: "Hello, how are you?", session_id: this.lastAwsMessage}
         // }));
-
-      };
-      reader.readAsDataURL(audioBlob);
-    }
   }
 
   // --- Timers ---
@@ -340,26 +344,8 @@ export class ChatComponent {
   // --- Chat ---
   sendMessage() {
     if (this.chatInput.trim()) {
-      this.messages.push({ from: 'You', text: this.chatInput });
-      fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          audio_data: this.chatInput,
-          session_id: this.sessionId || ''
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-
-          if (data && data.agent_response) {
-            this.zone.run(() => {
-              this.messages.push({ from: 'Bot', text: data.agent_response });
-              this.cdr.detectChanges();
-              this.textToSpeech(data.audio_response.audio_data);
-            });
-          }
-        });
+      //this.messages.push({ from: 'You', text: this.chatInput });
+      this.triggerMl(this.chatInput); 
       //this.socket.emit('chat', this.chatInput);
       this.chatInput = '';
     }
