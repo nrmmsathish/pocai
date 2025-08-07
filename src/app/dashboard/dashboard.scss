@@ -1,43 +1,84 @@
 /* Theme toggling styles */
+::ng-deep .dark-theme {
+
+  .ag-header,
+  .ag-row,
+  .ag-root-wrapper {
+    background-color: #1a1a1a;
+    color: white;
+  }
+
+  .ag-root-wrapper {
+    border-color: black;
+  }
+
+  .ag-picker-field-wrapper {
+    color: white;
+    background-color: black;
+  }
+
+  .client-link {
+    color: white !important;
+  }
+
+  .interaction-summary-row {
+    background: #313232 !important;
+    border: 1px solid black;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    background: #181818;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #393939;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e5b950;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #181818;
+  }
+
+  /* For Firefox */
+  scrollbar-color: #393939 #181818;
+  scrollbar-width: thin;
+}
+
 .dark-theme {
-  background: linear-gradient(135deg, #181818 0%, #232526 100%);
-  color: #fff;
+  background: #000000cc;
+
+  .open-chat-btn.sticky-chat-btn {
+    background: #e5b950;
+  }
 
   .dashboard-header {
-    background: #000;
-    color: #e5b95f;
+    background: black;
+    color: white;
   }
-  .widget-header{
-   background: #503b0d;
+
+  .widget-header {
+    background: black;
     color: white;
   }
 
   .routeLink {
-    color: white;
+    color: #e5b950;
     margin-left: auto;
     margin-right: 16px;
     cursor: pointer;
-    background: #000;
-    text-decoration: underline;
+    background: black;
+    //text-decoration: underline;
   }
-  .book-overview-greeting {
- 
- // border-bottom: 1.5px solid #999;
-}
 
-.greeting-title {
-  color: black;
-}
-
-.greeting-desc {  
-  color: #333;  
-}
-.metric-title{
-  color: #666;
-}
-.metric-value{
-  color:black;
-}
+  .banner-img {
+    visibility: hidden;
+    // border-bottom: 1.5px solid #999;
+  }
 
   .side-nav {
     background: #193b6a;
@@ -50,7 +91,7 @@
   }
 
   .theme-toggle-btn {
-   // background: #232526;
+    // background: #232526;
     color: #e5b95f;
   }
 }
@@ -64,13 +105,14 @@
     color: #1b1912;
     box-shadow: 0 2px 8px rgba(10, 35, 66, 0.08);
   }
+
   .routeLink {
     color: black;
     margin-left: auto;
     margin-right: 16px;
     cursor: pointer;
     background: white;
-    text-decoration: underline;
+    //text-decoration: underline;
   }
 
   .side-nav {
@@ -508,7 +550,7 @@
 .book-overview-greeting {
   padding-top: 22px;
   padding-bottom: 18px;
- // border-bottom: 1.5px solid rgba(255, 255, 255, 0.18);
+  // border-bottom: 1.5px solid rgba(255, 255, 255, 0.18);
 }
 
 .greeting-title {
@@ -584,6 +626,6 @@
     font-size: 0.88em;
   }
 }
-::ng-deep .ag-root-wrapper{
-  border-radius: 0;
-}
+::ng-deep .ag-root-wrapper {
+    border-radius: 0;
+  }

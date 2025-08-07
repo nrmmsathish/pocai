@@ -21,8 +21,12 @@
              'bot-msg': msg.from === 'Bot',
              'partial-msg': msg.partial
            }">
-        <span class="msg-from" *ngIf="msg.from === 'Bot'">🤖</span>
-        <span class="msg-from" *ngIf="msg.from === 'You'">🧑</span>
+        <span class="msg-from" *ngIf="msg.from === 'Bot'">
+  <img src="bot-profile.jpg" alt="Bot" class="profile-img" />
+</span>
+<span class="msg-from" *ngIf="msg.from === 'You'">
+  <img src="user-profile.png" alt="You" class="profile-img" />
+</span>
         <span class="msg-text">{{ msg.text }}</span>
         <span *ngIf="msg.partial" class="msg-partial-indicator">...</span>
       </div>
@@ -43,12 +47,12 @@
         <span *ngIf="!recognizing">🎤 Speak</span>
         <span *ngIf="recognizing">🎤 Listening...</span>
       </button>
-      <button (click)="stopListening()" class="stop-btn" aria-label="Stop Listening">
+      <!-- <button (click)="stopListening()" class="stop-btn" aria-label="Stop Listening">
         ⏹️
-      </button>
-      <div *ngIf="recognizing" class="timer">
+      </button> -->
+      <!-- <div *ngIf="recognizing" class="timer">
         <span>⏱️ {{ listeningSeconds }}s</span>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
