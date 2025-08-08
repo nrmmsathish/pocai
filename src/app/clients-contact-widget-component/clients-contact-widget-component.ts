@@ -63,7 +63,7 @@ export class ClientsContactWidgetComponent {
 
   // Mail
   mailTemplates = [
-    { id: 'welcome', name: 'Post Meeting Email', body: 'Dear {{name}},\n\nWelcome to our Private Wealth service...' },
+    { id: 'welcome', name: 'Post meeting follow up email', body: 'Dear {{name}},\n\nWelcome to our Private Wealth service...' },
     { id: 'review', name: 'Portfolio Review', body: 'Dear {{name}},\n\nWe would like to schedule a review of your portfolio...' },
     { id: 'custom', name: 'Custom Template', body: '' }
   ];
@@ -75,7 +75,7 @@ export class ClientsContactWidgetComponent {
   mailTo = '';
   mailBcc = 'mail.audit@bank.com';
   mailSubject = '';
-  userSignature = ',\nJohn Doe\nPrivate Wealth Advisor';
+  userSignature = 'Warm Regards\nJohn Doe\nPrivate Wealth Advisor';
 
   // WhatsApp
   whatsappRecipient = '';
@@ -372,7 +372,7 @@ export class ClientsContactWidgetComponent {
         aumTrend: 'down',
         nnia: 95000,
         nniaTrend: 'up',
-        reason: 'Performance review',
+        reason: 'Investment Opportunities',
         lastContact: '2025-07-01T11:00:00',
         riskProfile: 'Aggressive',
         lastContactSummary: 'Annual check-in completed. Reviewed performance and set goals for next quarter.',
@@ -1539,7 +1539,7 @@ export class ClientsContactWidgetComponent {
       if (event.event?.target?.closest('.email-btn')) {
         this.mailRecipient = client.name;
         this.mailTo = client.email || '';
-        this.mailSubject = `Portfolio Update for ${client.name}`;
+        this.mailSubject = `Post meeting follow up for ${client.name}`;
         this.mailTemplate = `Hi ${client.name},
 Thank you again for taking the time to speak with me earlier. I appreciated our conversation and wanted to summarize the key points we discussed, along with next steps you might consider as you continue to refine your portfolio strategy.
 
@@ -1556,7 +1556,7 @@ If you’d like to proceed with either product or have further questions, I’d 
 
 Looking forward to supporting your wealth journey.
 
-Warm regards,
+
 ${this.userSignature}`;
         this.showMailPopup = true;
       }
