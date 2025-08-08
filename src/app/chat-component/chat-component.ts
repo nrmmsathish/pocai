@@ -308,7 +308,7 @@ export class ChatComponent {
         naturalLanguageQueryUnderstandingSpec: { filterExtractionCondition: 'ENABLED' }
       };
 
-      const accessToken = 'ya29.a0AS3H6Nyd_8_CcMVAVw1k8jvJOyCyu-wnBzuHCh9Y24IKQI--euQOHP6kzQ6hVetxpGdBQ5w37yEQqyIXMqe9syQ2Nb-1bdUgW84cyb3fuF48OM6e4leKL1g5qMOID2WFjOLVLDv-71EzikVbB23AEHVvc2eZj0i7TcLgFWFwWKvApRiQWqHRzzMAkuAfS5-Q-UQ8xGzESDXxCcc7RuL6biB8ayM9U0zVOpaEEQjcs-r5YFpzhjb2TxILM_eBeTEO2XTmTobxyWz9LbBi5YnHD2-niOpg9dqW6rGDjeideHr3j51mDV9F4kaESYoijkcGa29N8LMaCgYKAb8SARASFQHGX2MiOOezME4irxok-V4ffB21Mw0334'; // Replace with your token logic
+      const accessToken = ''; 
 
       try {
         fetch(url, {
