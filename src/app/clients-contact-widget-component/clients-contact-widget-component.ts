@@ -60,7 +60,9 @@ export class ClientsContactWidgetComponent {
   aiTypingPoints: { text: string, typing: boolean }[] = [];
   aiTypingIndex = 0;
   private aiTypingTimeouts: number[] = [];
-
+animatedTranscriptLines: string[] = [];
+private transcriptAnimationIndex = 0;
+private transcriptAnimationTimeout: any;
   // Mail
   mailTemplates = [
     { id: 'welcome', name: 'Post meeting follow up email', body: 'Dear {{name}},\n\nWelcome to our Private Wealth service...' },
@@ -135,6 +137,37 @@ export class ClientsContactWidgetComponent {
       this.chatbotInput = '';
     }
   }
+  animateTranscript(lines: string[], delay = 350) {
+  this.animatedTranscriptLines = [];
+  this.transcriptAnimationIndex = 0;
+  if (this.transcriptAnimationTimeout) {
+    clearTimeout(this.transcriptAnimationTimeout);
+  }
+  const showNextLine = () => {
+    if (this.transcriptAnimationIndex < lines.length) {
+      this.animatedTranscriptLines.push('');
+      this.animateWords(lines[this.transcriptAnimationIndex], this.transcriptAnimationIndex, delay);
+      this.transcriptAnimationIndex++;
+      this.transcriptAnimationTimeout = setTimeout(showNextLine, lines[this.transcriptAnimationIndex - 1].split(' ').length * delay + 2000);
+    }
+  };
+  showNextLine();
+}
+
+animateWords(line: string, lineIdx: number, delay: number) {
+  const words = line.split(' ');
+  let wordIdx = 0;
+  const revealWord = () => {
+    if (wordIdx < words.length) {
+      const currentLine = this.animatedTranscriptLines[lineIdx] || '';
+      this.animatedTranscriptLines[lineIdx] = currentLine + (wordIdx > 0 ? ' ' : '') + words[wordIdx];
+      this.cdr.detectChanges();
+      wordIdx++;
+      setTimeout(revealWord, delay);
+    }
+  };
+  revealWord();
+}
   applySmartFilter(type: string) {
     if (this.activeSmartFilter === type) {
       this.activeSmartFilter = '';
@@ -1578,7 +1611,8 @@ ${this.userSignature}`;
           this.zone.run(() => {
             this.callStatus = `Connected to ${client.name}`;
             this.listening = true;
-            this.startTranscriptSimulation();
+//            this.startTranscriptSimulation();
+this.animateTranscript(this.fullTranscript, 120); // 120ms per word
             const tones: Array<'angry' | 'happy' | 'neutral'> = ['angry', 'happy', 'neutral'];
             const idx = Math.floor(Math.random() * tones.length);
             this.startAssistantListening(client, tones[idx]);
@@ -1778,6 +1812,7 @@ ${this.userSignature}`;
 
   startTranscriptSimulation() {
     this.transcriptLines = [];
+    
     let idx = 0;
     if (this.transcriptInterval) clearInterval(this.transcriptInterval);
     this.transcriptInterval = setInterval(() => {
@@ -1811,24 +1846,40 @@ ${this.userSignature}`;
   triggerMl(convertedText: string) {
     this.sessionId = this.generateSessionId();
     // Add bot "thinking" animation message
-    this.chatbotMessages.push({
-      from: 'bot',
-      text: `<span class="bot-thinking">
-      <svg width="24" height="24" style="vertical-align:middle;margin-right:6px;">
-        <circle cx="12" cy="12" r="10" fill="#eaf3ff"/>
-        <circle cx="8" cy="12" r="2" fill="#2d8cff">
-          <animate attributeName="r" values="2;4;2" dur="1s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="12" cy="12" r="2" fill="#2d8cff">
-          <animate attributeName="r" values="2;4;2" dur="1s" begin="0.3s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="16" cy="12" r="2" fill="#2d8cff">
-          <animate attributeName="r" values="2;4;2" dur="1s" begin="0.6s" repeatCount="indefinite"/>
-        </circle>
-      </svg>
-      <span>Thinking...</span>
-    </span>`
-    });
+    // this.chatbotMessages.push({
+    //   from: 'bot',
+    //   text: `<span class="bot-thinking">
+    //   <svg width="24" height="24" style="vertical-align:middle;margin-right:6px;">
+    //     <circle cx="12" cy="12" r="10" fill="#eaf3ff"/>
+    //     <circle cx="8" cy="12" r="2" fill="#2d8cff">
+    //       <animate attributeName="r" values="2;4;2" dur="1s" repeatCount="indefinite"/>
+    //     </circle>
+    //     <circle cx="12" cy="12" r="2" fill="#2d8cff">
+    //       <animate attributeName="r" values="2;4;2" dur="1s" begin="0.3s" repeatCount="indefinite"/>
+    //     </circle>
+    //     <circle cx="16" cy="12" r="2" fill="#2d8cff">
+    //       <animate attributeName="r" values="2;4;2" dur="1s" begin="0.6s" repeatCount="indefinite"/>
+    //     </circle>
+    //   </svg>
+    //   <span>Thinking...</span>
+    // </span>`
+    // });
+    if (/valid|irp/i.test(convertedText)) {
+      this.zone.run(() => {
+        this.chatbotMessages.push({
+          from: 'bot',
+          text: 'Yes, Carol has valid IRP and risk profile is aggressive.'
+        });
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          const container = this.chatContainer?.nativeElement;
+          if (container) {
+            container.scrollTop = container.scrollHeight;
+          }
+        }, 100);
+      });
+      return;
+    }
     this.cdr.detectChanges();
     fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
       method: 'POST',

@@ -280,16 +280,18 @@
           Live Transcript:
         </strong>
         <div class="transcript-box">
-          <div *ngFor="let line of transcriptLines">
-            <span class="transcript-line" [ngClass]="{
-              'advisor': line.startsWith('📞 Advisor'),
-              'client': line.startsWith('👩‍💼 Carol'),
-              'ai': line.startsWith('🤖 AI')
-            }">
-              {{ line }}
-            </span>
-          </div>
-        </div>
+  <div *ngFor="let line of animatedTranscriptLines">
+    <span class="transcript-line" [ngClass]="{
+      'advisor': line.startsWith('📞 Advisor'),
+      'client': line.startsWith('👩‍💼 Carol'),
+      'ai': line.startsWith('🤖 AI')
+    }">
+      <ng-container *ngFor="let word of line.split(' '); let wi = index">
+        <span [style.opacity]="word ? 1 : 0">{{ word }} </span>
+      </ng-container>
+    </span>
+  </div>
+</div>
       </div>
     </div>
     <!-- Right Extension: Chatbot -->
