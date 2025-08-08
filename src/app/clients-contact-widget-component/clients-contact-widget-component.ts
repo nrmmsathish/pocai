@@ -63,19 +63,19 @@ export class ClientsContactWidgetComponent {
 
   // Mail
   mailTemplates = [
-    { id: 'welcome', name: 'Welcome Email', body: 'Dear {{name}},\n\nWelcome to our Private Wealth service...' },
+    { id: 'welcome', name: 'Post Meeting Email', body: 'Dear {{name}},\n\nWelcome to our Private Wealth service...' },
     { id: 'review', name: 'Portfolio Review', body: 'Dear {{name}},\n\nWe would like to schedule a review of your portfolio...' },
     { id: 'custom', name: 'Custom Template', body: '' }
   ];
   selectedTemplate = 'welcome';
   mailTemplate = '';
   mailRecipient = '';
-  mailFrom = 'sathish.virattiswaran@bank.com';
+  mailFrom = 'john.doe@bank.com';
   mailCc = 'sathish.virattiswaran@bank.com';
   mailTo = '';
   mailBcc = 'mail.audit@bank.com';
   mailSubject = '';
-  userSignature = 'Best regards,\nJohn Doe\nPrivate Wealth Advisor';
+  userSignature = ',\nJohn Doe\nPrivate Wealth Advisor';
 
   // WhatsApp
   whatsappRecipient = '';
@@ -1540,12 +1540,23 @@ export class ClientsContactWidgetComponent {
         this.mailRecipient = client.name;
         this.mailTo = client.email || '';
         this.mailSubject = `Portfolio Update for ${client.name}`;
-        this.mailTemplate = `Dear ${client.name},
+        this.mailTemplate = `Hi ${client.name},
+Thank you again for taking the time to speak with me earlier. I appreciated our conversation and wanted to summarize the key points we discussed, along with next steps you might consider as you continue to refine your portfolio strategy.
 
-Based on your portfolio and recent market trends, we recommend considering our latest investment products designed to help increase your returns. These options include structured notes, ESG funds, and technology sector opportunities, all tailored to your risk profile and investment goals.
+Summary of Recommendations:
 
-Please let us know if you would like a detailed proposal or have any questions about these recommendations.
+Vanguard Growth ETF (VUG): Designed for long-term equity growth, this ETF aligns well with your aggressive risk profile and complements your recent equity transaction.
 
+PIMCO Emerging Markets Inflation-Linked Bond Fund (PEIAX): Offers inflation protection by investing in bonds from rapidly growing economies. The bond’s value and interest payments adjust with inflation, helping to preserve purchasing power. Managed by PIMCO’s expert team, this fund adds diversification without requiring hands-on oversight.
+
+Exclusive Promotion:
+As a first-time bond investor, you're eligible for a $100 cash voucher when you invest in PEIAX. This is a limited-time offer designed to help you explore new opportunities with added confidence.
+
+If you’d like to proceed with either product or have further questions, I’d be happy to assist. I can also provide additional materials or set up a time to walk through the details together.
+
+Looking forward to supporting your wealth journey.
+
+Warm regards,
 ${this.userSignature}`;
         this.showMailPopup = true;
       }
