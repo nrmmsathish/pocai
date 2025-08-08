@@ -152,6 +152,7 @@ private transcriptAnimationTimeout: any;
     }
   };
   showNextLine();
+  
 }
 
 animateWords(line: string, lineIdx: number, delay: number) {
@@ -164,6 +165,18 @@ animateWords(line: string, lineIdx: number, delay: number) {
       this.cdr.detectChanges();
       wordIdx++;
       setTimeout(revealWord, delay);
+      setTimeout(() => {
+        this.cdr.detectChanges();
+        const transcriptBox = document.querySelector('.transcript-box');
+        if (transcriptBox) transcriptBox.scrollTop = transcriptBox.scrollHeight;
+      }, 50);
+    }else {
+      // Scroll to end after line finishes animating
+      setTimeout(() => {
+        this.cdr.detectChanges();
+        const transcriptBox = document.querySelector('.transcript-box');
+        if (transcriptBox) transcriptBox.scrollTop = transcriptBox.scrollHeight;
+      }, 50);
     }
   };
   revealWord();
