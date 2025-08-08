@@ -5,7 +5,7 @@
   </div>
 
   <div class="chat-container">
-    <app-circular-waveform [audioUrl]="''"></app-circular-waveform>
+    <app-circular-waveform *ngIf="!isGCP" [audioUrl]="''"></app-circular-waveform>
     <!-- <df-messenger project-id="dynamicinsightbuilde-3-3cb8" agent-id="365164f6-85f6-44cb-9d5b-7c76ad589a4b"
       language-code="en" max-query-length="-1">
       <df-messenger-chat-bubble chat-title="Client Assistant">
@@ -27,7 +27,7 @@
 <span class="msg-from" *ngIf="msg.from === 'You'">
   <img src="user-profile.png" alt="You" class="profile-img" />
 </span>
-        <span class="msg-text">{{ msg.text }}</span>
+        <span class="msg-text" [innerHTML]="msg.text"></span>
         <span *ngIf="msg.partial" class="msg-partial-indicator">...</span>
       </div>
     </div>

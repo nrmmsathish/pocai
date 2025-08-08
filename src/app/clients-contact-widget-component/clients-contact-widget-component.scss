@@ -535,7 +535,7 @@ ag-grid-angular {
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(60, 179, 113, 0.18);
   z-index: 1002;
-  width: 1200px;
+  width: 80%;
   max-width: 96vw;
   padding: 0;
 }
@@ -1261,7 +1261,7 @@ ag-grid-angular {
 }
 
 .transcript-box {
-  max-height: 120px;
+  max-height: 400px;
   overflow-y: auto;
   margin-top: 8px;
   padding-right: 4px;
@@ -1513,4 +1513,15 @@ ag-grid-angular {
     background: rgb(121, 99, 54);
     color: white;
   }
+}
+.product-recommendation {
+      text-align: justify;
+    padding: 20px;
+}
+
+.bot-thinking {
+  display: flex;
+  align-items: center;
+  font-style: italic;
+  color: #2d8cff;
 }

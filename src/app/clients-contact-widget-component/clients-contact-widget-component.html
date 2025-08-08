@@ -80,9 +80,25 @@
           </div>
         </div>
         <div *ngIf="activeTab === 'talking'" class="talking-points-section">
-          <ul>
+          <ul *ngIf="selectedClient?.name !== 'Carol Lee'">
             <li *ngFor="let point of talkingPointsList; let i = index" [innerHTML]="point" [style.--i]="i"></li>
           </ul>
+          <div *ngIf="selectedClient?.name === 'Carol Lee'">
+
+            <div class="product-recommendation">
+              <div style="margin-bottom:6px;"><strong>Products recommendation:</strong></div>
+              <div>Vanguard Growth ETF (VUG) and PIMCO Emerging Markets Inflation-Linked Bond Fund (PEIAX).</div>
+              <div style="margin:8px 0 6px 0;"><strong>Rationale:</strong></div>
+              <div>
+                Carol’s aggressive risk profile and recent $120,000 equity transaction align with her interest in growth
+                stocks, making VUG ideal for capturing long-term capital appreciation through large-cap U.S. growth
+                companies.<br><br>
+                Her portfolio is primarily stock-based, suggest adding PEIAX to diversify with international bonds,
+                which offer yield and currency diversification, mitigating inflation impact. Her digital behavior
+                signals readiness for strategic rebalancing—position these as complementary inflation-resilient plays.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -217,30 +233,43 @@
       Hang Up
     </button>
   </div>
-  <div class="call-popup-content-with-assistant">
-    <div class="call-animation">
-      <div class="call-wave" *ngIf="!listening"></div>
-      <div class="call-wave listening" *ngIf="listening"></div>
-      <div class="call-status">{{callStatus}}</div>
-      <div *ngIf="listening" class="assistant-listening">
-        <span>🧑‍💼 AI Meeting expert is listening...</span>
-        <span *ngIf="listening" class="record-indicator">
-          <span class="record-dot"></span> Recording
-        </span>
-        <div class="call-prompts">
-          <ul>
-            <li *ngFor="let point of aiTypingPoints">
-              <span [innerHTML]="point.text"></span>
-              <span *ngIf="point.typing" class="typing-dot">|</span>
-            </li>
-          </ul>
+ <div class="call-popup-content-with-assistant" style="display: flex;">
+    <!-- Left Extension: Pre-Meeting Summary Points -->
+    <div class="call-premeeting-extension" style="width: 360px; background: #f5f7fa; border-radius: 12px; margin-right: 18px; padding: 16px 12px;">
+      <div style="font-weight:600; color:#193b6a; margin-left:20px;">
+        Pre-Meeting Summary
+      </div>
+      <ul *ngIf="callRecipient !== 'Carol Lee'">
+        <li *ngFor="let point of talkingPointsList; let i = index" [innerHTML]="point" [style.--i]="i"></li>
+      </ul>
+      <div *ngIf="callRecipient === 'Carol Lee'">
+        <div class="product-recommendation" style="text-align:left;">
+          <div style="margin-bottom:6px;"><strong>Products recommendation:</strong></div>
+          <div>Vanguard Growth ETF (VUG) and PIMCO Emerging Markets Inflation-Linked Bond Fund (PEIAX).</div>
+          <div style="margin:8px 0 6px 0;"><strong>Rationale:</strong></div>
+          <div>
+            Carol’s aggressive risk profile and recent $120,000 equity transaction align with her interest in growth
+            stocks, making VUG ideal for capturing long-term capital appreciation through large-cap U.S. growth
+            companies.<br><br>
+            Her portfolio is primarily stock-based, suggest adding PEIAX to diversify with international bonds,
+            which offer yield and currency diversification, mitigating inflation impact. Her digital behavior
+            signals readiness for strategic rebalancing—position these as complementary inflation-resilient plays.
+          </div>
         </div>
       </div>
     </div>
-    <!-- Virtual Assistant Extension -->
-    <div class="call-assistant-extension">
-      <div class="assistant-header">
-        <span>🧠 Intelli Assist</span>
+    <!-- Center: Live Transcript -->
+    <div style="flex:1; min-width:0;">
+      <div class="call-animation">
+        <div class="call-wave" *ngIf="!listening"></div>
+        <div class="call-wave listening" *ngIf="listening"></div>
+        <div class="call-status">{{callStatus}}</div>
+        <div *ngIf="listening" class="assistant-listening">
+          <span>🧑‍💼 AI Meeting expert is listening...</span>
+          <span *ngIf="listening" class="record-indicator">
+            <span class="record-dot"></span> Recording
+          </span>
+        </div>
       </div>
       <div class="assistant-transcript futuristic-transcript">
         <strong>
@@ -253,23 +282,44 @@
         <div class="transcript-box">
           <div *ngFor="let line of transcriptLines">
             <span class="transcript-line" [ngClass]="{
-              'advisor': line.startsWith('Advisor:'),
-              'client': line.startsWith('Client:'),
-              'ai': line.startsWith('AI:')
+              'advisor': line.startsWith('📞 Advisor'),
+              'client': line.startsWith('👩‍💼 Carol'),
+              'ai': line.startsWith('🤖 AI')
             }">
               {{ line }}
             </span>
           </div>
         </div>
       </div>
-      <div class="assistant-question">
-        <input id="assistantQuestion" [(ngModel)]="assistantQuestion" type="text" placeholder="Type your question..." />
-        <button class="ask-btn" (keydown.enter)="askAssistant()" (click)="askAssistant()">Ask</button>
-      </div>
-      <div class="assistant-answer" *ngIf="assistantAnswer">
-        <strong>AI Response:</strong>
-        <div>{{ assistantAnswer }}</div>
+    </div>
+    <!-- Right Extension: Chatbot -->
+    <div class="call-chatbot-extension" style="width: 340px; background: linear-gradient(135deg,#f5f7fa 80%,#e3e9f7 100%); border-radius: 16px; margin-left: 18px; padding: 20px 18px; display: flex; flex-direction: column; box-shadow: 0 4px 18px 0 rgba(44,62,80,0.07);">
+  <div style="font-weight:700; color:#193b6a; margin-bottom:16px; font-size:18px; display:flex; align-items:center;">
+    <svg width="22" height="22" style="vertical-align:middle;margin-right:8px;">
+      <circle cx="11" cy="11" r="10" fill="#2d8cff" />
+      <text x="11" y="16" text-anchor="middle" font-size="12" fill="#fff">🤖</text>
+    </svg>
+    Chatbot Assistant
+  </div>
+  <div class="chatbot-messages" #chatContainer style="flex:1; overflow-y:auto; margin-bottom:16px;padding-right:4px;max-height:400px;">
+    <div *ngFor="let msg of chatbotMessages">
+      <div [ngClass]="{'bot': msg.from === 'bot', 'user': msg.from === 'user'}"
+           style="margin-bottom:12px; display:flex; align-items:flex-start;">
+        <div *ngIf="msg.from === 'bot'" style="background:#eaf3ff; color:#2d8cff; border-radius:12px 12px 12px 4px; padding:10px 14px; font-size:15px; box-shadow:0 2px 8px rgba(44,62,80,0.04); max-width:80%;">
+          <span style="font-weight:500; display:block; margin-bottom:2px;">Bot</span>
+          <span [innerHTML]="msg.text"></span>
+        </div>
+        <div *ngIf="msg.from === 'user'" style="background:#fff; color:#193b6a; border-radius:12px 12px 4px 12px; padding:10px 14px; font-size:15px; margin-left:auto; box-shadow:0 2px 8px rgba(44,62,80,0.04); max-width:80%;">
+          <span style="font-weight:500; display:block; margin-bottom:2px;">You</span>
+          <span [innerHTML]="msg.text"></span>
+        </div>
       </div>
     </div>
   </div>
+  <div class="chatbot-input-row" style="display:flex; align-items:center; background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(44,62,80,0.06); padding:6px 10px;">
+    <input (keydown.enter)="sendChatbotMessage()" [(ngModel)]="chatbotInput" type="text" placeholder="Type your question..." style="flex:1; padding:8px 10px; border-radius:6px; border:1px solid #d1d5db; font-size:15px; outline:none;">
+    <button class="send-btn" style="margin-left:8px; background:#2d8cff; color:#fff; border:none; border-radius:6px; padding:8px 16px; font-weight:600; font-size:15px; cursor:pointer; transition:background 0.2s;" (click)="sendChatbotMessage()" >Ask AI</button>
+  </div>
+</div>
+</div>
 </div>

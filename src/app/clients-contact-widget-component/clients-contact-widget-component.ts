@@ -1,4 +1,4 @@
-import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgGridModule } from 'ag-grid-angular';
 import { ColDef, GridOptions, themeQuartz } from 'ag-grid-community';
@@ -34,6 +34,8 @@ interface Client {
   styleUrl: './clients-contact-widget-component.scss'
 })
 export class ClientsContactWidgetComponent {
+  sessionId: string = this.generateSessionId();
+  @ViewChild('chatContainer') chatContainer!: ElementRef;
   theme = themeQuartz;
   isMobile = window.innerWidth <= 600;
   gridOptions: GridOptions;
@@ -41,7 +43,8 @@ export class ClientsContactWidgetComponent {
   rowData: Client[];
   activeSmartFilter: string = '';
   filteredRowData: Client[] = [];
-
+  chatbotMessages: { from: 'bot' | 'user', text: string }[] = [];
+  chatbotInput: string = '';
   // Popups and UI state
   showPopup = false;
   showMailPopup = false;
@@ -49,7 +52,7 @@ export class ClientsContactWidgetComponent {
   showZoomPopup = false;
   showCallPopup = false;
   listening = false;
-
+  messages: { from: string, text: string, partial?: boolean }[] = [];
   // Client and AI
   selectedClient: Client | null = null;
   talkingPointsList: string[] = [];
@@ -92,20 +95,22 @@ export class ClientsContactWidgetComponent {
   assistantAnswer: string = '';
   transcriptLines: string[] = [];
   fullTranscript: string[] = [
-    "Advisor: Welcome to the call, Alice.",
-    "Client: Thank you. I wanted to discuss my portfolio performance.",
-    "Advisor: Sure, let's review your recent investments.",
-    "Client: I am interested in ESG funds.",
-    "Advisor: Great choice. I will share some options.",
-    "AI: ESG funds have outperformed the market this quarter.",
-    "Client: Can you send me the details?",
-    "Advisor: Absolutely, I will email you after the call."
+    "📞 Advisor: Hi Carol, thanks for taking my call. I received notice that you are exploring ways to protect your portfolio from inflation, and specifically look at  growth stocks and international bonds. Given your aggressive risk profile and recent equity transaction, I’d like to recommend two products that align with your goals: the Vanguard Growth ETF (VUG) for long-term equity growth, and the PIMCO Emerging Markets Inflation-Linked Bond Fund (PEIAX) to hedge against inflation while tapping into emerging market potential.",
+    "👩‍💼 Carol: I’m familiar with growth ETFs, but I’m not sure about inflation-linked bonds. How do they actually help?",
+    "📞 Advisor: PEIAX invests in bonds from governments and companies in developing countries, but it's specifically designed to hedge against inflation. This would add diversification and a strong inflation-fighting component to your portfolio.",
+    "👩‍💼 Carol: Hmm… Emerging markets? That sounds a bit risky. I'm not sure if I want to get into that.",
+    "🤖 AI: (Suggest to carol) This fund invests in bonds, which are loans, not equity. Think of it as lending money to governments in countries with rapidly growing economies. PIMCO, a leading global investment manager, handles all the analysis and risk management, so you're not trying to do this yourself. They have a team of experts dedicated to this.",
+    "📞 Advisor: I hear your concern about emerging markets, Carol. Think of this type of bond as lending money to governments in countries with rapidly growing economies.  It's specifically designed to address inflation by having the bond's value and interest payments adjust with inflation, helping to protect your purchasing power.  To give you an extra incentive to explore this new area of your portfolio, we have an ongoing promotion. As a first-time bond buyer, you're eligible for a $100 cash voucher to get started.",
+    "👩‍💼 Carol: That’s interesting. I’ll definitely consider it."
   ];
+
+
+
   transcriptInterval: any;
 
   tiers = ['Platinum', 'Gold', 'Silver', 'Bronze'];
 
-  constructor(private ngZone: NgZone, private cdr: ChangeDetectorRef) {
+  constructor(private zone: NgZone, private cdr: ChangeDetectorRef) {
     this.gridOptions = {
       defaultColDef: {
         resizable: true,
@@ -122,7 +127,14 @@ export class ClientsContactWidgetComponent {
   ngOnInit() {
     this.filteredRowData = this.rowData;
   }
-
+  sendChatbotMessage() {
+    if (this.chatbotInput && this.chatbotInput.trim()) {
+      this.chatbotMessages.push({ from: 'user', text: this.chatbotInput });
+      // Mock bot response, replace with your logic
+      this.triggerMl(this.chatbotInput);
+      this.chatbotInput = '';
+    }
+  }
   applySmartFilter(type: string) {
     if (this.activeSmartFilter === type) {
       this.activeSmartFilter = '';
@@ -1552,7 +1564,7 @@ ${this.userSignature}`;
         this.listening = false;
         this.showCallPopup = true;
         setTimeout(() => {
-          this.ngZone.run(() => {
+          this.zone.run(() => {
             this.callStatus = `Connected to ${client.name}`;
             this.listening = true;
             this.startTranscriptSimulation();
@@ -1779,5 +1791,62 @@ ${this.userSignature}`;
   customizeTemplate() {
     this.selectedTemplate = 'custom';
     this.mailTemplate = '';
+  }
+  private generateSessionId(): string {
+    // Generates a random 16-character alphanumeric session ID
+    return Math.random().toString(36).substr(2, 16) + Date.now().toString(36);
+  }
+
+  triggerMl(convertedText: string) {
+    this.sessionId = this.generateSessionId();
+    // Add bot "thinking" animation message
+    this.chatbotMessages.push({
+      from: 'bot',
+      text: `<span class="bot-thinking">
+      <svg width="24" height="24" style="vertical-align:middle;margin-right:6px;">
+        <circle cx="12" cy="12" r="10" fill="#eaf3ff"/>
+        <circle cx="8" cy="12" r="2" fill="#2d8cff">
+          <animate attributeName="r" values="2;4;2" dur="1s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="12" cy="12" r="2" fill="#2d8cff">
+          <animate attributeName="r" values="2;4;2" dur="1s" begin="0.3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="16" cy="12" r="2" fill="#2d8cff">
+          <animate attributeName="r" values="2;4;2" dur="1s" begin="0.6s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+      <span>Thinking...</span>
+    </span>`
+    });
+    this.cdr.detectChanges();
+    fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        audio_data: convertedText,
+        session_id: this.sessionId || ''
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        const lastMsg = this.chatbotMessages[this.chatbotMessages.length - 1];
+        if (lastMsg && lastMsg.text.includes('Thinking...')) {
+          this.chatbotMessages.pop();
+        }
+        if (data && data.agent_response) {
+          this.zone.run(() => {
+            this.chatbotMessages.push({ from: 'bot', text: data.agent_response });
+            this.cdr.detectChanges();
+
+            setTimeout(() => {
+              // Use nativeElement and scrollHeight for smooth scroll
+              if (this.chatContainer && this.chatContainer.nativeElement) {
+                this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+              }
+            }, 0);
+          });
+        }
+      });
+
   }
 }

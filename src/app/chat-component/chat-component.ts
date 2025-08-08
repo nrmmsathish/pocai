@@ -27,7 +27,7 @@ export class ChatComponent {
   waveSurfer: any;
   @ViewChild('widgetContainer') widgetContainer!: ElementRef;
   @ViewChild('chatContainer') chatContainer!: ElementRef;
-  
+
   @ViewChild(CircularWaveformComponent) waveformComponent!: CircularWaveformComponent;
 
   private speechPauseTimeout: any;
@@ -40,6 +40,7 @@ export class ChatComponent {
   private lipSyncInterval: any;
   private lastAwsMessage: string = '';
   private lastSessionId: string = '';
+  isGCP: boolean = false;
   constructor(private zone: NgZone, private cdr: ChangeDetectorRef) {
     // this.socket.on('bot', (msg: string) => {
     //   this.zone.run(() => {
@@ -266,20 +267,58 @@ export class ChatComponent {
       }
     }
     this.stopAudioRecording();
-    
+
   }
   triggerMl(convertedText: string) {
-     //this.sessionId = this.generateSessionId();
-     
-    fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
+    //this.sessionId = this.generateSessionId();
+    if (/report|pdf/i.test(convertedText)) {
+      this.zone.run(() => {
+        this.messages.push({
+          from: 'Bot',
+          text: `
+      <div class="generated-report-container">
+        <img src="file.png" alt="PDF" class="pdf-icon">
+        <span class="generated-report">Generated Report</span>
+        <span><img src="download.png" alt="Download" class="download-icon"></span>
+        
+      </div>
+    `
+        });
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          const container = this.chatContainer?.nativeElement;
+          if (container) {
+            container.scrollTop = container.scrollHeight;
+          }
+        }, 100);
+      });
+      return;
+    }
+    else if (this.isGCP) {
+      const url = 'https://discoveryengine.googleapis.com/v1alpha/projects/499356280647/locations/global/collections/default_collection/engines/agentspace-1754404159443_1754404159443/servingConfigs/default_search:search';
+      const body = {
+        query: convertedText,
+        pageSize: 10,
+        session: 'projects/499356280647/locations/global/collections/default_collection/engines/agentspace-1754404159443_1754404159443/sessions/-',
+        spellCorrectionSpec: { mode: 'AUTO' },
+        languageCode: 'en-US',
+        relevanceScoreSpec: { returnRelevanceScore: true },
+        userInfo: { timeZone: 'Asia/Calcutta' },
+        contentSearchSpec: { snippetSpec: { returnSnippet: true } },
+        naturalLanguageQueryUnderstandingSpec: { filterExtractionCondition: 'ENABLED' }
+      };
+
+      const accessToken = 'ya29.a0AS3H6Nyd_8_CcMVAVw1k8jvJOyCyu-wnBzuHCh9Y24IKQI--euQOHP6kzQ6hVetxpGdBQ5w37yEQqyIXMqe9syQ2Nb-1bdUgW84cyb3fuF48OM6e4leKL1g5qMOID2WFjOLVLDv-71EzikVbB23AEHVvc2eZj0i7TcLgFWFwWKvApRiQWqHRzzMAkuAfS5-Q-UQ8xGzESDXxCcc7RuL6biB8ayM9U0zVOpaEEQjcs-r5YFpzhjb2TxILM_eBeTEO2XTmTobxyWz9LbBi5YnHD2-niOpg9dqW6rGDjeideHr3j51mDV9F4kaESYoijkcGa29N8LMaCgYKAb8SARASFQHGX2MiOOezME4irxok-V4ffB21Mw0334'; // Replace with your token logic
+
+      try {
+        fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            audio_data: convertedText,
-            session_id: this.sessionId || ''
-          })
-        })
-          .then(response => response.json())
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        }).then(response => response.json())
           .then(data => {
 
             if (data && data.agent_response) {
@@ -297,14 +336,48 @@ export class ChatComponent {
             }
           });
 
-        // this.awsSocket.send(JSON.stringify({
-        //   requestContext: {
-        //     connectionId: this.lastAwsMessage,
-        //     domainName: "test-api.execute-api.us-east-1.amazonaws.com",
-        //     stage: "dev"
-        //   },
-        //   body: { action: "sendmessage", message: "Hello, how are you?", session_id: this.lastAwsMessage}
-        // }));
+      } catch (error) {
+        console.error('Discovery search error:', error);
+      }
+    } else {
+      fetch('https://27bokahdyhujxyjyjpyy5a7kya0rxokm.lambda-url.us-east-1.on.aws', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          audio_data: convertedText,
+          session_id: this.sessionId || ''
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+
+          if (data && data.agent_response) {
+            this.zone.run(() => {
+              this.messages.push({ from: 'Bot', text: data.agent_response });
+              this.cdr.detectChanges();
+              this.textToSpeech(data.audio_response.audio_data);
+              setTimeout(() => {
+                const container = this.chatContainer?.nativeElement;
+                if (container) {
+                  container.scrollTop = container.scrollHeight;
+                }
+              }, 100);
+            });
+          }
+        });
+    }
+
+
+
+
+    // this.awsSocket.send(JSON.stringify({
+    //   requestContext: {
+    //     connectionId: this.lastAwsMessage,
+    //     domainName: "test-api.execute-api.us-east-1.amazonaws.com",
+    //     stage: "dev"
+    //   },
+    //   body: { action: "sendmessage", message: "Hello, how are you?", session_id: this.lastAwsMessage}
+    // }));
   }
 
   // --- Timers ---
@@ -342,7 +415,7 @@ export class ChatComponent {
   sendMessage() {
     if (this.chatInput.trim()) {
       this.messages.push({ from: 'You', text: this.chatInput });
-      this.triggerMl(this.chatInput); 
+      this.triggerMl(this.chatInput);
       //this.socket.emit('chat', this.chatInput);
       this.chatInput = '';
     }
