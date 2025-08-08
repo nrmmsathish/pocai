@@ -26,6 +26,8 @@ export class ChatComponent {
   listeningSeconds: number = 0;
   waveSurfer: any;
   @ViewChild('widgetContainer') widgetContainer!: ElementRef;
+  @ViewChild('chatContainer') chatContainer!: ElementRef;
+  
   @ViewChild(CircularWaveformComponent) waveformComponent!: CircularWaveformComponent;
 
   private speechPauseTimeout: any;
@@ -285,6 +287,12 @@ export class ChatComponent {
                 this.messages.push({ from: 'Bot', text: data.agent_response });
                 this.cdr.detectChanges();
                 this.textToSpeech(data.audio_response.audio_data);
+                setTimeout(() => {
+                  const container = this.chatContainer?.nativeElement;
+                  if (container) {
+                    container.scrollTop = container.scrollHeight;
+                  }
+                }, 100);
               });
             }
           });

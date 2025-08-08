@@ -3,8 +3,8 @@ import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy } fro
 @Component({
   selector: 'app-circular-waveform',
   template: `
-    <canvas #waveformCanvas width="800" height="800" style="width:400px;height:400px;"></canvas>
-    
+    <canvas #waveformCanvas width="800" height="400" style="width:400px;height:200px;"></canvas>
+
   `,
   styles: [`
     canvas { background: #fff;  }
@@ -26,10 +26,10 @@ export class CircularWaveformComponent implements AfterViewInit, OnDestroy {
 
   n_points = 200;
   angles = Array.from({length: 200}, (_, i) => (2 * Math.PI * i) / 200);
-  base_radius = 170;
-  amplitude_scale = 130;
+  base_radius = 70;
+  amplitude_scale = 100;
   center_x = 400;
-  center_y = 400;
+  center_y = 200;
   previousAmplitudes = new Array(200).fill(0);
   targetAmplitudes = new Array(200).fill(0);
   currentAmplitudes = new Array(200).fill(0);
