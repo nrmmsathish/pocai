@@ -77,7 +77,7 @@ private transcriptAnimationTimeout: any;
   mailTo = '';
   mailBcc = 'mail.audit@bank.com';
   mailSubject = '';
-  userSignature = 'Warm Regards\nJohn Doe\nPrivate Wealth Advisor';
+  userSignature = 'Warm Regards\nJohn Tan\nPrivate Wealth Advisor';
 
   // WhatsApp
   whatsappRecipient = '';
@@ -1637,7 +1637,7 @@ this.animateTranscript(this.fullTranscript, 120); // 120ms per word
         this.zoomTopic = `Meeting with ${client.name}`;
         this.zoomDateTime = '';
         this.zoomInvitees = client.email || '';
-        this.zoomMessage = `Hi ${client.name},\n\nI'd like to invite you to a Zoom meeting to discuss your portfolio and any questions you may have.\n\nBest regards,\nJohn Doe`;
+        this.zoomMessage = `Hi ${client.name},\n\nI'd like to invite you to a Zoom meeting to discuss your portfolio and any questions you may have.\n\nBest regards,\nJohn Tan`;
         this.showZoomPopup = true;
       }
     }
