@@ -14,8 +14,8 @@
 
 .insight-tile {
   position: relative;
-  width: 320px;
-  height: 180px;
+  width: 400px;
+  height: 200px;
   border-radius: 18px;
   background-size: cover;
   background-position: center;
@@ -34,7 +34,7 @@
 .tile-overlay {
   background: linear-gradient(180deg, #193b6a88 0%, #2d8cffcc 100%);
   color: #fff;
-  padding: 18px 22px 14px 22px;
+  padding: 0 22px 14px 22px;
   width: 100%;
   border-radius: 0 0 18px 18px;
   display: flex;
@@ -43,7 +43,7 @@
 }
 
 .tile-title {
-  font-size: 1.18em;
+  font-size: .98em;
   font-weight: 700;
   margin-bottom: 12px;
   text-shadow: 0 2px 8px #193b6a44;

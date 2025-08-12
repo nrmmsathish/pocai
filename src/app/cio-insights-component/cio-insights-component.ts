@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './cio-insights-component.html',
   styleUrl: './cio-insights-component.scss'
 })
+
+
 export class CioInsightsComponent {
   theme = themeQuartz;
   showMailPopup = false;
@@ -22,8 +24,8 @@ export class CioInsightsComponent {
   mailBody = '';
   insights = [
     {
-      title: 'Exclusive Structured Note Picks This Quarter',
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80',
+      title: 'Stocks Rise as Sweeping Tariffs takes effect',
+      image: 'kate.JPG',
       visits: 77,
       proposed: 25,
       accepted: 12
@@ -47,13 +49,6 @@ export class CioInsightsComponent {
       visits: 87,
       proposed: 30,
       accepted: 14
-    },
-    {
-      title: 'Private Equity Trends',
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
-      visits: 65,
-      proposed: 18,
-      accepted: 7
     }
   ];
 
