@@ -30,15 +30,15 @@ export class CioInsightsComponent {
       proposed: 25,
       accepted: 12
     },{
-      title: 'ESG Investing: The Future of Wealth',
-      image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80',
+      title: 'CIO Strategy: Big Tech Triumphs while macro signals are mixed',
+      image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80',
       visits: 124,
       proposed: 38,
       accepted: 19
     },
     {
       title: 'Global Markets Outlook Q3',
-      image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80',
+      image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80',
       visits: 98,
       proposed: 22,
       accepted: 11
