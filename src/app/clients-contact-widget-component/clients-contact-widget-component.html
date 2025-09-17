@@ -80,10 +80,10 @@
           </div>
         </div>
         <div *ngIf="activeTab === 'talking'" class="talking-points-section">
-          <ul *ngIf="selectedClient?.name !== 'Carol Lee'">
+          <ul *ngIf="selectedClient?.name !== 'CarolLee'">
             <li *ngFor="let point of talkingPointsList; let i = index" [innerHTML]="point" [style.--i]="i"></li>
           </ul>
-          <div *ngIf="selectedClient?.name === 'Carol Lee'">
+          <div *ngIf="selectedClient?.name === 'CarolLee'">
 
             <div class="product-recommendation">
               <div style="margin-bottom:6px;"><strong>Products recommendation:</strong></div>

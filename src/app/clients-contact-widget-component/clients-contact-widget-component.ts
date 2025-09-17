@@ -427,7 +427,7 @@ animateWords(line: string, lineIdx: number, delay: number) {
         complianceFlag: true,
         taxResidency: 'Hong Kong',
         priority: 'High',
-        customTags: ['Real Estate'],
+        customTags: ['ESG'],
         recentArticles: [
           { title: 'Property Investment Guide', url: 'https://www.property.com/guide', readDate: '2025-06-28' },
           { title: 'Dont let inflation eat your returns', url: 'https://www.markettrends.com/trends', readDate: '2025-08-12' }
@@ -440,7 +440,7 @@ animateWords(line: string, lineIdx: number, delay: number) {
         aumTrend: 'up',
         nnia: 350000,
         nniaTrend: 'up',
-        reason: 'Portfolio review',
+        reason: 'Leads Campaign',
         lastContact: '2025-07-10T09:30:00',
         riskProfile: 'Balanced',
         lastTransactionAmount: 500000,
@@ -448,7 +448,7 @@ animateWords(line: string, lineIdx: number, delay: number) {
         lastContactSummary: 'Discussed portfolio rebalancing and agreed to increase allocation to ESG funds. Client requested follow-up on new market opportunities.',
         complianceFlag: false,
         taxResidency: 'Singapore',
-        customTags: ['ESG', 'Succession'],
+        customTags: ['NRI'],
         priority: 'High',
         recentArticles: [
           { title: 'Global Markets Rally', url: 'https://www.ft.com/content/markets-rally', readDate: '2025-07-08' },
@@ -575,7 +575,7 @@ animateWords(line: string, lineIdx: number, delay: number) {
         lastContactSummary: 'Estate planning session held. Client to consult with legal advisor before next steps.',
         nnia: 200000,
         nniaTrend: 'down',
-        reason: 'Estate planning',
+        reason: 'Tax Planning',
         lastContact: '2025-07-03T09:00:00',
         riskProfile: 'Conservative',
         lastTransactionAmount: 400000,
@@ -1773,14 +1773,31 @@ this.animateTranscript(this.fullTranscript, 120); // 120ms per word
         `Invite to exclusive events for ${client.taxResidency || 'global'} clients.`
       ];
     } else {
-      this.talkingPointsList = [
-        engagementInfo,
-        themeRecommendation,
-        `Review ${client.tier} tier market trends and risk profile (${client.riskProfile || 'N/A'}).`,
-        `Suggest rebalancing based on NNIA and last transaction ($${client.lastTransactionAmount?.toLocaleString() || 'N/A'}).`,
-        `Mention new opportunities for ${client.taxResidency || 'global'} clients.`,
-        `Highlight regulatory changes for compliance${client.complianceFlag ? ' (flagged)' : ''}.`
+      if (client.customTags?.includes('ESG')) {
+        this.talkingPointsList = [
+        // engagementInfo,
+        // themeRecommendation,
+        // `Review ${client.tier} tier market trends and risk profile (${client.riskProfile || 'N/A'}).`,
+        // `Suggest rebalancing based on NNIA and last transaction ($${client.lastTransactionAmount?.toLocaleString() || 'N/A'}).`,
+        // `Mention new opportunities for ${client.taxResidency || 'global'} clients.`,
+        // `Highlight regulatory changes for compliance${client.complianceFlag ? ' (flagged)' : ''}.`
+        'Overconcentrated on Cash 3Mn - Opportunity to invest',
+        '1Mn TD redemption in 20 days',
+        'Qualified for accredited investor'
       ];
+      }else{
+this.talkingPointsList = [
+        // engagementInfo,
+        // themeRecommendation,
+        // `Review ${client.tier} tier market trends and risk profile (${client.riskProfile || 'N/A'}).`,
+        // `Suggest rebalancing based on NNIA and last transaction ($${client.lastTransactionAmount?.toLocaleString() || 'N/A'}).`,
+        // `Mention new opportunities for ${client.taxResidency || 'global'} clients.`,
+        // `Highlight regulatory changes for compliance${client.complianceFlag ? ' (flagged)' : ''}.`
+        'Over concentrated in US equities, opportunity diversification',
+        'Insurance protection gap - Critical Illness Care',
+      ];
+      }
+      
     }
   }
 
